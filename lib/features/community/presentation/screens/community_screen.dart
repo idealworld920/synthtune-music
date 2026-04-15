@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../../core/constants/app_colors.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import 'post_detail_screen.dart';
 import '../../domain/models/community_post.dart';
 import '../providers/community_provider.dart';
 
@@ -331,7 +332,9 @@ class _PostCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final instrumentColor = AppColors.instrumentColors[post.instrument] ?? AppColors.primary;
 
-    return Container(
+    return GestureDetector(
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PostDetailScreen(postId: post.id))),
+      child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.bgCard,
@@ -485,6 +488,7 @@ class _PostCard extends ConsumerWidget {
           ),
         ],
       ),
+    ),
     );
   }
 

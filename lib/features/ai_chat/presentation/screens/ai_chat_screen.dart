@@ -307,13 +307,28 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
     // ── 인사 ──
     if (lower.contains('안녕') || lower.contains('하이') || lower.contains('hello') || lower.contains('hi') || lower == 'ㅎㅇ') {
-      return '안녕하세요! 반갑습니다. 오늘은 어떤 연습을 해볼까요? 궁금한 점이 있으면 뭐든 물어보세요!';
+      final greets = [
+        '안녕하세요! 반가워요. 오늘은 어떤 음악 이야기를 해볼까요?',
+        '반갑습니다! 오늘 기분은 어떠세요? 음악 관련 궁금한 거 있으면 물어보세요!',
+        '안녕하세요! 좋은 하루 보내고 계시나요? 무엇이든 편하게 이야기해요!',
+      ];
+      return greets[_responseVariant % greets.length];
     }
     if (lower.contains('고마워') || lower.contains('감사') || lower.contains('ㄱㅅ') || lower.contains('땡큐') || lower.contains('thank')) {
-      return '별말씀을요! 도움이 되셨다면 기뻐요. 다른 궁금한 점이 있으면 언제든 물어보세요!';
+      final thanks = [
+        '천만에요! 도움이 됐다니 저도 기뻐요!',
+        '별말씀을요! 더 궁금한 거 있으면 언제든 물어보세요.',
+        '감사는 제가 해야죠! 열심히 연습하는 당신이 멋져요!',
+      ];
+      return thanks[_responseVariant % thanks.length];
     }
     if (lower.contains('잘가') || lower.contains('바이') || lower.contains('bye') || lower.contains('ㅂㅂ')) {
-      return '오늘도 수고하셨어요! 꾸준히 연습하면 반드시 실력이 늘어요. 다음에 또 만나요!';
+      final byes = [
+        '다음에 또 만나요! 오늘도 음악과 함께 좋은 하루 보내세요!',
+        '수고하셨어요! 꾸준히 연습하면 반드시 실력이 늘어요. 화이팅!',
+        '잘 가요! 다음에 올 때 연습한 거 자랑해주세요!',
+      ];
+      return byes[_responseVariant % byes.length];
     }
 
     // ── 일상 대화 ──
@@ -321,7 +336,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
       return '저는 여기서 음악 관련 도움을 드리고 있어요! 연습하다 막히는 부분이 있거나, 새로운 곡을 찾고 있다면 말해주세요. 아니면 그냥 수다를 떨어도 좋아요!';
     }
     if (lower.contains('이름') || lower.contains('누구') || lower.contains('뭐야') || lower.contains('자기소개')) {
-      return '저는 AI 음악 선생님이에요! 피아노, 기타, 바이올린, 드럼 4가지 악기의 연주 팁과 음악 이론을 알려드립니다. 연습 방법, 악보 읽기, 테크닉 등 뭐든 물어보세요!';
+      return '저는 AI 채팅이에요! 피아노, 기타, 바이올린, 드럼 4가지 악기의 연주 팁과 음악 이론을 알려드립니다. 연습 방법, 악보 읽기, 테크닉 등 뭐든 물어보세요!';
     }
     if (lower.contains('나이') || lower.contains('몇살') || lower.contains('몇 살')) {
       return '저는 나이가 없어요! 하지만 수많은 음악 교육 자료를 학습했기 때문에 경험 많은 선생님이라고 생각해주세요. 궁금한 게 있으면 뭐든 물어봐요!';
@@ -428,7 +443,35 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
       return '앱 주요 기능 안내:\n• 레슨 탭: 스케일/동요/클래식/스킬 카테고리별 학습\n• 연습: 악보 보면서 마이크로 녹음 → AI 분석\n• 진도: 학습 현황, 고급 리포트\n• 커뮤니티: 연습 기록 공유, Q&A\n• 창작: 나만의 악보 만들기 (프리미엄)\n\n설정에서 구독 플랜도 확인해보세요!';
     }
 
-    return '궁금한 점이 있으시군요! 더 정확한 답변을 위해 구체적으로 질문해주세요.\n\n예시:\n• "피아노 손가락 번호 알려줘"\n• "기타 F코드 팁"\n• "드럼 파라디들 연습법"\n• "바이올린 비브라토 하는 법"\n• "연습 추천해줘"';
+    // ── 자연스러운 대화 이어가기 ──
+    // 짧은 답변 (ㅇㅇ, ㅋㅋ, ㅎㅎ, 응, 아 등)
+    if (lower.length <= 3) {
+      final shorts = [
+        '네? 더 말해주세요! 궁금한 게 있으면 편하게 물어봐요.',
+        '음, 뭔가 더 이야기하고 싶은 게 있나요?',
+        '듣고 있어요! 무엇이든 물어보세요.',
+      ];
+      return shorts[_responseVariant % shorts.length];
+    }
+
+    // 질문 형태 감지
+    if (lower.contains('?') || lower.contains('뭐') || lower.contains('어떻게') || lower.contains('왜') || lower.contains('언제') || lower.contains('어디')) {
+      final questions = [
+        '좋은 질문이에요! 음악과 관련된 건가요? 좀 더 구체적으로 알려주시면 정확하게 답변해드릴게요.',
+        '흥미로운 질문이네요! 악기 이름이나 상황을 알려주시면 더 맞춤형 답변을 드릴 수 있어요.',
+        '궁금한 게 많으시군요! 좋아요. 어떤 악기를 연주하시는지 알려주시면 더 도움이 될 거예요.',
+      ];
+      return questions[_responseVariant % questions.length];
+    }
+
+    // 일반 대화
+    final defaults = [
+      '재미있는 이야기네요! 음악 관련 질문이 있으면 언제든 물어보세요. 아니면 그냥 수다를 떨어도 좋아요!',
+      '그렇군요! 혹시 요즘 연습하고 있는 곡이 있나요? 도움이 필요하면 말씀해주세요.',
+      '이해했어요! 다른 궁금한 점이 있으면 편하게 물어보세요. 음악이든 일상이든 뭐든 좋아요!',
+      '좋은 이야기예요! 오늘 연습은 하셨나요? 같이 목표를 세워볼까요?',
+    ];
+    return defaults[_responseVariant % defaults.length];
   }
 
   @override
@@ -441,7 +484,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           children: [
             Icon(Icons.auto_awesome_rounded, color: AppColors.accent, size: 20),
             SizedBox(width: 8),
-            Text('AI 음악 선생님'),
+            Text('AI 채팅'),
           ],
         ),
         actions: [
@@ -666,7 +709,7 @@ class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
           ),
           const SizedBox(height: 4),
           Text(
-            'AI 음악 선생님의 말투를 설정합니다.',
+            'AI 채팅의 말투를 설정합니다.',
             style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
           ),
           const SizedBox(height: 12),

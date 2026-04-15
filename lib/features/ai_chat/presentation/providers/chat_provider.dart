@@ -143,7 +143,7 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
   }
 
   static ChatMessage _welcomeMessage() => ChatMessage(
-    text: '안녕하세요! AI 음악 선생님입니다. 연습, 악기, 음악 이론 등 무엇이든 질문해주세요.',
+    text: '안녕하세요! SynthTune AI입니다. 음악, 연습, 일상 등 무엇이든 편하게 이야기해요!',
     isUser: false,
   );
 }
