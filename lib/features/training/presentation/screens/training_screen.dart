@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../lesson/presentation/providers/lesson_provider.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
 import 'ai_recommend_screen.dart';
@@ -33,7 +34,7 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
     final isGoalMet = _completedToday >= _targetCount;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('연습')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)?.practiceStart ?? '연습')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -272,7 +273,7 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(ctx),
-                  child: const Text('저장'),
+                  child: Text(AppLocalizations.of(context)?.save ?? '저장'),
                 ),
               ),
               const SizedBox(height: 8),

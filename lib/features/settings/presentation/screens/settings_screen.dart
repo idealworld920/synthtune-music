@@ -9,6 +9,7 @@ import '../../../auth/presentation/providers/user_profile_provider.dart';
 import '../../../subscription/domain/subscription_tier.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/services/ai_voice_service.dart';
 import 'appearance_screen.dart';
 import 'language_screen.dart';
@@ -32,7 +33,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final tier = ref.watch(subscriptionTierProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('설정')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)?.settings ?? '설정')),
       body: ListView(
         children: [
           // 프로필 섹션
@@ -86,11 +87,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
 
           // 구독 섹션
-          _SectionHeader(title: '구독'),
+          _SectionHeader(title: AppLocalizations.of(context)?.subscription ?? '구독'),
           _SettingsTile(
             icon: Icons.workspace_premium_rounded,
             iconColor: tier == SubscriptionTier.free ? AppColors.textSecondary : AppColors.accentGold,
-            title: '현재 플랜: ${tier.name}',
+            title: '${AppLocalizations.of(context)?.currentPlan ?? '현재 플랜'}: ${tier.name}',
             subtitle: tier.price,
             onTap: () => context.push(RouteNames.subscription),
           ),
@@ -116,12 +117,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
 
           // 외관 섹션
-          _SectionHeader(title: '외관'),
+          _SectionHeader(title: AppLocalizations.of(context)?.themeAndStyle ?? '외관'),
           _SettingsTile(
             icon: Icons.palette_rounded,
             iconColor: AppColors.accent,
-            title: '테마 및 스타일',
-            subtitle: '앱 테마, 글꼴, 악보 스타일',
+            title: AppLocalizations.of(context)?.themeAndStyle ?? '테마 및 스타일',
+            subtitle: '${AppLocalizations.of(context)?.appTheme ?? '앱 테마'}, ${AppLocalizations.of(context)?.fontSetting ?? '글꼴'}, ${AppLocalizations.of(context)?.sheetStyle ?? '악보 스타일'}',
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AppearanceScreen())),
           ),
 
@@ -140,13 +141,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           _SettingsTile(
             icon: Icons.logout_rounded,
             iconColor: AppColors.textSecondary,
-            title: '로그아웃',
+            title: AppLocalizations.of(context)?.logout ?? '로그아웃',
             onTap: isLoading ? null : _confirmSignOut,
           ),
           _SettingsTile(
             icon: Icons.person_remove_rounded,
             iconColor: AppColors.scoreMiss,
-            title: '회원탈퇴',
+            title: AppLocalizations.of(context)?.deleteAccount ?? '회원탈퇴',
             titleColor: AppColors.scoreMiss,
             onTap: isLoading ? null : _confirmDelete,
           ),
@@ -270,12 +271,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.bgCard,
-        title: const Text('로그아웃'),
-        content: const Text('정말 로그아웃 하시겠습니까?\n다시 로그인하면 데이터가 유지됩니다.'),
+        title: Text(AppLocalizations.of(context)?.logout ?? '로그아웃'),
+        content: Text(AppLocalizations.of(context)?.logoutConfirm ?? '정말 로그아웃 하시겠습니까?\n다시 로그인하면 데이터가 유지됩니다.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: Text('취소', style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(AppLocalizations.of(context)?.cancel ?? '취소', style: TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
             onPressed: () async {
@@ -283,7 +284,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               await ref.read(authNotifierProvider.notifier).signOut();
               if (mounted) context.go(RouteNames.login);
             },
-            child: Text('로그아웃', style: TextStyle(color: AppColors.primary)),
+            child: Text(AppLocalizations.of(context)?.logout ?? '로그아웃', style: TextStyle(color: AppColors.primary)),
           ),
         ],
       ),
@@ -312,7 +313,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 children: [
                   Icon(Icons.warning_amber_rounded, color: AppColors.scoreMiss, size: 24),
                   const SizedBox(width: 8),
-                  Text('회원탈퇴', style: TextStyle(color: AppColors.scoreMiss, fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text(AppLocalizations.of(context)?.deleteAccount ?? '회원탈퇴', style: TextStyle(color: AppColors.scoreMiss, fontSize: 20, fontWeight: FontWeight.bold)),
                 ],
               ),
               const SizedBox(height: 16),
@@ -423,14 +424,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     }
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: AppColors.scoreMiss, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
-                  child: const Text('회원탈퇴', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                  child: Text(AppLocalizations.of(context)?.deleteAccount ?? '회원탈퇴', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                 ),
               ),
               const SizedBox(height: 8),
               Center(
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(),
-                  child: Text('취소', style: TextStyle(color: AppColors.textSecondary)),
+                  child: Text(AppLocalizations.of(context)?.cancel ?? '취소', style: TextStyle(color: AppColors.textSecondary)),
                 ),
               ),
             ],

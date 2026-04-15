@@ -6,6 +6,7 @@ import '../../../../core/router/route_names.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
 import '../../../subscription/domain/subscription_tier.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/lesson.dart';
 import '../providers/lesson_provider.dart';
 import 'tutorial_screen.dart';
@@ -22,17 +23,18 @@ class LessonsScreen extends ConsumerWidget {
     final categoryFilter = ref.watch(selectedCategoryFilterProvider);
     final selectedInstrument = profile?.selectedInstrument ?? 'piano';
 
+    final l10n = AppLocalizations.of(context);
     final filters = [
-      ('all', '전체', '🎼'),
-      ('piano', '피아노', '🎹'),
-      ('guitar', '기타', '🎸'),
-      ('drums', '드럼', '🥁'),
-      ('violin', '바이올린', '🎻'),
+      ('all', l10n?.allCategory ?? '전체', '🎼'),
+      ('piano', l10n?.piano ?? '피아노', '🎹'),
+      ('guitar', l10n?.guitar ?? '기타', '🎸'),
+      ('drums', l10n?.drums ?? '드럼', '🥁'),
+      ('violin', l10n?.violin ?? '바이올린', '🎻'),
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('레슨'),
+        title: Text(l10n?.lessons ?? '레슨'),
       ),
       body: Column(
         children: [
@@ -56,7 +58,7 @@ class LessonsScreen extends ConsumerWidget {
                           SnackBar(
                             content: const Text('스탠다드 이상 구독 시 전체 악기를 이용할 수 있습니다.'),
                             action: SnackBarAction(
-                              label: '업그레이드',
+                              label: l10n?.upgrade ?? '업그레이드',
                               onPressed: () => context.push(RouteNames.subscription),
                             ),
                             backgroundColor: AppColors.bgCard,
@@ -320,14 +322,15 @@ class _CategoryTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selected = ref.watch(selectedCategoryFilterProvider);
+    final l10n = AppLocalizations.of(context);
     final categories = [
-      ('all', '전체', Icons.apps_rounded),
+      ('all', l10n?.allCategory ?? '전체', Icons.apps_rounded),
       ('tutorial', '악기 입문', Icons.school_rounded),
-      ('scale', '기본 스케일', Icons.piano_rounded),
-      ('nursery', '동요', Icons.child_care_rounded),
-      ('classic', '클래식', Icons.library_music_rounded),
-      ('skill', '스킬', Icons.fitness_center_rounded),
-      ('my', '나만의 음악', Icons.create_rounded),
+      ('scale', l10n?.scaleCategory ?? '기본 스케일', Icons.piano_rounded),
+      ('nursery', l10n?.nurseryCategory ?? '동요', Icons.child_care_rounded),
+      ('classic', l10n?.classicCategory ?? '클래식', Icons.library_music_rounded),
+      ('skill', l10n?.skillCategory ?? '스킬', Icons.fitness_center_rounded),
+      ('my', l10n?.myMusicCategory ?? '나만의 음악', Icons.create_rounded),
     ];
 
     return SizedBox(
@@ -348,8 +351,8 @@ class _CategoryTabs extends StatelessWidget {
                   if (tier != SubscriptionTier.premium && tier != SubscriptionTier.student) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: const Text('프리미엄 구독 시 나만의 음악을 이용할 수 있습니다.'),
-                        action: SnackBarAction(label: '업그레이드', onPressed: () => context.push(RouteNames.subscription)),
+                        content: Text(l10n?.premiumFeature ?? '프리미엄 구독 시 나만의 음악을 이용할 수 있습니다.'),
+                        action: SnackBarAction(label: l10n?.upgrade ?? '업그레이드', onPressed: () => context.push(RouteNames.subscription)),
                         backgroundColor: AppColors.bgCard,
                       ),
                     );
@@ -397,8 +400,9 @@ class _DifficultyTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selected = ref.watch(selectedDifficultyFilterProvider);
+    final l10n = AppLocalizations.of(context);
     final difficulties = [
-      ('all', '전체', null),
+      ('all', l10n?.allCategory ?? '전체', null),
       ('beginner', 'Easy', AppColors.scorePerfect),
       ('intermediate', 'Medium', AppColors.accentGold),
       ('advanced', 'Hard', AppColors.scoreMiss),

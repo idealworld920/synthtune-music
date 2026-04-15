@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/services/email_service.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../community/domain/models/community_post.dart';
@@ -92,12 +93,12 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.bgCard,
-        title: const Text('대화 내역 삭제'),
-        content: const Text('모든 대화 내역을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.'),
+        title: Text(AppLocalizations.of(context)?.deleteChatHistory ?? '대화 내역 삭제'),
+        content: Text(AppLocalizations.of(context)?.deleteConfirm ?? '모든 대화 내역을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: Text('취소', style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(AppLocalizations.of(context)?.cancel ?? '취소', style: TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
             onPressed: () {
@@ -480,27 +481,27 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.auto_awesome_rounded, color: AppColors.accent, size: 20),
-            SizedBox(width: 8),
-            Text('AI 채팅'),
+            const Icon(Icons.auto_awesome_rounded, color: AppColors.accent, size: 20),
+            const SizedBox(width: 8),
+            Text(AppLocalizations.of(context)?.aiTeacher ?? 'AI 채팅'),
           ],
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.history_rounded, color: AppColors.textSecondary, size: 20),
-            tooltip: '대화 내역',
+            tooltip: AppLocalizations.of(context)?.chatHistory ?? '대화 내역',
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChatHistoryScreen())),
           ),
           IconButton(
             icon: Icon(Icons.settings_rounded, color: AppColors.textSecondary, size: 20),
-            tooltip: '대화 설정',
+            tooltip: AppLocalizations.of(context)?.chatSettings ?? '대화 설정',
             onPressed: _showSettings,
           ),
           IconButton(
             icon: Icon(Icons.delete_outline_rounded, color: AppColors.textSecondary, size: 20),
-            tooltip: '대화 내역 삭제',
+            tooltip: AppLocalizations.of(context)?.deleteChatHistory ?? '대화 내역 삭제',
             onPressed: _confirmDeleteAll,
           ),
         ],
@@ -523,9 +524,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Row(
               children: [
-                _AttachButton(icon: Icons.image_rounded, label: '사진', onTap: () => _attachMedia('image')),
+                _AttachButton(icon: Icons.image_rounded, label: AppLocalizations.of(context)?.photo ?? '사진', onTap: () => _attachMedia('image')),
                 const SizedBox(width: 8),
-                _AttachButton(icon: Icons.videocam_rounded, label: '동영상', onTap: () => _attachMedia('video')),
+                _AttachButton(icon: Icons.videocam_rounded, label: AppLocalizations.of(context)?.video ?? '동영상', onTap: () => _attachMedia('video')),
                 const SizedBox(width: 8),
                 GestureDetector(
                   onTap: () {
@@ -548,7 +549,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          _isRecording ? '녹음 중' : '음성',
+                          _isRecording ? (AppLocalizations.of(context)?.recording ?? '녹음 중') : (AppLocalizations.of(context)?.audio ?? '음성'),
                           style: TextStyle(fontSize: 12, color: _isRecording ? AppColors.scoreMiss : AppColors.textSecondary),
                         ),
                       ],
@@ -574,7 +575,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                       controller: _ctrl,
                       style: TextStyle(color: AppColors.textPrimary, fontSize: 15),
                       decoration: InputDecoration(
-                        hintText: '메시지를 입력하세요...',
+                        hintText: AppLocalizations.of(context)?.typeMessage ?? '메시지를 입력하세요...',
                         hintStyle: TextStyle(color: AppColors.textSecondary),
                         filled: true,
                         fillColor: AppColors.bgCard,
@@ -653,7 +654,7 @@ class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '대화 설정',
+            AppLocalizations.of(context)?.chatSettings ?? '대화 설정',
             style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
@@ -663,7 +664,7 @@ class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
           ),
           const SizedBox(height: 20),
           Text(
-            '대화 저장 기간',
+            AppLocalizations.of(context)?.retentionPeriod ?? '대화 저장 기간',
             style: TextStyle(color: AppColors.textPrimary, fontSize: 15, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
@@ -704,7 +705,7 @@ class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
 
           // 말투 설정
           Text(
-            'AI 말투',
+            AppLocalizations.of(context)?.aiTone ?? 'AI 말투',
             style: TextStyle(color: AppColors.textPrimary, fontSize: 15, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
@@ -797,12 +798,12 @@ class _MessageBubble extends StatelessWidget {
             context: context,
             builder: (ctx) => AlertDialog(
               backgroundColor: AppColors.bgCard,
-              title: const Text('메시지 삭제'),
-              content: const Text('이 메시지를 삭제하시겠습니까?'),
+              title: Text(AppLocalizations.of(context)?.deleteChatHistory ?? '메시지 삭제'),
+              content: Text(AppLocalizations.of(context)?.deleteConfirm ?? '이 메시지를 삭제하시겠습니까?'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(ctx).pop(),
-                  child: Text('취소', style: TextStyle(color: AppColors.textSecondary)),
+                  child: Text(AppLocalizations.of(context)?.cancel ?? '취소', style: TextStyle(color: AppColors.textSecondary)),
                 ),
                 TextButton(
                   onPressed: () {

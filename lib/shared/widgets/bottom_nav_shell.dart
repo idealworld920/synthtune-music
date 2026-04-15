@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/router/route_names.dart';
 import '../../features/subscription/presentation/providers/subscription_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 class BottomNavShell extends ConsumerWidget {
   final Widget child;
@@ -84,12 +85,12 @@ class BottomNavShell extends ConsumerWidget {
               context.go(RouteNames.aiChat);
           }
         },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.music_note_rounded), label: '레슨'),
-          BottomNavigationBarItem(icon: Icon(Icons.fitness_center_rounded), label: '연습'),
-          BottomNavigationBarItem(icon: Icon(Icons.people_rounded), label: '커뮤니티'),
-          BottomNavigationBarItem(icon: Icon(Icons.auto_awesome_rounded), label: 'AI'),
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: AppLocalizations.of(context)?.home ?? '홈'),
+          BottomNavigationBarItem(icon: Icon(Icons.music_note_rounded), label: AppLocalizations.of(context)?.lessons ?? '레슨'),
+          BottomNavigationBarItem(icon: Icon(Icons.fitness_center_rounded), label: AppLocalizations.of(context)?.practiceStart ?? '연습'),
+          BottomNavigationBarItem(icon: Icon(Icons.people_rounded), label: AppLocalizations.of(context)?.community ?? '커뮤니티'),
+          BottomNavigationBarItem(icon: Icon(Icons.auto_awesome_rounded), label: AppLocalizations.of(context)?.ai ?? 'AI'),
         ],
       ),
     );

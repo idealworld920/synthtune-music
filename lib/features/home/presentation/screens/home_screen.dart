@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_logo.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
@@ -32,7 +33,7 @@ class HomeScreen extends ConsumerWidget {
               loading: () => const SizedBox.shrink(),
               error: (_, __) => const SizedBox.shrink(),
               data: (profile) => Text(
-                '어서오세요, ${profile?.displayName ?? '사용자'}님',
+                '${AppLocalizations.of(context)?.welcomeBack ?? '어서오세요'}, ${profile?.displayName ?? '사용자'}',
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w600,
@@ -232,7 +233,7 @@ class _ProfileCard extends StatelessWidget {
             child: OutlinedButton.icon(
               onPressed: () => context.push(RouteNames.progress),
               icon: Icon(Icons.bar_chart_rounded, size: 18),
-              label: const Text('진도 보기'),
+              label: Text(AppLocalizations.of(context)?.progress ?? '진도 보기'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 side: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
@@ -455,7 +456,7 @@ class _AdBanner extends StatelessWidget {
               foregroundColor: AppColors.primary,
               padding: const EdgeInsets.symmetric(horizontal: 12),
             ),
-            child: const Text('업그레이드', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            child: Text(AppLocalizations.of(context)?.upgrade ?? '업그레이드', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
           ),
         ],
       ),

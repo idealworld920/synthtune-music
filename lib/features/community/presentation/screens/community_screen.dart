@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../../core/constants/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import 'post_detail_screen.dart';
 import '../../domain/models/community_post.dart';
@@ -16,16 +17,17 @@ class CommunityScreen extends ConsumerWidget {
     final posts = ref.watch(filteredCommunityProvider);
     final selectedCat = ref.watch(selectedCommunityCategory);
 
+    final l10n = AppLocalizations.of(context);
     final categories = [
-      ('all', '전체', Icons.dashboard_rounded),
-      ('practice', '연습 기록', Icons.music_note_rounded),
-      ('qna', 'Q&A', Icons.help_outline_rounded),
-      ('notice', '공지사항', Icons.campaign_rounded),
-      ('feedback', '문의·의견', Icons.feedback_rounded),
+      ('all', l10n?.allCategory ?? '전체', Icons.dashboard_rounded),
+      ('practice', l10n?.communityPractice ?? '연습 기록', Icons.music_note_rounded),
+      ('qna', l10n?.communityQna ?? 'Q&A', Icons.help_outline_rounded),
+      ('notice', l10n?.communityNotice ?? '공지사항', Icons.campaign_rounded),
+      ('feedback', l10n?.communityFeedback ?? '문의·의견', Icons.feedback_rounded),
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('커뮤니티')),
+      appBar: AppBar(title: Text(l10n?.community ?? '커뮤니티')),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showPostDialog(context, ref),
         backgroundColor: AppColors.primary,
@@ -141,7 +143,7 @@ class _NewPostSheetState extends State<_NewPostSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '새 게시글',
+            AppLocalizations.of(context)?.newPost ?? '새 게시글',
             style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
@@ -184,7 +186,7 @@ class _NewPostSheetState extends State<_NewPostSheet> {
             children: [
               _MediaButton(
                 icon: Icons.image_rounded,
-                label: '사진',
+                label: AppLocalizations.of(context)?.photo ?? '사진',
                 isSelected: _selectedMedia == 'image',
                 onTap: () => setState(() {
                   _selectedMedia = 'image';
@@ -194,7 +196,7 @@ class _NewPostSheetState extends State<_NewPostSheet> {
               const SizedBox(width: 8),
               _MediaButton(
                 icon: Icons.videocam_rounded,
-                label: '동영상',
+                label: AppLocalizations.of(context)?.video ?? '동영상',
                 isSelected: _selectedMedia == 'video',
                 onTap: () => setState(() {
                   _selectedMedia = 'video';
@@ -204,7 +206,7 @@ class _NewPostSheetState extends State<_NewPostSheet> {
               const SizedBox(width: 8),
               _MediaButton(
                 icon: Icons.mic_rounded,
-                label: '녹음',
+                label: AppLocalizations.of(context)?.audio ?? '녹음',
                 isSelected: _selectedMedia == 'audio',
                 onTap: () => setState(() {
                   _selectedMedia = 'audio';
@@ -515,7 +517,7 @@ class _PostCard extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('댓글 ${updatedPost.comments.length}개', style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text('${AppLocalizations.of(context)?.comment ?? '댓글'} ${updatedPost.comments.length}', style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
                   // 댓글 목록
                   if (updatedPost.comments.isEmpty)
