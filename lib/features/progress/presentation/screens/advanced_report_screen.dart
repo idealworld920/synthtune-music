@@ -29,16 +29,16 @@ class AdvancedReportScreen extends ConsumerWidget {
         title: const Text('고급 리포트'),
         actions: isPremium ? [
           IconButton(
-            icon: const Icon(Icons.save_alt_rounded, color: AppColors.textSecondary),
+            icon: Icon(Icons.save_alt_rounded, color: AppColors.textSecondary),
             tooltip: '저장',
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('리포트가 저장되었습니다.'), backgroundColor: AppColors.scorePerfect),
+                SnackBar(content: Text('리포트가 저장되었습니다.'), backgroundColor: AppColors.scorePerfect),
               );
             },
           ),
           IconButton(
-            icon: const Icon(Icons.share_rounded, color: AppColors.primary),
+            icon: Icon(Icons.share_rounded, color: AppColors.primary),
             tooltip: '공유',
             onPressed: () => _shareReport(context, ref),
           ),
@@ -73,7 +73,7 @@ class AdvancedReportScreen extends ConsumerWidget {
     );
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('커뮤니티에 리포트가 공유되었습니다.'), backgroundColor: AppColors.primary),
+      SnackBar(content: Text('커뮤니티에 리포트가 공유되었습니다.'), backgroundColor: AppColors.primary),
     );
   }
 }
@@ -94,15 +94,15 @@ class _PremiumGate extends ConsumerWidget {
                 color: AppColors.accentGold.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.lock_rounded, color: AppColors.accentGold, size: 40),
+              child: Icon(Icons.lock_rounded, color: AppColors.accentGold, size: 40),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               '프리미엄 기능',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
             const SizedBox(height: 12),
-            const Text(
+            Text(
               '고급 리포트에서 상세한 음정 분석,\nAI 맞춤 연습 루틴, 연습 방법을\n확인할 수 있습니다.',
               textAlign: TextAlign.center,
               style: TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.6),
@@ -183,7 +183,7 @@ class _ReportContent extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(color: AppColors.bgCard, borderRadius: BorderRadius.circular(12)),
-              child: const Center(
+              child: Center(
                 child: Text('연습 기록이 쌓이면 취약 음표가 표시됩니다.', style: TextStyle(color: AppColors.textSecondary)),
               ),
             )
@@ -301,7 +301,7 @@ class _SectionTitle extends StatelessWidget {
       children: [
         Icon(icon, color: AppColors.primary, size: 20),
         const SizedBox(width: 8),
-        Text(title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+        Text(title, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
       ],
     );
   }
@@ -326,7 +326,7 @@ class _MetricCard extends StatelessWidget {
         children: [
           Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
-          Text(label, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+          Text(label, style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
         ],
       ),
     );
@@ -356,7 +356,7 @@ class _PitchAccuracyChart extends StatelessWidget {
               reservedSize: 32,
               getTitlesWidget: (v, _) => Text(
                 '${(v * 100).round()}%',
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 10),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 10),
               ),
             ),
           ),
@@ -366,7 +366,7 @@ class _PitchAccuracyChart extends StatelessWidget {
               getTitlesWidget: (v, _) {
                 final idx = v.toInt();
                 if (idx >= 0 && idx < data.length) {
-                  return Text(data[idx].$1, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12));
+                  return Text(data[idx].$1, style: TextStyle(color: AppColors.textSecondary, fontSize: 12));
                 }
                 return const Text('');
               },
@@ -440,11 +440,11 @@ class _RoutineCard extends StatelessWidget {
               children: [
                 Icon(item.icon, color: AppColors.textSecondary, size: 18),
                 const SizedBox(width: 10),
-                Expanded(child: Text(item.title, style: const TextStyle(color: AppColors.textPrimary, fontSize: 14))),
+                Expanded(child: Text(item.title, style: TextStyle(color: AppColors.textPrimary, fontSize: 14))),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(color: AppColors.bgSurface, borderRadius: BorderRadius.circular(6)),
-                  child: Text(item.duration, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                  child: Text(item.duration, style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
                 ),
               ],
             ),
@@ -490,7 +490,7 @@ class _TipCard extends StatelessWidget {
               children: [
                 Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w700, fontSize: 14)),
                 const SizedBox(height: 6),
-                Text(body, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13, height: 1.5)),
+                Text(body, style: TextStyle(color: AppColors.textSecondary, fontSize: 13, height: 1.5)),
               ],
             ),
           ),

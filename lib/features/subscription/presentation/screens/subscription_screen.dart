@@ -18,7 +18,7 @@ class SubscriptionScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: AppColors.bgSurface,
         elevation: 0,
-        title: const Text(
+        title: Text(
           '구독 플랜',
           style: TextStyle(
             color: AppColors.textPrimary,
@@ -27,7 +27,7 @@ class SubscriptionScreen extends ConsumerWidget {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.textPrimary),
+          icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.textPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -63,7 +63,7 @@ class SubscriptionScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       '나에게 맞는 플랜을 선택하여\nAI 음악 학습을 시작하세요',
                       style: TextStyle(
@@ -155,7 +155,7 @@ class _TierCard extends ConsumerWidget {
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
+            content: Text(
               '결제 기능 준비 중입니다',
               style: TextStyle(color: AppColors.textPrimary),
             ),
@@ -302,7 +302,7 @@ class _TierCard extends ConsumerWidget {
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: const Text(
+                          content: Text(
                             '결제 기능 준비 중입니다',
                             style: TextStyle(color: AppColors.textPrimary),
                           ),

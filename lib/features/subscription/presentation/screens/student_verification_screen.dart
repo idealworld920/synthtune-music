@@ -122,7 +122,7 @@ class _FormView extends StatelessWidget {
               color: AppColors.accent.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.school_rounded, color: AppColors.accent, size: 32),
+            child: Icon(Icons.school_rounded, color: AppColors.accent, size: 32),
           ),
           const SizedBox(height: 20),
           Text(
@@ -130,7 +130,7 @@ class _FormView extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             '학교 이메일로 인증하면 프리미엄 기능을\n₩4,900/월에 이용할 수 있습니다.',
             style: TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.5),
           ),
@@ -149,9 +149,9 @@ class _FormView extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.info_outline, color: AppColors.accent, size: 16),
+                    Icon(Icons.info_outline, color: AppColors.accent, size: 16),
                     const SizedBox(width: 8),
-                    const Text(
+                    Text(
                       '지원 이메일 도메인',
                       style: TextStyle(
                         color: AppColors.accent,
@@ -173,7 +173,7 @@ class _FormView extends StatelessWidget {
                     ),
                     child: Text(
                       '*$d',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textSecondary,
                         fontSize: 12,
                         fontFamily: 'monospace',
@@ -191,7 +191,7 @@ class _FormView extends StatelessWidget {
             controller: emailCtrl,
             keyboardType: TextInputType.emailAddress,
             autocorrect: false,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: '학교 이메일',
               hintText: 'example@university.ac.kr',
               prefixIcon: Icon(Icons.email_outlined, color: AppColors.textSecondary),
@@ -229,7 +229,7 @@ class _FormView extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
-          const Text(
+          Text(
             '※ 허위 정보 입력 시 계정이 정지될 수 있습니다.',
             style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
             textAlign: TextAlign.center,
@@ -255,7 +255,7 @@ class _SuccessView extends ConsumerWidget {
             color: AppColors.scorePerfect.withValues(alpha: 0.15),
             shape: BoxShape.circle,
           ),
-          child: const Icon(Icons.check_rounded, color: AppColors.scorePerfect, size: 44),
+          child: Icon(Icons.check_rounded, color: AppColors.scorePerfect, size: 44),
         ),
         const SizedBox(height: 24),
         Text(
@@ -265,7 +265,7 @@ class _SuccessView extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 12),
-        const Text(
+        Text(
           '학생 할인 요금(₩4,900/월)이 적용되었습니다.\n프리미엄 기능을 마음껏 사용하세요!',
           textAlign: TextAlign.center,
           style: TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.6),

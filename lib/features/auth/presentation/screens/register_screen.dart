@@ -94,7 +94,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 // 이름
                 TextFormField(
                   controller: _nameCtrl,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: '이름',
                     prefixIcon: Icon(Icons.person_outline, color: AppColors.textSecondary),
                   ),
@@ -109,7 +109,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 TextFormField(
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: '이메일',
                     prefixIcon: Icon(Icons.email_outlined, color: AppColors.textSecondary),
                   ),
@@ -126,7 +126,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   obscureText: _obscurePw,
                   decoration: InputDecoration(
                     labelText: '비밀번호',
-                    prefixIcon: const Icon(Icons.lock_outline, color: AppColors.textSecondary),
+                    prefixIcon: Icon(Icons.lock_outline, color: AppColors.textSecondary),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePw ? Icons.visibility_off_outlined : Icons.visibility_outlined,
@@ -146,7 +146,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 TextFormField(
                   controller: _pwConfirmCtrl,
                   obscureText: _obscurePw,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: '비밀번호 확인',
                     prefixIcon: Icon(Icons.lock_outline, color: AppColors.textSecondary),
                   ),

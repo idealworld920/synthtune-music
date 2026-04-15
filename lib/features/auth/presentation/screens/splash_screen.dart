@@ -94,7 +94,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text(
+                Text(
                   'AI 음악 교육',
                   style: TextStyle(
                     color: AppColors.textPrimary,
@@ -104,7 +104,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'AI와 함께하는 스마트 음악 학습',
                   style: TextStyle(
                     color: AppColors.textSecondary,

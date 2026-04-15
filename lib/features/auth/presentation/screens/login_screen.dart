@@ -121,7 +121,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 TextFormField(
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: '이메일',
                     prefixIcon: Icon(Icons.email_outlined, color: AppColors.textSecondary),
                   ),
@@ -138,7 +138,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   obscureText: _obscurePw,
                   decoration: InputDecoration(
                     labelText: '비밀번호',
-                    prefixIcon: const Icon(Icons.lock_outline, color: AppColors.textSecondary),
+                    prefixIcon: Icon(Icons.lock_outline, color: AppColors.textSecondary),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePw ? Icons.visibility_off_outlined : Icons.visibility_outlined,
@@ -183,12 +183,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    const Expanded(child: Divider(color: AppColors.bgCard)),
+                    Expanded(child: Divider(color: AppColors.bgCard)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Text('또는', style: Theme.of(context).textTheme.bodySmall),
                     ),
-                    const Expanded(child: Divider(color: AppColors.bgCard)),
+                    Expanded(child: Divider(color: AppColors.bgCard)),
                   ],
                 ),
                 const SizedBox(height: 16),

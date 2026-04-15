@@ -184,7 +184,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               ),
                               Text(
                                 lvl.$3,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.textSecondary,
                                   fontSize: 13,
                                 ),

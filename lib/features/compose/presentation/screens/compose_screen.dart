@@ -105,13 +105,13 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('제목을 입력해주세요')),
+        SnackBar(content: Text('제목을 입력해주세요')),
       );
       return;
     }
     if (_selectedCells.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('음표를 추가해주세요')),
+        SnackBar(content: Text('음표를 추가해주세요')),
       );
       return;
     }
@@ -144,13 +144,13 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('제목을 입력해주세요')),
+        SnackBar(content: Text('제목을 입력해주세요')),
       );
       return;
     }
     if (_selectedCells.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('음표를 하나 이상 추가해주세요')),
+        SnackBar(content: Text('음표를 하나 이상 추가해주세요')),
       );
       return;
     }
@@ -206,10 +206,10 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                 // Title input
                 TextField(
                   controller: _titleController,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.textPrimary),
                   decoration: InputDecoration(
                     hintText: '곡 제목을 입력하세요',
-                    hintStyle: const TextStyle(color: AppColors.textSecondary),
+                    hintStyle: TextStyle(color: AppColors.textSecondary),
                     filled: true,
                     fillColor: AppColors.bgCard,
                     border: OutlineInputBorder(
@@ -228,7 +228,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       '피아노 롤',
                       style: TextStyle(
                         color: AppColors.textPrimary,
@@ -256,7 +256,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                 const SizedBox(height: 24),
 
                 // Sheet music preview
-                const Text(
+                Text(
                   '악보 미리보기',
                   style: TextStyle(
                     color: AppColors.textPrimary,
@@ -352,7 +352,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                 ),
                 child: Text(
                   _noteNames[row],
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
@@ -421,13 +421,13 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
+                Icon(
                   Icons.lock_outline,
                   color: AppColors.accentGold,
                   size: 56,
                 ),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   '프리미엄 기능',
                   style: TextStyle(
                     color: AppColors.textPrimary,
@@ -436,7 +436,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   '악보 만들기는 프리미엄 또는 학생 구독자만\n이용할 수 있습니다.',
                   textAlign: TextAlign.center,
                   style: TextStyle(

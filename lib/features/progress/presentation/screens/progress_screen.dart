@@ -24,11 +24,11 @@ class ProgressScreen extends ConsumerWidget {
         title: const Text('진도'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.save_alt_rounded, size: 20, color: AppColors.textSecondary),
+            icon: Icon(Icons.save_alt_rounded, size: 20, color: AppColors.textSecondary),
             tooltip: '저장',
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('리포트가 저장되었습니다.'), backgroundColor: AppColors.scorePerfect),
+                SnackBar(content: Text('리포트가 저장되었습니다.'), backgroundColor: AppColors.scorePerfect),
               );
             },
           ),
@@ -51,14 +51,14 @@ class ProgressScreen extends ConsumerWidget {
                 createdAt: DateTime.now(),
               ));
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('커뮤니티에 공유되었습니다.'), backgroundColor: AppColors.primary),
+                SnackBar(content: Text('커뮤니티에 공유되었습니다.'), backgroundColor: AppColors.primary),
               );
             },
           ),
           TextButton.icon(
             onPressed: () => context.push(RouteNames.advancedReport),
             icon: const Icon(Icons.analytics_rounded, size: 18, color: AppColors.accentGold),
-            label: const Text('고급', style: TextStyle(color: AppColors.accentGold, fontSize: 13)),
+            label: Text('고급', style: TextStyle(color: AppColors.accentGold, fontSize: 13)),
           ),
         ],
       ),
@@ -137,7 +137,7 @@ class _LevelCard extends StatelessWidget {
                 child: Text(
                   'Lv\n${profile.currentLevel}',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -151,7 +151,7 @@ class _LevelCard extends StatelessWidget {
                   children: [
                     Text(
                       profile.displayName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -160,7 +160,7 @@ class _LevelCard extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       profile.levelLabel,
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                      style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
                     ),
                   ],
                 ),
@@ -170,7 +170,7 @@ class _LevelCard extends StatelessWidget {
                   const Text('🔥', style: TextStyle(fontSize: 22)),
                   Text(
                     '${profile.streakDays}일',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.accentGold,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
@@ -186,11 +186,11 @@ class _LevelCard extends StatelessWidget {
             children: [
               Text(
                 '${profile.xpPoints} XP',
-                style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600),
+                style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600),
               ),
               Text(
                 '${profile.xpForNextLevel} XP (Lv.${profile.currentLevel + 1})',
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
               ),
             ],
           ),
@@ -200,7 +200,7 @@ class _LevelCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: profile.xpProgress,
               backgroundColor: AppColors.bgCard,
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
               minHeight: 8,
             ),
           ),
@@ -292,7 +292,7 @@ class _MiniStatCard extends StatelessWidget {
                 ),
                 TextSpan(
                   text: ' $unit',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 11,
                   ),
@@ -302,7 +302,7 @@ class _MiniStatCard extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(label,
-              style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 11),
               textAlign: TextAlign.center),
         ],
       ),
@@ -341,7 +341,7 @@ class _WeeklyBarChart extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 4),
                       child: Text(
                         data[val.toInt()].day,
-                        style: const TextStyle(
+                        style: TextStyle(
                             color: AppColors.textSecondary, fontSize: 11),
                       ),
                     );
@@ -388,7 +388,7 @@ class _ScoreLineChart extends StatelessWidget {
           color: AppColors.bgCard,
           borderRadius: BorderRadius.circular(14),
         ),
-        child: const Center(
+        child: Center(
           child: Text('연습 기록이 없습니다.', style: TextStyle(color: AppColors.textSecondary)),
         ),
       );
@@ -417,7 +417,7 @@ class _ScoreLineChart extends StatelessWidget {
                 interval: 50,
                 getTitlesWidget: (val, meta) => Text(
                   '${val.round()}',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 10),
+                  style: TextStyle(color: AppColors.textSecondary, fontSize: 10),
                 ),
               ),
             ),
@@ -503,7 +503,7 @@ class _HistoryCard extends StatelessWidget {
               children: [
                 Text(
                   session.lessonTitle as String,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
@@ -512,7 +512,7 @@ class _HistoryCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   _formatDate(session.createdAt as DateTime),
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                  style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
                 ),
               ],
             ),

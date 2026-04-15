@@ -63,7 +63,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     children: [
                       Text(
                         profile?.displayName ?? firebaseUser?.displayName ?? '사용자',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
@@ -72,7 +72,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       const SizedBox(height: 4),
                       Text(
                         profile?.email ?? firebaseUser?.email ?? '',
-                        style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                        style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
                       ),
                     ],
                   ),
@@ -137,7 +137,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('취소', style: TextStyle(color: AppColors.textSecondary)),
+            child: Text('취소', style: TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
             onPressed: () async {
@@ -145,7 +145,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               await ref.read(authNotifierProvider.notifier).signOut();
               if (mounted) context.go(RouteNames.login);
             },
-            child: const Text('로그아웃', style: TextStyle(color: AppColors.primary)),
+            child: Text('로그아웃', style: TextStyle(color: AppColors.primary)),
           ),
         ],
       ),
@@ -164,7 +164,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('취소', style: TextStyle(color: AppColors.textSecondary)),
+            child: Text('취소', style: TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
             onPressed: () async {
@@ -183,7 +183,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 context.go(RouteNames.login);
               }
             },
-            child: const Text('탈퇴', style: TextStyle(color: AppColors.scoreMiss)),
+            child: Text('탈퇴', style: TextStyle(color: AppColors.scoreMiss)),
           ),
         ],
       ),
@@ -201,7 +201,7 @@ class _SectionHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
           color: AppColors.textSecondary,
@@ -249,9 +249,9 @@ class _SettingsTile extends StatelessWidget {
         ),
       ),
       subtitle: subtitle != null
-          ? Text(subtitle!, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12))
+          ? Text(subtitle!, style: TextStyle(color: AppColors.textSecondary, fontSize: 12))
           : null,
-      trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary),
+      trailing: Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary),
       onTap: onTap,
     );
   }

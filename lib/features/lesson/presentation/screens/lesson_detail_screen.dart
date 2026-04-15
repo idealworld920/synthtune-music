@@ -18,7 +18,7 @@ class LessonDetailScreen extends ConsumerWidget {
     if (lesson == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: const Center(
+        body: Center(
           child: Text('레슨을 찾을 수 없습니다.', style: TextStyle(color: AppColors.textPrimary)),
         ),
       );
@@ -61,7 +61,7 @@ class LessonDetailScreen extends ConsumerWidget {
                     const SizedBox(height: 12),
                     Text(
                       lesson.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -113,7 +113,7 @@ class LessonDetailScreen extends ConsumerWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('완료 보상', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                            Text('완료 보상', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
                             Text(
                               '+${lesson.xpReward} XP',
                               style: const TextStyle(
@@ -155,7 +155,7 @@ class LessonDetailScreen extends ConsumerWidget {
                         color: AppColors.bgCard,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -235,7 +235,7 @@ class _NoteList extends StatelessWidget {
           ),
           child: Text(
             note.noteName,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 13,
               fontWeight: FontWeight.w500,

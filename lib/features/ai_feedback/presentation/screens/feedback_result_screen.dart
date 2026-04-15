@@ -78,7 +78,7 @@ class _FeedbackResultScreenState extends ConsumerState<FeedbackResultScreen>
     if (_session == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: const Center(child: Text('결과가 없습니다.')),
+        body: Center(child: Text('결과가 없습니다.')),
       );
     }
 
@@ -115,7 +115,7 @@ class _FeedbackResultScreenState extends ConsumerState<FeedbackResultScreen>
               const SizedBox(height: 8),
               Text(
                 _scoreMessage(session.score),
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -124,7 +124,7 @@ class _FeedbackResultScreenState extends ConsumerState<FeedbackResultScreen>
               const SizedBox(height: 4),
               Text(
                 session.lessonTitle,
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
               ),
               const SizedBox(height: 24),
 
@@ -207,7 +207,7 @@ class _FeedbackResultScreenState extends ConsumerState<FeedbackResultScreen>
                         label: const Text('홈으로'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.textPrimary,
-                          side: const BorderSide(color: AppColors.bgCard),
+                          side: BorderSide(color: AppColors.bgCard),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -329,7 +329,7 @@ class _StatCard extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(label,
-              style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 11),
               textAlign: TextAlign.center),
         ],
       ),
@@ -465,7 +465,7 @@ class _AiFeedbackCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             _generateFeedback(),
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
               height: 1.5,

@@ -77,7 +77,7 @@ class CommunityScreen extends ConsumerWidget {
                       selectedCat == 'qna' ? '아직 질문이 없습니다. 첫 질문을 남겨보세요!' :
                       selectedCat == 'feedback' ? '의견을 남겨주세요!' :
                       '아직 게시물이 없습니다.',
-                      style: const TextStyle(color: AppColors.textSecondary),
+                      style: TextStyle(color: AppColors.textSecondary),
                     ),
                   )
                 : ListView.separated(
@@ -137,7 +137,7 @@ class _NewPostSheetState extends State<_NewPostSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             '새 게시글',
             style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold),
           ),
@@ -162,10 +162,10 @@ class _NewPostSheetState extends State<_NewPostSheet> {
           TextField(
             controller: _ctrl,
             maxLines: 3,
-            style: const TextStyle(color: AppColors.textPrimary),
+            style: TextStyle(color: AppColors.textPrimary),
             decoration: InputDecoration(
               hintText: '오늘 연습 어떠셨나요?',
-              hintStyle: const TextStyle(color: AppColors.textSecondary),
+              hintStyle: TextStyle(color: AppColors.textSecondary),
               filled: true,
               fillColor: AppColors.bgCard,
               border: OutlineInputBorder(
@@ -236,7 +236,7 @@ class _NewPostSheetState extends State<_NewPostSheet> {
                   const Spacer(),
                   GestureDetector(
                     onTap: () => setState(() { _selectedMedia = null; _mediaAttached = false; }),
-                    child: const Icon(Icons.close_rounded, color: AppColors.textSecondary, size: 16),
+                    child: Icon(Icons.close_rounded, color: AppColors.textSecondary, size: 16),
                   ),
                 ],
               ),
@@ -347,7 +347,7 @@ class _PostCard extends ConsumerWidget {
                 backgroundColor: AppColors.primary.withValues(alpha: 0.2),
                 child: Text(
                   post.userName.isNotEmpty ? post.userName[0] : '?',
-                  style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                  style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
                 ),
               ),
               const SizedBox(width: 10),
@@ -355,8 +355,8 @@ class _PostCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(post.userName, style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 14)),
-                    Text(timeago.format(post.createdAt, locale: 'ko'), style: const TextStyle(color: AppColors.textSecondary, fontSize: 11)),
+                    Text(post.userName, style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 14)),
+                    Text(timeago.format(post.createdAt, locale: 'ko'), style: TextStyle(color: AppColors.textSecondary, fontSize: 11)),
                   ],
                 ),
               ),
@@ -388,7 +388,7 @@ class _PostCard extends ConsumerWidget {
           const SizedBox(height: 10),
 
           // 본문
-          Text(post.content, style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, height: 1.5)),
+          Text(post.content, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, height: 1.5)),
 
           // 미디어 첨부 표시
           if (post.mediaUrls.isNotEmpty) ...[
@@ -416,7 +416,7 @@ class _PostCard extends ConsumerWidget {
                       post.mediaType == 'image' ? '사진'
                           : post.mediaType == 'video' ? '동영상'
                           : '녹음 파일',
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                      style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
                     ),
                   ],
                 ),
@@ -439,13 +439,13 @@ class _PostCard extends ConsumerWidget {
                       child: Icon(
                         post.isLiked ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                         key: ValueKey(post.isLiked),
-                        color: post.isLiked ? const Color(0xFFFF4B6E) : AppColors.textSecondary,
+                        color: post.isLiked ? Color(0xFFFF4B6E) : AppColors.textSecondary,
                         size: 20,
                       ),
                     ),
                     const SizedBox(width: 4),
                     Text('${post.likes}', style: TextStyle(
-                      color: post.isLiked ? const Color(0xFFFF4B6E) : AppColors.textSecondary, fontSize: 13,
+                      color: post.isLiked ? Color(0xFFFF4B6E) : AppColors.textSecondary, fontSize: 13,
                     )),
                   ],
                 ),
@@ -457,9 +457,9 @@ class _PostCard extends ConsumerWidget {
                 onTap: () => _showComments(context, ref, post),
                 child: Row(
                   children: [
-                    const Icon(Icons.chat_bubble_outline_rounded, color: AppColors.textSecondary, size: 18),
+                    Icon(Icons.chat_bubble_outline_rounded, color: AppColors.textSecondary, size: 18),
                     const SizedBox(width: 4),
-                    Text('${post.comments.length}', style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                    Text('${post.comments.length}', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
                   ],
                 ),
               ),
@@ -470,14 +470,14 @@ class _PostCard extends ConsumerWidget {
                 onTap: () {
                   ref.read(communityProvider.notifier).sharePost(post.id);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('공유되었습니다.'), duration: Duration(seconds: 1)),
+                    SnackBar(content: Text('공유되었습니다.'), duration: Duration(seconds: 1)),
                   );
                 },
                 child: Row(
                   children: [
-                    const Icon(Icons.share_outlined, color: AppColors.textSecondary, size: 18),
+                    Icon(Icons.share_outlined, color: AppColors.textSecondary, size: 18),
                     const SizedBox(width: 4),
-                    Text('${post.shares}', style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                    Text('${post.shares}', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
                   ],
                 ),
               ),
@@ -511,12 +511,12 @@ class _PostCard extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('댓글 ${updatedPost.comments.length}개', style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text('댓글 ${updatedPost.comments.length}개', style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
                   // 댓글 목록
                   if (updatedPost.comments.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Center(child: Text('아직 댓글이 없습니다.', style: TextStyle(color: AppColors.textSecondary))),
                     )
                   else
@@ -534,7 +534,7 @@ class _PostCard extends ConsumerWidget {
                                 CircleAvatar(
                                   radius: 14,
                                   backgroundColor: AppColors.primary.withValues(alpha: 0.2),
-                                  child: Text(c.userName[0], style: const TextStyle(fontSize: 11, color: AppColors.textPrimary)),
+                                  child: Text(c.userName[0], style: TextStyle(fontSize: 11, color: AppColors.textPrimary)),
                                 ),
                                 const SizedBox(width: 10),
                                 Expanded(
@@ -543,13 +543,13 @@ class _PostCard extends ConsumerWidget {
                                     children: [
                                       Row(
                                         children: [
-                                          Text(c.userName, style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 13)),
+                                          Text(c.userName, style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 13)),
                                           const SizedBox(width: 8),
-                                          Text(timeago.format(c.createdAt, locale: 'ko'), style: const TextStyle(color: AppColors.textSecondary, fontSize: 11)),
+                                          Text(timeago.format(c.createdAt, locale: 'ko'), style: TextStyle(color: AppColors.textSecondary, fontSize: 11)),
                                         ],
                                       ),
                                       const SizedBox(height: 4),
-                                      Text(c.text, style: const TextStyle(color: AppColors.textPrimary, fontSize: 13)),
+                                      Text(c.text, style: TextStyle(color: AppColors.textPrimary, fontSize: 13)),
                                     ],
                                   ),
                                 ),
@@ -559,17 +559,17 @@ class _PostCard extends ConsumerWidget {
                         },
                       ),
                     ),
-                  const Divider(color: AppColors.bgCard),
+                  Divider(color: AppColors.bgCard),
                   // 댓글 입력
                   Row(
                     children: [
                       Expanded(
                         child: TextField(
                           controller: ctrl,
-                          style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+                          style: TextStyle(color: AppColors.textPrimary, fontSize: 14),
                           decoration: InputDecoration(
                             hintText: '댓글을 입력하세요...',
-                            hintStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                            hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 14),
                             filled: true,
                             fillColor: AppColors.bgCard,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),

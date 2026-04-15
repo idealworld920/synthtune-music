@@ -97,14 +97,14 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('취소', style: TextStyle(color: AppColors.textSecondary)),
+            child: Text('취소', style: TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(ctx).pop();
               ref.read(chatProvider.notifier).clearAll();
             },
-            child: const Text('삭제', style: TextStyle(color: AppColors.scoreMiss)),
+            child: Text('삭제', style: TextStyle(color: AppColors.scoreMiss)),
           ),
         ],
       ),
@@ -236,19 +236,19 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('아래 내용을 운영팀에 전달할까요?', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+              Text('아래 내용을 운영팀에 전달할까요?', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
               const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(color: AppColors.bgSurface, borderRadius: BorderRadius.circular(8)),
-                child: Text(userText, style: const TextStyle(color: AppColors.textPrimary, fontSize: 13)),
+                child: Text(userText, style: TextStyle(color: AppColors.textPrimary, fontSize: 13)),
               ),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('아니오', style: TextStyle(color: AppColors.textSecondary)),
+              child: Text('아니오', style: TextStyle(color: AppColors.textSecondary)),
             ),
             TextButton(
               onPressed: () async {
@@ -291,7 +291,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                 ));
                 _scrollToBottom();
               },
-              child: const Text('전송', style: TextStyle(color: AppColors.primary)),
+              child: Text('전송', style: TextStyle(color: AppColors.primary)),
             ),
           ],
         ),
@@ -446,17 +446,17 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.history_rounded, color: AppColors.textSecondary, size: 20),
+            icon: Icon(Icons.history_rounded, color: AppColors.textSecondary, size: 20),
             tooltip: '대화 내역',
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChatHistoryScreen())),
           ),
           IconButton(
-            icon: const Icon(Icons.settings_rounded, color: AppColors.textSecondary, size: 20),
+            icon: Icon(Icons.settings_rounded, color: AppColors.textSecondary, size: 20),
             tooltip: '대화 설정',
             onPressed: _showSettings,
           ),
           IconButton(
-            icon: const Icon(Icons.delete_outline_rounded, color: AppColors.textSecondary, size: 20),
+            icon: Icon(Icons.delete_outline_rounded, color: AppColors.textSecondary, size: 20),
             tooltip: '대화 내역 삭제',
             onPressed: _confirmDeleteAll,
           ),
@@ -518,7 +518,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           // 텍스트 입력
           Container(
             padding: const EdgeInsets.fromLTRB(16, 8, 8, 16),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.bgSurface,
               border: Border(top: BorderSide(color: AppColors.bgCard)),
             ),
@@ -529,10 +529,10 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                   Expanded(
                     child: TextField(
                       controller: _ctrl,
-                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
+                      style: TextStyle(color: AppColors.textPrimary, fontSize: 15),
                       decoration: InputDecoration(
                         hintText: '메시지를 입력하세요...',
-                        hintStyle: const TextStyle(color: AppColors.textSecondary),
+                        hintStyle: TextStyle(color: AppColors.textSecondary),
                         filled: true,
                         fillColor: AppColors.bgCard,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -608,22 +608,22 @@ class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             '대화 설정',
             style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
             '현재 저장된 대화: $msgCount개',
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
           ),
           const SizedBox(height: 20),
-          const Text(
+          Text(
             '대화 저장 기간',
             style: TextStyle(color: AppColors.textPrimary, fontSize: 15, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
-          const Text(
+          Text(
             '설정 기간이 지난 대화는 자동으로 삭제됩니다.',
             style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
           ),
@@ -659,12 +659,12 @@ class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
           const SizedBox(height: 24),
 
           // 말투 설정
-          const Text(
+          Text(
             'AI 말투',
             style: TextStyle(color: AppColors.textPrimary, fontSize: 15, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
-          const Text(
+          Text(
             'AI 음악 선생님의 말투를 설정합니다.',
             style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
           ),
@@ -728,7 +728,7 @@ class _AttachButton extends StatelessWidget {
           children: [
             Icon(icon, size: 16, color: AppColors.textSecondary),
             const SizedBox(width: 4),
-            Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+            Text(label, style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
           ],
         ),
       ),
@@ -757,14 +757,14 @@ class _MessageBubble extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(ctx).pop(),
-                  child: const Text('취소', style: TextStyle(color: AppColors.textSecondary)),
+                  child: Text('취소', style: TextStyle(color: AppColors.textSecondary)),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.of(ctx).pop();
                     onDelete();
                   },
-                  child: const Text('삭제', style: TextStyle(color: AppColors.scoreMiss)),
+                  child: Text('삭제', style: TextStyle(color: AppColors.scoreMiss)),
                 ),
               ],
             ),
@@ -781,7 +781,7 @@ class _MessageBubble extends StatelessWidget {
                   color: AppColors.accent.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.auto_awesome_rounded, color: AppColors.accent, size: 16),
+                child: Icon(Icons.auto_awesome_rounded, color: AppColors.accent, size: 16),
               ),
               const SizedBox(width: 8),
             ],
@@ -817,7 +817,7 @@ class _MessageBubble extends StatelessWidget {
                           ),
                         ),
                       ),
-                    Text(message.text, style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, height: 1.5)),
+                    Text(message.text, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, height: 1.5)),
                     const SizedBox(height: 4),
                     Text(
                       '${message.time.hour.toString().padLeft(2, '0')}:${message.time.minute.toString().padLeft(2, '0')}',

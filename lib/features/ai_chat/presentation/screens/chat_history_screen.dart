@@ -14,7 +14,7 @@ class ChatHistoryScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('대화 내역')),
       body: dates.isEmpty
-          ? const Center(child: Text('저장된 대화가 없습니다.', style: TextStyle(color: AppColors.textSecondary)))
+          ? Center(child: Text('저장된 대화가 없습니다.', style: TextStyle(color: AppColors.textSecondary)))
           : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: dates.length,
@@ -44,20 +44,20 @@ class ChatHistoryScreen extends ConsumerWidget {
                               color: AppColors.primary.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Icon(Icons.chat_rounded, color: AppColors.primary, size: 22),
+                            child: Icon(Icons.chat_rounded, color: AppColors.primary, size: 22),
                           ),
                           const SizedBox(width: 14),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(_formatDate(date), style: const TextStyle(
+                                Text(_formatDate(date), style: TextStyle(
                                   color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 15,
                                 )),
                                 const SizedBox(height: 4),
                                 Text(
                                   '내 메시지 $userMsgs개 · AI 답변 $aiMsgs개',
-                                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                                  style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
                                 ),
                                 // 첫 사용자 메시지 미리보기
                                 if (msgs.any((m) => m.isUser)) ...[
@@ -72,7 +72,7 @@ class ChatHistoryScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
-                          const Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary),
+                          Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary),
                         ],
                       ),
                     ),
@@ -122,7 +122,7 @@ class _DayDetailScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppColors.accent.withValues(alpha: 0.2), shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.auto_awesome_rounded, color: AppColors.accent, size: 14),
+                    child: Icon(Icons.auto_awesome_rounded, color: AppColors.accent, size: 14),
                   ),
                   const SizedBox(width: 8),
                 ],
@@ -156,7 +156,7 @@ class _DayDetailScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                        Text(msg.text, style: const TextStyle(color: AppColors.textPrimary, fontSize: 13, height: 1.4)),
+                        Text(msg.text, style: TextStyle(color: AppColors.textPrimary, fontSize: 13, height: 1.4)),
                         const SizedBox(height: 3),
                         Text(
                           '${msg.time.hour.toString().padLeft(2, '0')}:${msg.time.minute.toString().padLeft(2, '0')}',

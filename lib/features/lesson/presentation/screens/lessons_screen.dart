@@ -185,7 +185,7 @@ class _LessonListCard extends StatelessWidget {
                     lesson.description,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 12,
                     ),
@@ -244,15 +244,15 @@ class _LessonListCard extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.bgCard,
-        title: const Text('잠긴 레슨', style: TextStyle(color: AppColors.textPrimary)),
-        content: const Text(
+        title: Text('잠긴 레슨', style: TextStyle(color: AppColors.textPrimary)),
+        content: Text(
           '이전 레슨을 먼저 완료해야 해제됩니다.',
           style: TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('확인', style: TextStyle(color: AppColors.primary)),
+            child: Text('확인', style: TextStyle(color: AppColors.primary)),
           ),
         ],
       ),

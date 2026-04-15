@@ -21,7 +21,7 @@ class PracticeScreen extends ConsumerWidget {
     if (lesson == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: const Center(child: Text('레슨을 찾을 수 없습니다.')),
+        body: Center(child: Text('레슨을 찾을 수 없습니다.')),
       );
     }
 
@@ -206,7 +206,7 @@ class _NoteDisplay extends StatelessWidget {
               '${practiceState.countdownSeconds}',
               style: const TextStyle(color: AppColors.primary, fontSize: 56, fontWeight: FontWeight.bold),
             ),
-            const Text('준비하세요!', style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+            Text('준비하세요!', style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
           ] else if (practiceState.status == PracticeStatus.recording) ...[
             Expanded(
               child: SheetMusicWidget(
@@ -228,7 +228,7 @@ class _NoteDisplay extends StatelessWidget {
                 const SizedBox(width: 16),
                 Text(
                   '현재 음: ${practiceState.detectedNote}',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                  style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
                 ),
               ],
             ),
@@ -254,7 +254,7 @@ class _NoteDisplay extends StatelessWidget {
               ],
             ),
           ] else if (practiceState.status == PracticeStatus.error) ...[
-            const Icon(Icons.error_outline, color: AppColors.scoreMiss, size: 48),
+            Icon(Icons.error_outline, color: AppColors.scoreMiss, size: 48),
             const SizedBox(height: 12),
             Text(
               practiceState.errorMessage ?? '오류가 발생했습니다',
@@ -339,7 +339,7 @@ class _PitchMeter extends StatelessWidget {
               children: [
                 Text(
                   '피치 미터',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
+                  style: TextStyle(color: AppColors.textSecondary, fontSize: 11),
                 ),
                 const SizedBox(height: 4),
                 ClipRRect(
@@ -389,7 +389,7 @@ class _ControlArea extends ConsumerWidget {
         );
 
       case PracticeStatus.countdown:
-        return const _BigButton(
+        return _BigButton(
           label: '준비 중...',
           icon: Icons.timer_rounded,
           color: AppColors.textSecondary,
@@ -546,7 +546,7 @@ class _CameraPipState extends State<_CameraPip> {
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.primary, width: 1.5),
           ),
-          child: const Icon(Icons.videocam_rounded, color: AppColors.primary, size: 20),
+          child: Icon(Icons.videocam_rounded, color: AppColors.primary, size: 20),
         ),
       );
     }
@@ -568,7 +568,7 @@ class _CameraPipState extends State<_CameraPip> {
             if (_initialized && _controller != null)
               CameraPreview(_controller!)
             else
-              const Center(
+              Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

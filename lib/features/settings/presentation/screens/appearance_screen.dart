@@ -52,7 +52,7 @@ class AppearanceScreen extends ConsumerWidget {
                           ),
                         ),
                         if (isSelected)
-                          const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 14),
+                          Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 14),
                       ],
                     ),
                   ),
@@ -145,8 +145,8 @@ class AppearanceScreen extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(s.label, style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
-                            Text(s.description, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                            Text(s.label, style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
+                            Text(s.description, style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
                           ],
                         ),
                       ),
@@ -168,7 +168,7 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: const TextStyle(
+    return Text(text, style: TextStyle(
       color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w700,
     ));
   }

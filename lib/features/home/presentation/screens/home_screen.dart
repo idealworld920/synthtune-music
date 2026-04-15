@@ -43,7 +43,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                const Text(
+                Text(
                   'AI 음악 교육',
                   style: TextStyle(
                     color: AppColors.textPrimary,
@@ -55,12 +55,12 @@ class HomeScreen extends ConsumerWidget {
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.edit_note_rounded, color: AppColors.accentGold),
+                icon: Icon(Icons.edit_note_rounded, color: AppColors.accentGold),
                 tooltip: '악보 만들기',
                 onPressed: () => context.push(RouteNames.compose),
               ),
               IconButton(
-                icon: const Icon(Icons.settings_rounded, color: AppColors.textSecondary),
+                icon: Icon(Icons.settings_rounded, color: AppColors.textSecondary),
                 onPressed: () => context.push(RouteNames.settings),
               ),
             ],
@@ -164,7 +164,7 @@ class _ProfileCard extends StatelessWidget {
                   profile.displayName.isNotEmpty
                       ? profile.displayName[0].toUpperCase()
                       : '?',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -178,7 +178,7 @@ class _ProfileCard extends StatelessWidget {
                   children: [
                     Text(
                       '안녕하세요, ${profile.displayName}님!',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -186,7 +186,7 @@ class _ProfileCard extends StatelessWidget {
                     ),
                     Text(
                       'Lv.${profile.currentLevel}  •  ${profile.xpPoints} XP',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textSecondary,
                         fontSize: 13,
                       ),
@@ -217,11 +217,11 @@ class _ProfileCard extends StatelessWidget {
             children: [
               Text(
                 '다음 레벨까지',
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
               ),
               Text(
                 '${profile.xpPoints} / ${profile.xpForNextLevel} XP',
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
               ),
             ],
           ),
@@ -352,7 +352,7 @@ class _LessonCard extends StatelessWidget {
                 children: [
                   Text(
                     lesson.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
@@ -374,7 +374,7 @@ class _LessonCard extends StatelessWidget {
               children: [
                 Text(
                   '${lesson.durationMinutes}분',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                  style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -433,10 +433,10 @@ class _AdBanner extends StatelessWidget {
               border: Border.all(color: AppColors.textSecondary.withValues(alpha: 0.5)),
               borderRadius: BorderRadius.circular(4),
             ),
-            child: const Text('광고', style: TextStyle(color: AppColors.textSecondary, fontSize: 10)),
+            child: Text('광고', style: TextStyle(color: AppColors.textSecondary, fontSize: 10)),
           ),
           const SizedBox(width: 10),
-          const Expanded(
+          Expanded(
             child: Text(
               '스탠다드로 업그레이드하고 광고를 제거하세요',
               style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
