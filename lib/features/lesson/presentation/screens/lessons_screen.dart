@@ -241,7 +241,7 @@ class _LessonListCard extends StatelessWidget {
   void _showLockedDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.bgCard,
         title: const Text('잠긴 레슨', style: TextStyle(color: AppColors.textPrimary)),
         content: const Text(
@@ -250,7 +250,7 @@ class _LessonListCard extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.of(ctx).pop(),
             child: const Text('확인', style: TextStyle(color: AppColors.primary)),
           ),
         ],
