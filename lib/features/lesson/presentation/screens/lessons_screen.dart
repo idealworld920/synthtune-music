@@ -8,6 +8,7 @@ import '../../../subscription/domain/subscription_tier.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../../domain/models/lesson.dart';
 import '../providers/lesson_provider.dart';
+import 'tutorial_screen.dart';
 
 class LessonsScreen extends ConsumerWidget {
   const LessonsScreen({super.key});
@@ -107,9 +108,11 @@ class LessonsScreen extends ConsumerWidget {
           _CategoryTabs(ref: ref),
           // 난이도 필터
           _DifficultyTabs(ref: ref),
-          // 레슨 목록 or 나만의 음악 안내
+          // 레슨 목록 or 특수 탭 안내
           Expanded(
-            child: categoryFilter == 'my' && lessons.isEmpty
+            child: categoryFilter == 'tutorial'
+                ? _TutorialList(selectedInstrument: filter == 'all' ? (profile?.selectedInstrument ?? 'piano') : filter)
+                : categoryFilter == 'my' && lessons.isEmpty
                 ? Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -432,6 +435,62 @@ class _DifficultyTabs extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class _TutorialList extends StatelessWidget {
+  final String selectedInstrument;
+  const _TutorialList({required this.selectedInstrument});
+
+  @override
+  Widget build(BuildContext context) {
+    final instruments = [
+      ('piano', '피아노', '🎹', '건반 악기의 대표'),
+      ('guitar', '기타', '🎸', '6줄 현악기'),
+      ('violin', '바이올린', '🎻', '활로 연주하는 현악기'),
+      ('drums', '드럼', '🥁', '리듬의 기초 타악기'),
+    ];
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Text('악기를 처음 접하시나요?\n입문 튜토리얼로 시작해보세요!', style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+        ),
+        ...instruments.map((inst) => Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: GestureDetector(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => TutorialScreen(instrument: inst.$1))),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.bgCard,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: inst.$1 == selectedInstrument ? AppColors.primary.withValues(alpha: 0.5) : AppColors.bgSurface),
+              ),
+              child: Row(
+                children: [
+                  Text(inst.$3, style: const TextStyle(fontSize: 36)),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('${inst.$2} 입문', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 16)),
+                        const SizedBox(height: 4),
+                        Text('${inst.$4} · 소개/자세/음위치/운지법', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary),
+                ],
+              ),
+            ),
+          ),
+        )),
+      ],
     );
   }
 }
