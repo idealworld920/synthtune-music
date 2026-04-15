@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
+import '../../../compose/presentation/providers/composition_provider.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../../domain/models/lesson.dart';
 
@@ -2233,6 +2234,10 @@ final filteredLessonsProvider = Provider<List<Lesson>>((ref) {
   }
 
   // 카테고리 필터
+  if (categoryFilter == 'my') {
+    // 나만의 음악: 사용자 창작 곡
+    return ref.watch(userCompositionsProvider);
+  }
   if (categoryFilter != 'all') {
     result = result.where((l) => l.category == categoryFilter).toList();
   }
@@ -2240,9 +2245,12 @@ final filteredLessonsProvider = Provider<List<Lesson>>((ref) {
   return result;
 });
 
-// 특정 레슨 가져오기
+// 특정 레슨 가져오기 (사용자 창작 곡 포함)
 final lessonByIdProvider = Provider.family<Lesson?, String>((ref, id) {
-  return ref.watch(lessonListProvider).cast<Lesson?>().firstWhere(
+  final all = ref.watch(lessonListProvider);
+  final userComps = ref.watch(userCompositionsProvider);
+  final combined = [...all, ...userComps];
+  return combined.cast<Lesson?>().firstWhere(
     (l) => l?.id == id,
     orElse: () => null,
   );

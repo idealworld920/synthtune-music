@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:camera/camera.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/sheet_music_widget.dart';
@@ -60,26 +61,38 @@ class PracticeScreen extends ConsumerWidget {
             },
           ),
         ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                // 음표 악보 영역
-                Expanded(
-                  flex: 3,
-                  child: _NoteDisplay(lesson: lesson, practiceState: practiceState),
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    // 음표 악보 영역
+                    Expanded(
+                      flex: 3,
+                      child: _NoteDisplay(lesson: lesson, practiceState: practiceState),
+                    ),
+                    const SizedBox(height: 20),
+                    // 피치 미터
+                    _PitchMeter(state: practiceState),
+                    const SizedBox(height: 24),
+                    // 컨트롤 버튼
+                    _ControlArea(lesson: lesson, state: practiceState),
+                    const SizedBox(height: 16),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                // 피치 미터
-                _PitchMeter(state: practiceState),
-                const SizedBox(height: 24),
-                // 컨트롤 버튼
-                _ControlArea(lesson: lesson, state: practiceState),
-                const SizedBox(height: 16),
-              ],
+              ),
             ),
-          ),
+            // 카메라 PIP (녹음 중일 때 표시)
+            if (practiceState.status == PracticeStatus.recording ||
+                practiceState.status == PracticeStatus.countdown)
+              const Positioned(
+                top: 80,
+                right: 12,
+                child: _CameraPip(),
+              ),
+          ],
         ),
       ),
     );
@@ -420,6 +433,130 @@ class _BigButton extends StatelessWidget {
                 color: active ? color : AppColors.textSecondary,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CameraPip extends StatefulWidget {
+  const _CameraPip();
+
+  @override
+  State<_CameraPip> createState() => _CameraPipState();
+}
+
+class _CameraPipState extends State<_CameraPip> {
+  CameraController? _controller;
+  bool _initialized = false;
+  bool _hidden = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initCamera();
+  }
+
+  Future<void> _initCamera() async {
+    try {
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) return;
+      // 전면 카메라 우선
+      final front = cameras.firstWhere(
+        (c) => c.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
+      _controller = CameraController(front, ResolutionPreset.low, enableAudio: false);
+      await _controller!.initialize();
+      if (mounted) setState(() => _initialized = true);
+    } catch (_) {
+      // 카메라 사용 불가 시 무시
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_hidden) {
+      return GestureDetector(
+        onTap: () => setState(() => _hidden = false),
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: AppColors.bgCard.withValues(alpha: 0.9),
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.primary, width: 1.5),
+          ),
+          child: const Icon(Icons.videocam_rounded, color: AppColors.primary, size: 20),
+        ),
+      );
+    }
+
+    return Container(
+      width: 110,
+      height: 150,
+      decoration: BoxDecoration(
+        color: AppColors.bgCard,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.6), width: 2),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 8)],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Stack(
+          children: [
+            if (_initialized && _controller != null)
+              CameraPreview(_controller!)
+            else
+              const Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.videocam_off_rounded, color: AppColors.textSecondary, size: 24),
+                    SizedBox(height: 4),
+                    Text('카메라', style: TextStyle(color: AppColors.textSecondary, fontSize: 10)),
+                  ],
+                ),
+              ),
+            // 닫기 버튼
+            Positioned(
+              top: 2,
+              right: 2,
+              child: GestureDetector(
+                onTap: () => setState(() => _hidden = true),
+                child: Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.6),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.close, color: Colors.white, size: 14),
+                ),
+              ),
+            ),
+            // AI 분석 라벨
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                color: Colors.black.withValues(alpha: 0.6),
+                child: const Text(
+                  'AI 자세 분석',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white70, fontSize: 9, fontWeight: FontWeight.w600),
+                ),
               ),
             ),
           ],

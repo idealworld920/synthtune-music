@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
+import '../../../subscription/domain/subscription_tier.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../../domain/models/lesson.dart';
 import '../providers/lesson_provider.dart';
@@ -291,6 +292,7 @@ class _CategoryTabs extends StatelessWidget {
       ('scale', '기본 스케일', Icons.piano_rounded),
       ('nursery', '동요', Icons.child_care_rounded),
       ('classic', '클래식', Icons.library_music_rounded),
+      ('my', '나만의 음악', Icons.create_rounded),
     ];
 
     return SizedBox(
@@ -305,7 +307,22 @@ class _CategoryTabs extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: GestureDetector(
-              onTap: () => ref.read(selectedCategoryFilterProvider.notifier).state = c.$1,
+              onTap: () {
+                if (c.$1 == 'my') {
+                  final tier = ref.read(subscriptionTierProvider);
+                  if (tier != SubscriptionTier.premium && tier != SubscriptionTier.student) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('프리미엄 구독 시 나만의 음악을 이용할 수 있습니다.'),
+                        action: SnackBarAction(label: '업그레이드', onPressed: () => context.push(RouteNames.subscription)),
+                        backgroundColor: AppColors.bgCard,
+                      ),
+                    );
+                    return;
+                  }
+                }
+                ref.read(selectedCategoryFilterProvider.notifier).state = c.$1;
+              },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(

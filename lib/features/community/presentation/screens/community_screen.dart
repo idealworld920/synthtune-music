@@ -11,7 +11,15 @@ class CommunityScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final posts = ref.watch(communityProvider);
+    final posts = ref.watch(filteredCommunityProvider);
+    final selectedCat = ref.watch(selectedCommunityCategory);
+
+    final categories = [
+      ('practice', '연습 기록', Icons.music_note_rounded),
+      ('qna', 'Q&A', Icons.help_outline_rounded),
+      ('notice', '공지사항', Icons.campaign_rounded),
+      ('feedback', '문의·의견', Icons.feedback_rounded),
+    ];
 
     return Scaffold(
       appBar: AppBar(title: const Text('커뮤니티')),
@@ -20,16 +28,67 @@ class CommunityScreen extends ConsumerWidget {
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.edit_rounded, color: Colors.white),
       ),
-      body: posts.isEmpty
-          ? const Center(
-              child: Text('아직 게시물이 없습니다.', style: TextStyle(color: AppColors.textSecondary)),
-            )
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: posts.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, i) => _PostCard(post: posts[i]),
+      body: Column(
+        children: [
+          // 카테고리 탭
+          SizedBox(
+            height: 48,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              itemCount: categories.length,
+              itemBuilder: (context, i) {
+                final c = categories[i];
+                final isSelected = selectedCat == c.$1;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: GestureDetector(
+                    onTap: () => ref.read(selectedCommunityCategory.notifier).state = c.$1,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.primary : AppColors.bgCard,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: isSelected ? AppColors.primary : AppColors.bgSurface),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(c.$3, size: 15, color: isSelected ? Colors.white : AppColors.textSecondary),
+                          const SizedBox(width: 4),
+                          Text(c.$2, style: TextStyle(
+                            color: isSelected ? Colors.white : AppColors.textSecondary,
+                            fontSize: 13,
+                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                          )),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
+          ),
+          // 게시글 목록
+          Expanded(
+            child: posts.isEmpty
+                ? Center(
+                    child: Text(
+                      selectedCat == 'notice' ? '공지사항이 없습니다.' :
+                      selectedCat == 'qna' ? '아직 질문이 없습니다. 첫 질문을 남겨보세요!' :
+                      selectedCat == 'feedback' ? '의견을 남겨주세요!' :
+                      '아직 게시물이 없습니다.',
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: posts.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (context, i) => _PostCard(post: posts[i]),
+                  ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -59,6 +118,7 @@ class _NewPostSheetState extends State<_NewPostSheet> {
   final _ctrl = TextEditingController();
   String? _selectedMedia; // 'image', 'video', 'audio'
   bool _mediaAttached = false;
+  String _postCategory = 'practice';
 
   @override
   void dispose() {
@@ -81,7 +141,24 @@ class _NewPostSheetState extends State<_NewPostSheet> {
             '새 게시글',
             style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
+          // 카테고리 선택
+          Row(
+            children: [
+              for (final cat in [('practice', '연습 기록'), ('qna', 'Q&A'), ('feedback', '문의·의견')])
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: ChoiceChip(
+                    label: Text(cat.$2, style: TextStyle(fontSize: 12, color: _postCategory == cat.$1 ? Colors.white : AppColors.textSecondary)),
+                    selected: _postCategory == cat.$1,
+                    selectedColor: AppColors.primary,
+                    backgroundColor: AppColors.bgCard,
+                    onSelected: (_) => setState(() => _postCategory = cat.$1),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
           TextField(
             controller: _ctrl,
             maxLines: 3,
@@ -188,6 +265,7 @@ class _NewPostSheetState extends State<_NewPostSheet> {
                     createdAt: DateTime.now(),
                     mediaType: _selectedMedia,
                     mediaUrls: _mediaAttached ? ['mock_${_selectedMedia}_url'] : [],
+                    category: _postCategory,
                   ),
                 );
                 Navigator.pop(context);

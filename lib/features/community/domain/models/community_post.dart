@@ -14,6 +14,7 @@ class CommunityPost {
   final String? mediaType;         // 'image', 'video', 'audio'
   final List<Comment> comments;
   final int shares;
+  final String category; // 'practice', 'qna', 'notice', 'feedback'
 
   const CommunityPost({
     required this.id,
@@ -31,6 +32,7 @@ class CommunityPost {
     this.mediaType,
     this.comments = const [],
     this.shares = 0,
+    this.category = 'practice',
   });
 
   CommunityPost copyWith({
@@ -55,6 +57,7 @@ class CommunityPost {
       mediaType: mediaType,
       comments: comments ?? this.comments,
       shares: shares ?? this.shares,
+      category: category,
     );
   }
 

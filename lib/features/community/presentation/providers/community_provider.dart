@@ -63,7 +63,7 @@ List<CommunityPost> _mockPosts() {
     '피드백 보니까 D음이 항상 빗나가네요... 더 연습해야겠어요',
   ];
 
-  return List.generate(10, (i) {
+  final posts = List.generate(10, (i) {
     final lesson = lessons[i % lessons.length];
     final score = 65.0 + rng.nextDouble() * 33;
     return CommunityPost(
@@ -80,9 +80,61 @@ List<CommunityPost> _mockPosts() {
         hours: rng.nextInt(72),
         minutes: rng.nextInt(60),
       )),
+      category: 'practice',
     );
-  });
+  }).toList();
+
+  // 공지사항 mock
+  posts.addAll([
+    CommunityPost(
+      id: 'notice_1', userId: 'admin', userName: '운영팀',
+      content: '앱 업데이트 v1.1.0이 출시되었습니다!\n새로운 기능: 나만의 음악 창작, 카메라 피드백, 커뮤니티 개편.',
+      lessonTitle: '', instrument: '', score: 0, likes: 42, isLiked: false,
+      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+      category: 'notice',
+    ),
+    CommunityPost(
+      id: 'notice_2', userId: 'admin', userName: '운영팀',
+      content: '학생 할인 요금제 출시! 학교 이메일(.ac.kr, .edu) 인증으로 프리미엄 기능을 ₩4,900/월에 이용하세요.',
+      lessonTitle: '', instrument: '', score: 0, likes: 28, isLiked: false,
+      createdAt: DateTime.now().subtract(const Duration(days: 3)),
+      category: 'notice',
+    ),
+  ]);
+
+  // Q&A mock
+  posts.addAll([
+    CommunityPost(
+      id: 'qna_1', userId: 'user_q1', userName: '초보피아니스트',
+      content: '피아노 독학하는데 손가락 번호가 헷갈려요. 도레미파솔을 칠 때 어떤 손가락을 써야 하나요?',
+      lessonTitle: '', instrument: 'piano', score: 0, likes: 5, isLiked: false,
+      createdAt: DateTime.now().subtract(const Duration(hours: 8)),
+      category: 'qna',
+      comments: [
+        Comment(id: 'ans_1', userId: 'user_a1', userName: '김선생', text: '엄지=1, 검지=2, 중지=3, 약지=4, 새끼=5 입니다. C장조는 1-2-3-1-2-3-4-5로 치면 됩니다!', createdAt: DateTime.now().subtract(const Duration(hours: 6))),
+      ],
+    ),
+    CommunityPost(
+      id: 'qna_2', userId: 'user_q2', userName: '기타초보',
+      content: 'F 코드가 너무 어려워요... 바레 코드 쉽게 잡는 팁 있을까요?',
+      lessonTitle: '', instrument: 'guitar', score: 0, likes: 12, isLiked: false,
+      createdAt: DateTime.now().subtract(const Duration(days: 1)),
+      category: 'qna',
+    ),
+  ]);
+
+  return posts;
 }
+
+// 커뮤니티 카테고리 필터
+final selectedCommunityCategory = StateProvider<String>((ref) => 'practice');
+
+// 필터된 커뮤니티 게시글
+final filteredCommunityProvider = Provider<List<CommunityPost>>((ref) {
+  final category = ref.watch(selectedCommunityCategory);
+  final posts = ref.watch(communityProvider);
+  return posts.where((p) => p.category == category).toList();
+});
 
 final communityProvider =
     StateNotifierProvider<CommunityNotifier, List<CommunityPost>>(

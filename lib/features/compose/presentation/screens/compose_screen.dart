@@ -9,6 +9,7 @@ import '../../../subscription/domain/subscription_tier.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../../../community/presentation/providers/community_provider.dart';
 import '../../../community/domain/models/community_post.dart';
+import '../providers/composition_provider.dart';
 
 class ComposeScreen extends ConsumerStatefulWidget {
   const ComposeScreen({super.key});
@@ -98,6 +99,45 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
         _playbackBeat = -1;
       });
     }
+  }
+
+  void _saveAsMyMusic() {
+    final title = _titleController.text.trim();
+    if (title.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('제목을 입력해주세요')),
+      );
+      return;
+    }
+    if (_selectedCells.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('음표를 추가해주세요')),
+      );
+      return;
+    }
+    final notes = _buildMusicNotes();
+    ref.read(userCompositionsProvider.notifier).addComposition(
+      Lesson(
+        id: 'my_${DateTime.now().millisecondsSinceEpoch}',
+        title: title,
+        description: '나만의 창작곡',
+        instrument: 'piano',
+        difficulty: 'beginner',
+        durationMinutes: 3,
+        imageEmoji: '✨',
+        bpm: 80,
+        xpReward: 200,
+        orderIndex: 100,
+        category: 'my',
+        targetNotes: notes,
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('내 곡으로 저장되었습니다! 레슨 → 나만의 음악에서 연습하세요.'),
+        backgroundColor: AppColors.accentGold,
+      ),
+    );
   }
 
   void _shareToCommmunity() {
@@ -243,6 +283,24 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // 내 곡으로 저장 버튼
+                OutlinedButton.icon(
+                  onPressed: _saveAsMyMusic,
+                  icon: const Icon(Icons.save_rounded),
+                  label: const Text(
+                    '내 곡으로 저장',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.accentGold,
+                    side: const BorderSide(color: AppColors.accentGold, width: 1.5),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
