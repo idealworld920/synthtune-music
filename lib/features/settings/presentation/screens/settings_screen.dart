@@ -10,6 +10,7 @@ import '../../../subscription/domain/subscription_tier.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../../../../shared/services/ai_voice_service.dart';
 import 'appearance_screen.dart';
+import 'language_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -92,6 +93,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onTap: () => context.push(RouteNames.subscription),
           ),
 
+          // 언어 섹션
+          _SectionHeader(title: '언어'),
+          _SettingsTile(
+            icon: Icons.language_rounded,
+            iconColor: AppColors.primary,
+            title: '앱 언어',
+            subtitle: '15개국 언어 지원',
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LanguageScreen())),
+          ),
+
           // 외관 섹션
           _SectionHeader(title: '외관'),
           _SettingsTile(
@@ -165,6 +176,33 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     activeColor: AppColors.accent,
                     onChanged: (v) { setSheetState(() => enabled = v); AiVoiceService.setEnabled(v); },
                     contentPadding: EdgeInsets.zero,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 성별 선택
+                  Text('음성 성별', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: VoiceGender.values.map((g) {
+                      final isSel = AiVoiceService.currentGender == g;
+                      return Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(right: g == VoiceGender.female ? 8 : 0),
+                          child: ChoiceChip(
+                            avatar: Icon(g == VoiceGender.female ? Icons.female_rounded : Icons.male_rounded, size: 18, color: isSel ? Colors.white : AppColors.textSecondary),
+                            label: Text(g.label, style: TextStyle(fontSize: 13, color: isSel ? Colors.white : AppColors.textSecondary)),
+                            selected: isSel,
+                            selectedColor: AppColors.primary,
+                            backgroundColor: AppColors.bgCard,
+                            onSelected: (_) {
+                              AiVoiceService.setGender(g);
+                              setSheetState(() {});
+                              AiVoiceService.speak('안녕하세요, ${g.label} 음성입니다.');
+                            },
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(height: 16),
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../shared/services/ai_voice_service.dart';
+import '../../../../shared/widgets/recommended_videos.dart';
 
 /// 악기별 튜토리얼 데이터
 class _TutorialData {
@@ -619,6 +620,9 @@ class _TutorialScreenState extends State<TutorialScreen> {
               ],
             ),
           ),
+          const SizedBox(height: 24),
+          // 추천 영상
+          RecommendedVideos(instrument: widget.instrument, title: '추천 입문 영상'),
         ],
       ),
     );
