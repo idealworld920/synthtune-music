@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
+import '../../../../shared/widgets/app_logo.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
 import '../../../lesson/domain/models/lesson.dart';
@@ -29,19 +30,7 @@ class HomeScreen extends ConsumerWidget {
             surfaceTintColor: Colors.transparent,
             title: Row(
               children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [AppColors.primary, AppColors.accent],
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Center(
-                    child: Text('🎵', style: TextStyle(fontSize: 16)),
-                  ),
-                ),
+                const AppLogoSmall(size: 32),
                 const SizedBox(width: 10),
                 Text(
                   'SynthTune Music',
