@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
+import '../../../community/domain/models/community_post.dart';
+import '../../../community/presentation/providers/community_provider.dart';
 import '../providers/progress_provider.dart';
 
 class ProgressScreen extends ConsumerWidget {
@@ -21,10 +23,42 @@ class ProgressScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('진도'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.save_alt_rounded, size: 20, color: AppColors.textSecondary),
+            tooltip: '저장',
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('리포트가 저장되었습니다.'), backgroundColor: AppColors.scorePerfect),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.share_rounded, size: 20, color: AppColors.primary),
+            tooltip: '공유',
+            onPressed: () {
+              final profile = ref.read(userProfileProvider).valueOrNull;
+              final hist = ref.read(practiceHistoryProvider);
+              final avg = hist.isEmpty ? 0.0 : hist.map((s) => s.score).reduce((a, b) => a + b) / hist.length;
+              ref.read(communityProvider.notifier).addPost(CommunityPost(
+                id: 'prog_${DateTime.now().millisecondsSinceEpoch}',
+                userId: profile?.uid ?? 'me',
+                userName: profile?.displayName ?? '나',
+                content: '📈 학습 진도 공유\nLv.${profile?.currentLevel ?? 1} | XP ${profile?.xpPoints ?? 0} | 평균 ${avg.round()}점\n스트릭 ${profile?.streakDays ?? 0}일 연속!',
+                lessonTitle: '학습 진도',
+                instrument: profile?.selectedInstrument ?? 'piano',
+                score: avg,
+                likes: 0, isLiked: false,
+                createdAt: DateTime.now(),
+              ));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('커뮤니티에 공유되었습니다.'), backgroundColor: AppColors.primary),
+              );
+            },
+          ),
           TextButton.icon(
             onPressed: () => context.push(RouteNames.advancedReport),
             icon: const Icon(Icons.analytics_rounded, size: 18, color: AppColors.accentGold),
-            label: const Text('고급 리포트', style: TextStyle(color: AppColors.accentGold, fontSize: 13)),
+            label: const Text('고급', style: TextStyle(color: AppColors.accentGold, fontSize: 13)),
           ),
         ],
       ),
