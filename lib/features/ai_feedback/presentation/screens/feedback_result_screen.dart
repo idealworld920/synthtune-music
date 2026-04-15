@@ -6,6 +6,7 @@ import '../../../../core/router/route_names.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
 import '../../../lesson/domain/models/lesson.dart';
 import '../../../practice/domain/models/practice_session.dart';
+import '../../../../shared/utils/motivation.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
 
 class FeedbackResultScreen extends ConsumerStatefulWidget {
@@ -225,11 +226,7 @@ class _FeedbackResultScreenState extends ConsumerState<FeedbackResultScreen>
   }
 
   String _scoreMessage(double score) {
-    if (score >= 95) return '완벽해요! 🎉';
-    if (score >= 85) return '훌륭해요! 👏';
-    if (score >= 70) return '잘 했어요! 😊';
-    if (score >= 55) return '조금 더 연습해봐요';
-    return '계속 도전해보세요 💪';
+    return getScoreMotivation(score);
   }
 }
 

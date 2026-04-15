@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/sheet_music_widget.dart';
+import '../../../../shared/utils/motivation.dart';
 import '../../../lesson/domain/models/lesson.dart';
 import '../../../lesson/presentation/providers/lesson_provider.dart';
 import '../providers/practice_provider.dart';
@@ -186,6 +187,13 @@ class _NoteDisplay extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 8),
+            // 동기부여 응원 메시지
+            Text(
+              getStartMotivation(),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: AppColors.accent.withValues(alpha: 0.8), fontSize: 13, fontStyle: FontStyle.italic),
+            ),
           ] else if (practiceState.status == PracticeStatus.countdown) ...[
             Expanded(
               child: SheetMusicWidget(
@@ -223,6 +231,11 @@ class _NoteDisplay extends StatelessWidget {
                   style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                 ),
               ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              getRecordingEncouragement(),
+              style: TextStyle(color: AppColors.scorePerfect.withValues(alpha: 0.7), fontSize: 12, fontStyle: FontStyle.italic),
             ),
           ] else if (practiceState.status == PracticeStatus.analyzing) ...[
             Expanded(

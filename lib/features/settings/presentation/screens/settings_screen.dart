@@ -8,6 +8,7 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
 import '../../../subscription/domain/subscription_tier.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
+import 'appearance_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -88,6 +89,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: '현재 플랜: ${tier.name}',
             subtitle: tier.price,
             onTap: () => context.push(RouteNames.subscription),
+          ),
+
+          // 외관 섹션
+          _SectionHeader(title: '외관'),
+          _SettingsTile(
+            icon: Icons.palette_rounded,
+            iconColor: AppColors.accent,
+            title: '테마 및 스타일',
+            subtitle: '앱 테마, 글꼴, 악보 스타일',
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AppearanceScreen())),
           ),
 
           // 계정 섹션

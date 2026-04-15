@@ -19,6 +19,8 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   final _ctrl = TextEditingController();
   final _scrollCtrl = ScrollController();
   bool _isRecording = false;
+  String? _lastTopic; // 맥락 기억: 마지막 대화 주제
+  int _responseVariant = 0; // 같은 주제 반복 시 다른 응답
 
   @override
   void dispose() {
@@ -111,8 +113,68 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   String _generateResponse(String input) {
     final tone = ref.read(chatToneProvider);
-    final raw = _matchResponse(input.toLowerCase());
+    final lower = input.toLowerCase();
+
+    // 맥락 기반: "더 알려줘", "그거", "또" 같은 후속 질문 처리
+    if (_lastTopic != null && _isFollowUp(lower)) {
+      final raw = _getFollowUp(_lastTopic!, lower);
+      return _applyTone(raw, tone);
+    }
+
+    final raw = _matchResponse(lower);
+
+    // 주제 기억
+    _lastTopic = _detectTopic(lower);
+    _responseVariant++;
+
     return _applyTone(raw, tone);
+  }
+
+  bool _isFollowUp(String lower) {
+    return lower.contains('더') || lower.contains('또') || lower.contains('그거') ||
+        lower.contains('자세히') || lower.contains('예를 들') || lower.contains('다른') ||
+        lower.contains('계속') || lower.contains('그럼') || lower.contains('그래서') ||
+        lower.contains('왜') || lower == '?' || lower == '응' || lower == 'ㅇㅇ';
+  }
+
+  String? _detectTopic(String lower) {
+    if (lower.contains('피아노') || lower.contains('건반')) return 'piano';
+    if (lower.contains('기타') || lower.contains('코드')) return 'guitar';
+    if (lower.contains('바이올린') || lower.contains('보잉')) return 'violin';
+    if (lower.contains('드럼') || lower.contains('리듬')) return 'drums';
+    if (lower.contains('악보') || lower.contains('읽')) return 'theory';
+    if (lower.contains('연습') || lower.contains('방법')) return 'practice';
+    return _lastTopic;
+  }
+
+  String _getFollowUp(String topic, String lower) {
+    final wantsExample = lower.contains('예') || lower.contains('예를');
+    final wantsMore = lower.contains('더') || lower.contains('자세') || lower.contains('또');
+    final wantsWhy = lower.contains('왜') || lower.contains('이유');
+
+    switch (topic) {
+      case 'piano':
+        if (wantsExample) return '피아노 연습 예시:\n\n1. 하논 1번: 도미레파미솔파라... 양손 동시에\n2. 체르니 100번 중 1번: 오른손 멜로디 + 왼손 반주\n3. 반짝반짝 작은별: 도도솔솔라라솔~\n\n앱의 "동요" 탭에서 바로 시작할 수 있어요!';
+        if (wantsWhy) return '피아노가 좋은 이유는 음악의 기초를 시각적으로 이해할 수 있기 때문이에요. 건반 배치가 음의 높낮이와 직결되어서 음악 이론을 배우기에 최적입니다.';
+        return '피아노 추가 팁:\n• 매일 같은 시간에 연습하면 습관이 됩니다\n• 처음 3개월은 한 손씩 따로 연습\n• 좋아하는 곡 1개를 목표로 잡으세요\n• 손목 스트레칭 잊지 마세요!\n\n궁금한 게 또 있으면 물어보세요!';
+      case 'guitar':
+        if (wantsExample) return '기타 초보 연습 순서:\n\n월: Am-C 전환 (각 8박씩 교대)\n화: G-D 전환\n수: Am-C-G-D 순환\n목: 반짝반짝 작은별 (싱글노트)\n금: 좋아하는 곡 코드 따라하기\n\n하루 20분이면 충분해요!';
+        if (wantsWhy) return '기타는 휴대성이 좋고 혼자서도 반주와 멜로디를 동시에 연주할 수 있어서 독학에 적합해요. 코드 4개만 알면 수백 곡을 연주할 수 있다는 것도 큰 장점!';
+        return '기타 추가 팁:\n• 손끝이 아프면 정상! 2주면 굳은살 생겨요\n• 카포를 활용하면 어려운 키도 쉽게\n• 좋아하는 곡의 코드를 검색해서 따라해보세요\n• 스트로크: 팔목이 아닌 팔꿈치에서 움직임 시작';
+      case 'violin':
+        if (wantsExample) return '바이올린 일일 루틴:\n\n1. 개방현 롱톤 (각 현 4번씩) - 5분\n2. A장조 스케일 느리게 - 5분\n3. 곡 연습 (어려운 부분 반복) - 10분\n4. 좋아하는 곡 연주 - 5분\n\n총 25분이면 효과적!';
+        return '바이올린 추가 팁:\n• 첫 6개월은 톤 만들기에 집중\n• 매일 거울 보며 자세 체크\n• 현 교체 시기: 소리가 탁해질 때 (보통 3-6개월)\n• 무조건 튜닝부터 하고 연습 시작';
+      case 'drums':
+        if (wantsExample) return '드럼 기본 연습 순서:\n\nBPM 60으로:\n1. RLRL (싱글) x 16마디\n2. RRLL (더블) x 16마디\n3. RLRR LRLL (파라디들) x 8마디\n4. 4비트 (킥-하이햇-스네어-하이햇) x 16마디\n\n정확도 90% 이상 → BPM +10 올리기';
+        return '드럼 추가 팁:\n• 연습패드 구매 추천 (소음 줄이기)\n• 왼손(비주력) 집중 훈련이 핵심\n• 좋아하는 곡 들으면서 에어드럼도 효과적\n• 기본기 없이 필인부터 하면 안 돼요!';
+      case 'theory':
+        if (wantsMore) return '음악 이론 심화:\n• 인터벌: 장3도(4반음), 완전5도(7반음)\n• 코드 구성: 메이저=1-3-5, 마이너=1-b3-5\n• 12키: C D E F G A B + 5개 샵/플랫\n• 조표: 샵 순서 파도솔레라미시, 플랫 순서 시미라레솔도파';
+        return '음악 이론 더 알아보기:\n• 청음 연습: 피아노 소리 듣고 음 맞추기\n• 리듬 읽기: 4분음표=1박, 8분음표=반박\n• 음정 부르기: "도~미" 하면서 음정 익히기\n\n이론보다 실습이 중요해요! 앱에서 직접 연주해보세요.';
+      case 'practice':
+        return '연습 효율 높이는 비법:\n• 틀리는 마디만 10번 반복 → 앞뒤 연결 → 전체 통과\n• "80% 규칙": 80% 정확도로 3번 연속 성공하면 다음 단계로\n• 녹음해서 들어보기 (객관적 평가)\n• 연습 직후 5분 복습이 기억 정착에 효과적';
+      default:
+        return '궁금한 점이 더 있으시면 구체적으로 질문해주세요! 악기 연습, 음악 이론, 앱 사용법 등 뭐든 도와드릴 수 있어요.';
+    }
   }
 
   String _applyTone(String text, ChatTone tone) {
