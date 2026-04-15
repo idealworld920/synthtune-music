@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../community/domain/models/community_post.dart';
+import '../../../community/presentation/providers/community_provider.dart';
 import '../providers/chat_provider.dart';
 import 'chat_history_screen.dart';
 
@@ -31,10 +34,15 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     ref.read(chatProvider.notifier).addMessage(ChatMessage(text: text, isUser: true));
     _scrollToBottom();
 
+    final isInq = _isInquiry(text.toLowerCase());
+
     Future.delayed(const Duration(milliseconds: 800), () {
       if (!mounted) return;
       ref.read(chatProvider.notifier).addMessage(ChatMessage(text: _generateResponse(text), isUser: false));
       _scrollToBottom();
+
+      // 문의 감지 시 전송 다이얼로그
+      if (isInq) _handleInquiry(text);
     });
   }
 
@@ -143,7 +151,82 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     }
   }
 
+  // 문의 내용 감지 시 정리해서 커뮤니티 문의·의견에 자동 등록
+  bool _isInquiry(String lower) {
+    return lower.contains('문의') || lower.contains('버그') || lower.contains('오류') ||
+        lower.contains('안됨') || lower.contains('안 됨') || lower.contains('작동') ||
+        lower.contains('건의') || lower.contains('개선') || lower.contains('요청') ||
+        lower.contains('불편') || lower.contains('신고') || lower.contains('환불') ||
+        lower.contains('결제') || lower.contains('구독') && lower.contains('문제');
+  }
+
+  void _handleInquiry(String userText) {
+    // 문의 내용을 정리해서 커뮤니티 feedback 카테고리에 등록
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: AppColors.bgCard,
+          title: const Text('문의 내용 전송'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('아래 내용을 운영팀에 전달할까요?', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(color: AppColors.bgSurface, borderRadius: BorderRadius.circular(8)),
+                child: Text(userText, style: const TextStyle(color: AppColors.textPrimary, fontSize: 13)),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('아니오', style: TextStyle(color: AppColors.textSecondary)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                // 커뮤니티 feedback 카테고리에 자동 등록
+                final user = ref.read(currentUserProvider);
+                ref.read(communityProvider.notifier).addPost(
+                  CommunityPost(
+                    id: 'inquiry_${DateTime.now().millisecondsSinceEpoch}',
+                    userId: user?.uid ?? 'guest',
+                    userName: user?.displayName ?? '사용자',
+                    content: '📩 [AI 챗봇 문의]\n$userText',
+                    lessonTitle: '',
+                    instrument: '',
+                    score: 0,
+                    likes: 0,
+                    isLiked: false,
+                    createdAt: DateTime.now(),
+                    category: 'feedback',
+                  ),
+                );
+                ref.read(chatProvider.notifier).addMessage(ChatMessage(
+                  text: '문의 내용이 운영팀에 전달되었습니다. 커뮤니티 → 문의·의견 탭에서도 확인할 수 있어요. 빠른 시일 내에 답변드리겠습니다!',
+                  isUser: false,
+                ));
+                _scrollToBottom();
+              },
+              child: const Text('전송', style: TextStyle(color: AppColors.primary)),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
   String _matchResponse(String lower) {
+    // ── 문의/건의 감지 ──
+    if (_isInquiry(lower)) {
+      return '문의 내용을 확인했습니다. 내용을 정리해서 운영팀에 전달해드릴까요? 잠시만 기다려주세요...';
+    }
+
     // ── 인사 ──
     if (lower.contains('안녕') || lower.contains('하이') || lower.contains('hello') || lower.contains('hi') || lower == 'ㅎㅇ') {
       return '안녕하세요! 반갑습니다. 오늘은 어떤 연습을 해볼까요? 궁금한 점이 있으면 뭐든 물어보세요!';
@@ -155,6 +238,34 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
       return '오늘도 수고하셨어요! 꾸준히 연습하면 반드시 실력이 늘어요. 다음에 또 만나요!';
     }
 
+    // ── 일상 대화 ──
+    if (lower.contains('뭐해') || lower.contains('뭐하') || lower.contains('심심') || lower.contains('할 거')) {
+      return '저는 여기서 음악 관련 도움을 드리고 있어요! 연습하다 막히는 부분이 있거나, 새로운 곡을 찾고 있다면 말해주세요. 아니면 그냥 수다를 떨어도 좋아요!';
+    }
+    if (lower.contains('이름') || lower.contains('누구') || lower.contains('뭐야') || lower.contains('자기소개')) {
+      return '저는 AI 음악 선생님이에요! 피아노, 기타, 바이올린, 드럼 4가지 악기의 연주 팁과 음악 이론을 알려드립니다. 연습 방법, 악보 읽기, 테크닉 등 뭐든 물어보세요!';
+    }
+    if (lower.contains('나이') || lower.contains('몇살') || lower.contains('몇 살')) {
+      return '저는 나이가 없어요! 하지만 수많은 음악 교육 자료를 학습했기 때문에 경험 많은 선생님이라고 생각해주세요. 궁금한 게 있으면 뭐든 물어봐요!';
+    }
+    if (lower.contains('좋아하는') || lower.contains('취미') || lower.contains('관심')) {
+      return '저는 모든 장르의 음악을 좋아해요! 클래식부터 팝, 재즈, 록까지. 음악에 대해 이야기하는 걸 가장 좋아합니다. 혹시 요즘 좋아하는 곡이 있나요?';
+    }
+    if (lower.contains('날씨') || lower.contains('오늘')) {
+      return '날씨 이야기를 하시다니! 날씨가 좋으면 창문 열고 연습하는 것도 기분 전환이 됩니다. 오늘은 어떤 곡을 연습해볼까요?';
+    }
+    if (lower.contains('ㅋㅋ') || lower.contains('ㅎㅎ') || lower.contains('ㅜㅜ') || lower.contains('ㅠㅠ')) {
+      return lower.contains('ㅜ') || lower.contains('ㅠ')
+          ? '괜찮아요! 음악은 즐기는 거예요. 기분이 안 좋을 때 좋아하는 곡을 연주하면 기분이 나아질 거예요!'
+          : '즐거워 보이시네요! 그 에너지로 오늘도 화이팅! 뭔가 연습하고 싶은 게 있으면 말해주세요!';
+    }
+    if (lower.contains('배고') || lower.contains('밥') || lower.contains('먹')) {
+      return '배가 고프시군요! 연습도 중요하지만 밥도 잘 챙겨 드세요. 배부르게 먹고 와서 연습하면 더 집중이 잘 될 거예요!';
+    }
+    if (lower.contains('잠') || lower.contains('졸려') || lower.contains('피곤')) {
+      return '피곤할 때 억지로 연습하면 효율이 떨어져요. 충분히 쉬고 컨디션이 좋을 때 15분만 집중 연습하는 게 훨씬 효과적입니다. 푹 쉬세요!';
+    }
+
     // ── 감정/상태 ──
     if (lower.contains('힘들') || lower.contains('어려') || lower.contains('못하') || lower.contains('안돼') || lower.contains('포기')) {
       return '누구나 처음엔 어렵게 느껴져요. 중요한 건 포기하지 않는 거예요! 어려운 구간만 느린 템포로 10번 반복해보세요. 놀라울 정도로 빨리 나아집니다.';
@@ -162,7 +273,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     if (lower.contains('재미') || lower.contains('좋아') || lower.contains('신나') || lower.contains('잘됐') || lower.contains('됐다')) {
       return '정말 잘하고 계시네요! 즐기면서 연습하는 게 실력 향상의 비결이에요. 이 기세로 계속 가보시죠!';
     }
-    if (lower.contains('지루') || lower.contains('질려') || lower.contains('심심')) {
+    if (lower.contains('지루') || lower.contains('질려')) {
       return '같은 곡이 지루하다면 새로운 장르에 도전해보세요! 클래식 탭에서 캉캉이나 터키 행진곡 같은 곡은 템포가 빨라서 재미있을 거예요. 스킬 탭의 테크닉 연습도 새로운 자극이 됩니다.';
     }
 
