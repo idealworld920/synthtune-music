@@ -88,6 +88,32 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   String _generateResponse(String input) {
     final lower = input.toLowerCase();
+
+    // 인사
+    if (lower.contains('안녕') || lower.contains('하이') || lower.contains('hello') || lower.contains('hi')) {
+      return '안녕하세요! 반갑습니다. 오늘은 어떤 연습을 해볼까요? 궁금한 점이 있으면 뭐든 물어보세요!';
+    }
+    if (lower.contains('고마워') || lower.contains('감사') || lower.contains('ㄱㅅ') || lower.contains('땡큐')) {
+      return '별말씀을요! 도움이 되셨다면 기뻐요. 다른 궁금한 점이 있으면 언제든 물어보세요!';
+    }
+    if (lower.contains('잘가') || lower.contains('바이') || lower.contains('bye')) {
+      return '오늘도 수고하셨어요! 꾸준히 연습하면 반드시 실력이 늘어요. 다음에 또 만나요!';
+    }
+
+    // 기분/상태
+    if (lower.contains('힘들') || lower.contains('어려') || lower.contains('못하') || lower.contains('안돼')) {
+      return '누구나 처음엔 어렵게 느껴져요. 중요한 건 포기하지 않는 거예요! 어려운 부분을 알려주시면 더 구체적으로 도와드릴게요. 어떤 부분이 어려우신가요?';
+    }
+    if (lower.contains('재미') || lower.contains('좋아') || lower.contains('신나')) {
+      return '음악이 재미있으시다니 정말 좋아요! 즐기면서 연습하는 게 실력 향상의 비결이에요. 좋아하는 곡이 있으면 그 곡으로 연습해보세요!';
+    }
+
+    // 추천
+    if (lower.contains('추천') || lower.contains('뭐 할') || lower.contains('뭐해') || lower.contains('시작')) {
+      return '초보라면 "기본 스케일" 카테고리부터 시작하세요! 스케일로 기초를 다진 후 "동요"로 간단한 곡을 연주하고, 자신감이 붙으면 "클래식"에 도전해보세요. 레슨 탭에서 확인할 수 있어요!';
+    }
+
+    // 악기별
     if (lower.contains('피아노') || lower.contains('건반')) {
       return '피아노는 손가락 독립성이 중요합니다. 매일 하논이나 체르니 연습곡으로 기초를 다지세요. 특히 4번, 5번 손가락 강화에 집중하면 좋습니다.';
     }
@@ -100,13 +126,25 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     if (lower.contains('드럼') || lower.contains('리듬')) {
       return '드럼의 기본은 메트로놈과 함께 연습하는 것입니다. BPM 60부터 시작해서 싱글 스트로크를 정확하게 치는 연습을 하세요. 속도보다 정확도가 먼저입니다.';
     }
+
+    // 음악 이론
     if (lower.contains('음정') || lower.contains('튜닝')) {
       return '음정 연습의 핵심은 "듣기"입니다. 피아노나 튜너 앱으로 기준음을 틀어놓고 같은 음을 내는 연습을 하세요. 녹음해서 다시 들어보면 본인의 음정 습관을 파악할 수 있습니다.';
     }
+    if (lower.contains('악보') || lower.contains('읽')) {
+      return '악보 읽기의 기초는 오선지(5선)와 음자리표를 아는 것입니다. 높은음자리표에서 선 위의 음은 아래부터 미-솔-시-레-파, 칸의 음은 파-라-도-미입니다. 앱의 악보 표시를 보면서 천천히 익혀보세요!';
+    }
+    if (lower.contains('스케일') || lower.contains('음계')) {
+      return '스케일은 모든 음악의 기초입니다. C장조(도레미파솔라시도)부터 시작해서 G장조, D장조 순으로 연습하세요. 매일 5분씩 스케일만 연습해도 실력이 크게 늘어요!';
+    }
+
+    // 연습
     if (lower.contains('연습') || lower.contains('시간')) {
       return '하루 15-30분 꾸준한 연습이 가장 효과적입니다. 긴 시간보다 집중력 있는 짧은 연습이 중요해요. 어려운 부분만 반복하는 "구간 연습"도 효과적입니다.';
     }
-    return '좋은 질문이에요! 음악 학습에서 가장 중요한 것은 꾸준함입니다. 매일 조금씩이라도 악기를 만지고, 음악을 듣고, 연습하는 습관을 만들어보세요. 더 구체적인 질문이 있으면 언제든 물어보세요!';
+
+    // 기본 응답
+    return '궁금한 점이 있으시군요! 악기 이름(피아노, 기타 등)이나 연습 관련 키워드로 질문해주시면 더 구체적으로 도와드릴 수 있어요. 예를 들어 "피아노 초보 팁" 같이 물어보세요!';
   }
 
   @override
