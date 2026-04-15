@@ -399,16 +399,17 @@ class _TutorialScreenState extends State<TutorialScreen> {
                       ),
                       const SizedBox(height: 8),
                       Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _AiFeedbackItem(text: '카메라에 상체가 보이도록 위치를 조정하세요.', delay: 0),
-                              _AiFeedbackItem(text: '허리를 곧게 펴고 어깨의 힘을 빼세요.', delay: 1),
-                              _AiFeedbackItem(text: '${_data['name']}을 올바르게 잡고 있는지 확인합니다.', delay: 2),
-                              _AiFeedbackItem(text: '각 자세 항목을 탭하면 음성으로 안내해드려요.', delay: 3),
-                            ],
-                          ),
+                        child: _LiveAiFeedback(
+                          feedbacks: [
+                            '카메라에 상체가 보이도록 위치를 조정하세요.',
+                            '허리를 곧게 펴고 어깨의 힘을 빼세요.',
+                            '${_data['name']}을 올바르게 잡고 있는지 확인합니다.',
+                            '좋습니다! 자세가 안정적이에요.',
+                            '어깨가 올라가지 않았는지 확인하세요.',
+                            '팔꿈치 위치를 자연스럽게 내려놓으세요.',
+                            '손목이 꺾이지 않게 유지하세요.',
+                            '잘하고 있어요! 이 자세를 유지하세요.',
+                          ],
                         ),
                       ),
                     ],
@@ -556,16 +557,18 @@ class _TutorialScreenState extends State<TutorialScreen> {
                       ),
                       const SizedBox(height: 8),
                       Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _AiFeedbackItem(text: '손가락 모양을 카메라에 보여주세요.', delay: 0, color: AppColors.accentGold),
-                              _AiFeedbackItem(text: '손가락 끝으로 누르고 있는지 확인합니다.', delay: 1, color: AppColors.accentGold),
-                              _AiFeedbackItem(text: '다른 줄/건반에 닿지 않게 세워주세요.', delay: 2, color: AppColors.accentGold),
-                              _AiFeedbackItem(text: '아래 운지법을 참고하세요.', delay: 3, color: AppColors.accentGold),
-                            ],
-                          ),
+                        child: _LiveAiFeedback(
+                          color: AppColors.accentGold,
+                          feedbacks: [
+                            '손가락 모양을 카메라에 보여주세요.',
+                            '손가락 끝으로 누르고 있는지 확인합니다.',
+                            '다른 줄/건반에 닿지 않게 세워주세요.',
+                            '좋아요! 손 모양이 정확해요.',
+                            '손가락 간격을 조금 더 벌려보세요.',
+                            '손목 각도를 확인하세요.',
+                            '잘하고 있어요! 유지하세요.',
+                            '아래 운지법 가이드를 참고하세요.',
+                          ],
                         ),
                       ),
                     ],
@@ -665,6 +668,67 @@ class _AiFeedbackItemState extends State<_AiFeedbackItem> {
             Expanded(child: Text(widget.text, style: TextStyle(color: AppColors.textPrimary, fontSize: 12, height: 1.4))),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// 실시간으로 피드백이 바뀌는 위젯
+class _LiveAiFeedback extends StatefulWidget {
+  final List<String> feedbacks;
+  final Color color;
+  const _LiveAiFeedback({required this.feedbacks, this.color = AppColors.accent});
+
+  @override
+  State<_LiveAiFeedback> createState() => _LiveAiFeedbackState();
+}
+
+class _LiveAiFeedbackState extends State<_LiveAiFeedback> {
+  int _currentIndex = 0;
+  final List<String> _shown = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _addNext();
+  }
+
+  void _addNext() {
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      setState(() {
+        if (_shown.length >= 4) _shown.removeAt(0);
+        _shown.add(widget.feedbacks[_currentIndex % widget.feedbacks.length]);
+        _currentIndex++;
+      });
+      _addNext();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      reverse: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: _shown.asMap().entries.map((e) {
+          final isLatest = e.key == _shown.length - 1;
+          return AnimatedOpacity(
+            opacity: isLatest ? 1.0 : 0.5,
+            duration: const Duration(milliseconds: 300),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(isLatest ? Icons.auto_awesome_rounded : Icons.check_circle_rounded, color: widget.color, size: 13),
+                  const SizedBox(width: 5),
+                  Expanded(child: Text(e.value, style: TextStyle(color: AppColors.textPrimary, fontSize: 11, height: 1.3, fontWeight: isLatest ? FontWeight.w600 : FontWeight.normal))),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

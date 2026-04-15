@@ -7,6 +7,8 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/app_logo.dart';
+import '../../../../shared/services/ai_voice_service.dart';
+import '../../../settings/presentation/screens/language_screen.dart';
 import '../providers/auth_provider.dart';
 import '../providers/user_profile_provider.dart';
 
@@ -21,9 +23,10 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
     with TickerProviderStateMixin {
   final _pageCtrl = PageController();
   int _currentPage = 0;
-  final _totalPages = 10;
+  final _totalPages = 11;
 
   // 데이터
+  String _selectedLanguage = 'ko';
   String _selectedInstrument = 'piano';
   String _selectedLevel = 'beginner';
   String _purpose = '';
@@ -61,8 +64,8 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
   }
 
   void _nextPage() {
-    // 회원가입 페이지(2)에서 로그인 안 했으면 막기
-    if (_currentPage == 2 && !_isSignedIn) {
+    // 회원가입 페이지(3)에서 로그인 안 했으면 막기
+    if (_currentPage == 3 && !_isSignedIn) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('계정을 연동해주세요'), backgroundColor: AppColors.scoreMiss),
       );
@@ -83,6 +86,10 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
   }
 
   Future<void> _complete() async {
+    // 언어 + AI 음성 언어 동기화
+    ref.read(appLanguageProvider.notifier).state = _selectedLanguage;
+    final langMap = {'ko': 'ko-KR', 'en': 'en-US', 'ja': 'ja-JP', 'zh': 'zh-CN', 'fr': 'fr-FR', 'pt': 'pt-BR', 'es': 'es-ES', 'de': 'de-DE', 'it': 'it-IT', 'ru': 'ru-RU', 'vi': 'vi-VN', 'th': 'th-TH', 'ar': 'ar-SA', 'hi': 'hi-IN', 'id': 'id-ID'};
+    await AiVoiceService.setLanguage(langMap[_selectedLanguage] ?? 'ko-KR');
     await ref.read(userProfileProvider.notifier).saveOnboarding(_selectedInstrument, _selectedLevel);
     if (mounted) context.go(RouteNames.home);
   }
@@ -117,6 +124,7 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
                 controller: _pageCtrl,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
+                  _LanguagePage(),
                   _IntroPage(),
                   _HowToUsePage(),
                   _SignUpPage(),
@@ -172,6 +180,58 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // ─── 0. 언어 선택 ───
+  Widget _LanguagePage() {
+    const langs = [
+      ('ko', '한국어', '🇰🇷'), ('en', 'English', '🇺🇸'), ('ja', '日本語', '🇯🇵'),
+      ('zh', '中文', '🇨🇳'), ('fr', 'Français', '🇫🇷'), ('pt', 'Português', '🇧🇷'),
+      ('es', 'Español', '🇪🇸'), ('de', 'Deutsch', '🇩🇪'), ('it', 'Italiano', '🇮🇹'),
+      ('ru', 'Русский', '🇷🇺'), ('vi', 'Tiếng Việt', '🇻🇳'), ('th', 'ภาษาไทย', '🇹🇭'),
+      ('ar', 'العربية', '🇸🇦'), ('hi', 'हिन्दी', '🇮🇳'), ('id', 'Indonesia', '🇮🇩'),
+    ];
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Icon(Icons.language_rounded, color: AppColors.primary, size: 48),
+          const SizedBox(height: 16),
+          Text('언어를 선택하세요', style: TextStyle(color: AppColors.textPrimary, fontSize: 24, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Text('Select your language', style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+          const SizedBox(height: 20),
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: 1.6),
+              itemCount: langs.length,
+              itemBuilder: (context, i) {
+                final l = langs[i];
+                final isSel = _selectedLanguage == l.$1;
+                return GestureDetector(
+                  onTap: () => setState(() => _selectedLanguage = l.$1),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: isSel ? AppColors.primary.withValues(alpha: 0.2) : AppColors.bgCard,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: isSel ? AppColors.primary : Colors.transparent, width: 2),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(l.$3, style: const TextStyle(fontSize: 20)),
+                        const SizedBox(height: 4),
+                        Text(l.$2, style: TextStyle(color: isSel ? AppColors.primary : AppColors.textSecondary, fontSize: 10, fontWeight: isSel ? FontWeight.bold : FontWeight.normal), overflow: TextOverflow.ellipsis),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

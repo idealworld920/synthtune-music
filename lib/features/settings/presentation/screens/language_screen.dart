@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../shared/services/ai_voice_service.dart';
 
 final appLanguageProvider = StateProvider<String>((ref) => 'ko');
 
@@ -50,6 +51,9 @@ class LanguageScreen extends ConsumerWidget {
                 ref.read(appLanguageProvider.notifier).state = lang.$1;
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setString('app_language', lang.$1);
+                // AI 음성도 자동 연동
+                final langMap = {'ko': 'ko-KR', 'en': 'en-US', 'ja': 'ja-JP', 'zh': 'zh-CN', 'fr': 'fr-FR', 'pt': 'pt-BR', 'es': 'es-ES', 'de': 'de-DE', 'it': 'it-IT', 'ru': 'ru-RU', 'vi': 'vi-VN', 'th': 'th-TH', 'ar': 'ar-SA', 'hi': 'hi-IN', 'id': 'id-ID'};
+                await AiVoiceService.setLanguage(langMap[lang.$1] ?? 'ko-KR');
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('${lang.$2}로 변경되었습니다. 앱 재시작 시 적용됩니다.'), duration: const Duration(seconds: 2)),
