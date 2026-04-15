@@ -604,7 +604,8 @@ class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
 
     return Padding(
       padding: const EdgeInsets.all(20),
-      child: Column(
+      child: SingleChildScrollView(
+        child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -701,6 +702,7 @@ class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
           ),
           const SizedBox(height: 20),
         ],
+      ),
       ),
     );
   }
