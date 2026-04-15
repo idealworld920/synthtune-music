@@ -115,21 +115,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // 로고
+                  // 앱 이름
                   FadeTransition(
                     opacity: _logoFade,
                     child: ScaleTransition(
                       scale: _logoScale,
-                      child: const AppLogo(size: 120),
-                    ),
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // 앱 이름
-                  FadeTransition(
-                    opacity: _logoFade,
-                    child: Text(
+                      child: Text(
                       'SynthTune Music',
                       style: TextStyle(
                         color: AppColors.textPrimary,
@@ -138,6 +129,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                         letterSpacing: 1.2,
                       ),
                     ),
+                  ),
                   ),
 
                   const SizedBox(height: 32),
