@@ -42,24 +42,17 @@ class AppearanceScreen extends ConsumerWidget {
                     ),
                     child: Column(
                       children: [
-                        Container(
-                          width: 28, height: 28,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: t.previewColor,
-                            border: Border.all(color: Colors.white24),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
+                        Text(t.emoji, style: const TextStyle(fontSize: 22)),
+                        const SizedBox(height: 6),
                         Text(
-                          t.label.split(' ').first,
+                          t.label,
                           style: TextStyle(
                             color: isSelected ? AppColors.primary : Colors.white70,
-                            fontSize: 11, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            fontSize: 10, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                           ),
                         ),
                         if (isSelected)
-                          const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 16),
+                          const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 14),
                       ],
                     ),
                   ),

@@ -3,19 +3,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ─── 테마 ───
-enum AppThemeMode { dark, light, midnight, forest }
+enum AppThemeMode { system, dark, light, midnight, forest }
 
 extension AppThemeModeExt on AppThemeMode {
   String get label {
     switch (this) {
-      case AppThemeMode.dark: return '다크 (기본)';
+      case AppThemeMode.system: return '시스템';
+      case AppThemeMode.dark: return '다크';
       case AppThemeMode.light: return '라이트';
       case AppThemeMode.midnight: return '미드나잇';
       case AppThemeMode.forest: return '포레스트';
     }
   }
+  String get emoji {
+    switch (this) {
+      case AppThemeMode.system: return '📱';
+      case AppThemeMode.dark: return '🌙';
+      case AppThemeMode.light: return '☀️';
+      case AppThemeMode.midnight: return '🌌';
+      case AppThemeMode.forest: return '🌲';
+    }
+  }
   Color get previewColor {
     switch (this) {
+      case AppThemeMode.system: return const Color(0xFF2A2A3A);
       case AppThemeMode.dark: return const Color(0xFF1E1E2E);
       case AppThemeMode.light: return const Color(0xFFF5F5F5);
       case AppThemeMode.midnight: return const Color(0xFF0D1117);
@@ -65,7 +76,7 @@ extension SheetStyleExt on SheetStyle {
 }
 
 // ─── Providers ───
-final appThemeModeProvider = StateProvider<AppThemeMode>((ref) => AppThemeMode.dark);
+final appThemeModeProvider = StateProvider<AppThemeMode>((ref) => AppThemeMode.system);
 final appFontProvider = StateProvider<AppFont>((ref) => AppFont.system);
 final sheetStyleProvider = StateProvider<SheetStyle>((ref) => SheetStyle.standard);
 
@@ -73,7 +84,7 @@ final sheetStyleProvider = StateProvider<SheetStyle>((ref) => SheetStyle.standar
 class AppSettingsService {
   static Future<void> load(WidgetRef ref) async {
     final prefs = await SharedPreferences.getInstance();
-    final theme = prefs.getString('app_theme') ?? 'dark';
+    final theme = prefs.getString('app_theme') ?? 'system';
     final font = prefs.getString('app_font') ?? 'system';
     final sheet = prefs.getString('sheet_style') ?? 'standard';
 
