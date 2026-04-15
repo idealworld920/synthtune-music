@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'core/router/app_router.dart';
@@ -16,7 +17,17 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await AiVoiceService.init();
   timeago.setLocaleMessages('ko', timeago.KoMessages());
-  runApp(const ProviderScope(child: MyApp()));
+
+  // 저장된 언어 불러오기
+  final prefs = await SharedPreferences.getInstance();
+  final savedLang = prefs.getString('app_language') ?? 'ko';
+
+  runApp(ProviderScope(
+    overrides: [
+      appLanguageProvider.overrideWith((ref) => savedLang),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends ConsumerWidget {

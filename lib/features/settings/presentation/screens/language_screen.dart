@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../shared/services/ai_voice_service.dart';
 
 final appLanguageProvider = StateProvider<String>((ref) => 'ko');
 
@@ -65,7 +64,6 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
               },
             ),
           ),
-          // 저장 버튼
           if (_pendingLang != null && _pendingLang != current)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -73,11 +71,8 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: () => _saveAndRestart(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                  ),
+                  onPressed: _saveAndRestart,
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
                   child: Text(
                     '${languages.firstWhere((l) => l.$1 == _pendingLang).$2}로 변경 및 재시작',
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
@@ -93,18 +88,15 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
   Future<void> _saveAndRestart() async {
     final lang = _pendingLang!;
 
-    // 저장
-    ref.read(appLanguageProvider.notifier).state = lang;
+    // SharedPreferences에 저장
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('app_language', lang);
 
-    // AI 음성 연동
-    final langMap = {'ko': 'ko-KR', 'en': 'en-US', 'ja': 'ja-JP', 'zh': 'zh-CN', 'fr': 'fr-FR', 'pt': 'pt-BR', 'es': 'es-ES', 'de': 'de-DE', 'it': 'it-IT', 'ru': 'ru-RU', 'vi': 'vi-VN', 'th': 'th-TH', 'ar': 'ar-SA', 'hi': 'hi-IN', 'id': 'id-ID'};
-    await AiVoiceService.setLanguage(langMap[lang] ?? 'ko-KR');
+    // Provider 업데이트
+    ref.read(appLanguageProvider.notifier).state = lang;
 
     if (!mounted) return;
 
-    // 앱 재시작 다이얼로그
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -116,7 +108,6 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(ctx).pop();
-              // 앱 재시작
               SystemNavigator.pop();
             },
             child: Text('재시작', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
