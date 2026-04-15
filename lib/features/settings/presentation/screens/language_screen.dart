@@ -19,19 +19,9 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
   static const languages = [
     ('ko', '한국어', '🇰🇷'),
     ('en', 'English', '🇺🇸'),
-    ('ja', '日本語', '🇯🇵'),
-    ('zh', '中文', '🇨🇳'),
-    ('fr', 'Français', '🇫🇷'),
-    ('pt', 'Português', '🇧🇷'),
-    ('es', 'Español', '🇪🇸'),
-    ('de', 'Deutsch', '🇩🇪'),
-    ('it', 'Italiano', '🇮🇹'),
-    ('ru', 'Русский', '🇷🇺'),
-    ('vi', 'Tiếng Việt', '🇻🇳'),
-    ('th', 'ภาษาไทย', '🇹🇭'),
-    ('ar', 'العربية', '🇸🇦'),
-    ('hi', 'हिन्दी', '🇮🇳'),
-    ('id', 'Bahasa Indonesia', '🇮🇩'),
+    // 추후 업데이트로 추가 예정:
+    // ('ja', '日本語', '🇯🇵'),
+    // ('zh', '中文', '🇨🇳'),
   ];
 
   @override

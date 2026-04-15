@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../shared/services/ai_voice_service.dart';
+import '../../../../core/utils/locale_text.dart';
 import '../../../../shared/widgets/recommended_videos.dart';
 
 /// 악기별 튜토리얼 데이터
 class _TutorialData {
-  static Map<String, Map<String, dynamic>> get data => {
+  static Map<String, Map<String, dynamic>> getData(String langCode) =>
+      langCode == 'en' ? _dataEn : _dataKo;
+
+  static Map<String, Map<String, dynamic>> get data => _dataKo;
+
+  static Map<String, Map<String, dynamic>> get _dataKo => {
     'piano': {
       'name': '피아노',
       'emoji': '🎹',
@@ -148,6 +154,149 @@ class _TutorialData {
           '• 8비트: 하이햇을 매 반박마다 추가',
     },
   };
+
+  static Map<String, Map<String, dynamic>> get _dataEn => {
+    'piano': {
+      'name': 'Piano',
+      'emoji': '🎹',
+      'intro': 'The piano is the quintessential keyboard instrument, with 88 keys spanning a wide range of pitches.\n\n'
+          'Lower notes are on the left, higher notes on the right.\n\n'
+          'White keys play natural notes (C D E F G A B), and black keys play sharps/flats (#/♭).\n\n'
+          'The piano lets you play melody and accompaniment simultaneously with both hands, '
+          'making it ideal for solo performance and the best instrument for learning music theory.',
+      'posture': [
+        'Sit up straight on the bench with your feet flat on the floor.',
+        'Relax your shoulders and let your elbows hang naturally.',
+        'Curve your fingers gently as if holding an egg.',
+        'Keep your wrists level with the keys — don\'t bend them up or down.',
+        'Finger numbers: thumb=1, index=2, middle=3, ring=4, pinky=5.',
+      ],
+      'notePositions': 'Key positions:\n\n'
+          '• C — white key to the left of the group of 2 black keys\n'
+          '• D — between the 2 black keys\n'
+          '• E — to the right of the group of 2 black keys\n'
+          '• F — to the left of the group of 3 black keys\n'
+          '• G — between the 1st and 2nd of the 3 black keys\n'
+          '• A — between the 2nd and 3rd of the 3 black keys\n'
+          '• B — to the right of the group of 3 black keys\n\n'
+          'Find Middle C (C4) — it\'s near the center of the piano.',
+      'fingering': 'Basic fingering:\n\n'
+          '• C major right hand: 1-2-3-1-2-3-4-5 (C D E F G A B C)\n'
+          '• The thumb (1) passes under when crossing to the F key\n'
+          '• Left hand: 5-4-3-2-1-3-2-1 (C D E F G A B C)\n\n'
+          'Tips:\n'
+          '• Press each key with one finger at a time\n'
+          '• Start with one hand, then combine both when comfortable\n'
+          '• Don\'t press too hard — keep it light!',
+    },
+    'guitar': {
+      'name': 'Guitar',
+      'emoji': '🎸',
+      'intro': 'The guitar is a string instrument with 6 strings played by plucking with fingers or a pick.\n\n'
+          'String names (thickest to thinnest): 6th(E) 5th(A) 4th(D) 3rd(G) 2nd(B) 1st(E)\n\n'
+          'Press frets with your left hand and strum with your right.\n\n'
+          'You can play chords for accompaniment or single notes for melodies. '
+          'Its portability is a huge advantage — play anywhere!',
+      'posture': [
+        'Sit and place the guitar body on your right thigh.',
+        'Tilt the neck slightly upward.',
+        'Place your left thumb lightly on the back center of the neck.',
+        'Press just behind the fret (toward the body) with your left fingers.',
+        'Strum naturally over the sound hole with your right hand.',
+      ],
+      'notePositions': 'Basic note positions (1st string):\n\n'
+          '• Open (fret 0) = E\n'
+          '• Fret 1 = F\n'
+          '• Fret 3 = G\n'
+          '• Fret 5 = A\n'
+          '• Fret 7 = B\n'
+          '• Fret 8 = C (high)\n\n'
+          'Higher fret numbers = higher pitch.\n'
+          'Remember the open string notes: E-A-D-G-B-E',
+      'fingering': 'First chord — Am:\n\n'
+          '• 2nd string, fret 1: index finger (1)\n'
+          '• 3rd string, fret 2: ring (3) or middle (2)\n'
+          '• 4th string, fret 2: middle (2) or ring (3)\n'
+          '• Strum strings 5 to 1 (skip 6th string)\n\n'
+          'Tips:\n'
+          '• Press with your fingertips right next to the fret\n'
+          '• Arch your fingers so they don\'t touch other strings\n'
+          '• Your fingers will hurt at first, but calluses form in ~2 weeks',
+    },
+    'violin': {
+      'name': 'Violin',
+      'emoji': '🎻',
+      'intro': 'The violin is a string instrument played by drawing a bow across the strings.\n\n'
+          '4 strings: G D A E — from lowest to highest.\n\n'
+          'Press the strings with your left hand and move the bow with your right.\n\n'
+          'Known as the flower of the orchestra, it is capable of rich emotional expression. '
+          'It may be hard to produce sound at first, but with practice you\'ll create beautiful music.',
+      'posture': [
+        'Rest the violin on your left collarbone.',
+        'Place your chin gently on the chin rest — don\'t clamp it.',
+        'Left thumb sits lightly on the side of the neck; other fingers above the strings.',
+        'Hold the bow by curving your thumb inside the frog, fingers resting naturally on top.',
+        'Use the weight of the bow to press the strings — don\'t push with your arm.',
+      ],
+      'notePositions': 'Open string notes:\n\n'
+          '• G string (thickest) = G3 (196Hz)\n'
+          '• D string = D4 (293Hz)\n'
+          '• A string = A4 (440Hz)\n'
+          '• E string (thinnest) = E5 (659Hz)\n\n'
+          'Placing left-hand fingers raises the pitch:\n'
+          '• A string open = A\n'
+          '• A string 1st finger = B\n'
+          '• A string 2nd finger = C# or C\n'
+          '• A string 3rd finger = D',
+      'fingering': 'Left-hand basic fingering:\n\n'
+          '• 1st finger (index): ~2cm from the nut\n'
+          '• 2nd finger (middle): ~1.5cm above the 1st\n'
+          '• 3rd finger (ring): right next to the 2nd\n'
+          '• 4th finger (pinky): less common but needed later\n\n'
+          'Tips:\n'
+          '• Press with your fingertips for a clean sound\n'
+          '• Start by practicing only the 1st finger on the A string\n'
+          '• Use a tuner app to check your pitch',
+    },
+    'drums': {
+      'name': 'Drums',
+      'emoji': '🥁',
+      'intro': 'Drums are the heartbeat of percussion, providing the rhythmic foundation.\n\n'
+          'Basic setup:\n'
+          '• Kick drum (bass) — played with a foot pedal\n'
+          '• Snare — in front of your left hand, the most-hit drum\n'
+          '• Hi-hat — two cymbals, controlled by foot + hand\n'
+          '• Toms — 2-3 drums from high to low pitch\n'
+          '• Crash/Ride cymbals — for accents and rhythm\n\n'
+          'Drums are the heart of any band, building your rhythm and coordination skills.',
+      'posture': [
+        'Sit on the drum stool with thighs angled slightly downward.',
+        'Adjust the snare to about belly-button height.',
+        'Let your elbows hang naturally at your sides.',
+        'Grip the stick at the 1/3 point with thumb and index, wrap the other fingers.',
+        'Strike using your wrist and use the rebound (bounce).',
+      ],
+      'notePositions': 'Drum set layout:\n\n'
+          '• Kick (foot) — center floor, right foot pedal\n'
+          '• Snare — above left knee (left hand)\n'
+          '• Hi-hat — upper left (right hand crosses)\n'
+          '• High tom — upper left\n'
+          '• Mid tom — upper center\n'
+          '• Floor tom — lower right\n'
+          '• Crash cymbal — high left\n'
+          '• Ride cymbal — high right',
+      'fingering': 'Basic beat (4-beat):\n\n'
+          '• Beat 1: Kick + Hi-hat\n'
+          '• Beat 2: Snare + Hi-hat\n'
+          '• Beat 3: Kick + Hi-hat\n'
+          '• Beat 4: Snare + Hi-hat\n\n'
+          'Practice tips:\n'
+          '• Practice foot (kick) and hand (snare) separately\n'
+          '• Start very slowly at BPM 60\n'
+          '• Prioritize accuracy with a metronome\n'
+          '• 8-beat: add hi-hat on every off-beat',
+    },
+  };
 }
 
 class TutorialScreen extends StatefulWidget {
@@ -164,13 +313,23 @@ class _TutorialScreenState extends State<TutorialScreen> {
   CameraController? _cameraCtrl;
   bool _cameraReady = false;
 
-  Map<String, dynamic> get _data =>
-      _TutorialData.data[widget.instrument] ?? _TutorialData.data['piano']!;
+  String _langCode = 'ko';
+
+  Map<String, dynamic> get _data {
+    final d = _TutorialData.getData(_langCode);
+    return d[widget.instrument] ?? d['piano']!;
+  }
 
   @override
   void initState() {
     super.initState();
     _initCamera();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _langCode = Localizations.localeOf(context).languageCode;
   }
 
   Future<void> _initCamera() async {
@@ -211,11 +370,13 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final steps = ['악기 소개', '자세 안내', '음의 위치', '운지법'];
+    final steps = _langCode == 'en'
+        ? ['Introduction', 'Posture', 'Note Positions', 'Fingering']
+        : ['악기 소개', '자세 안내', '음의 위치', '운지법'];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${_data['name']} 입문'),
+        title: Text(_langCode == 'en' ? '${_data['name']} Basics' : '${_data['name']} 입문'),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -276,7 +437,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: const Text('이전'),
+                      child: Text(localeText(context, ko: '이전', en: 'Previous')),
                     ),
                   ),
                 if (_currentPage > 0) const SizedBox(width: 12),
@@ -289,7 +450,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     ),
-                    child: Text(_currentPage < 3 ? '다음' : '완료', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    child: Text(localeText(context, ko: _currentPage < 3 ? '다음' : '완료', en: _currentPage < 3 ? 'Next' : 'Done'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                   ),
                 ),
               ],
@@ -308,7 +469,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
         children: [
           Text(_data['emoji'] as String, style: const TextStyle(fontSize: 64)),
           const SizedBox(height: 16),
-          Text('${_data['name']}이란?', style: TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.bold)),
+          Text(_langCode == 'en' ? 'What is ${_data['name']}?' : '${_data['name']}이란?', style: TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.bold)),
           const SizedBox(height: 20),
           Container(
             padding: const EdgeInsets.all(20),
@@ -323,7 +484,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
           OutlinedButton.icon(
             onPressed: () => AiVoiceService.speak(_data['intro'] as String),
             icon: Icon(Icons.volume_up_rounded),
-            label: const Text('AI 음성으로 듣기'),
+            label: Text(localeText(context, ko: 'AI 음성으로 듣기', en: 'Listen with AI voice')),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.accent,
               side: BorderSide(color: AppColors.accent),
@@ -367,7 +528,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                                   decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(6)),
-                                  child: Text('실시간 영상', style: TextStyle(color: Colors.white, fontSize: 10)),
+                                  child: Text(localeText(context, ko: '실시간 영상', en: 'Live video'), style: TextStyle(color: Colors.white, fontSize: 10)),
                                 ),
                               ),
                             ],
@@ -394,13 +555,22 @@ class _TutorialScreenState extends State<TutorialScreen> {
                         children: [
                           Icon(Icons.auto_awesome_rounded, color: AppColors.accent, size: 14),
                           const SizedBox(width: 4),
-                          Text('AI 자세 피드백', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold, fontSize: 12)),
+                          Text(localeText(context, ko: 'AI 자세 피드백', en: 'AI Posture Feedback'), style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold, fontSize: 12)),
                         ],
                       ),
                       const SizedBox(height: 8),
                       Expanded(
                         child: _LiveAiFeedback(
-                          feedbacks: [
+                          feedbacks: _langCode == 'en' ? [
+                            'Adjust your position so your upper body is visible.',
+                            'Straighten your back and relax your shoulders.',
+                            'Check that you\'re holding the ${_data['name']} correctly.',
+                            'Great! Your posture looks stable.',
+                            'Make sure your shoulders aren\'t raised.',
+                            'Let your elbows hang naturally.',
+                            'Keep your wrists straight.',
+                            'Well done! Maintain this posture.',
+                          ] : [
                             '카메라에 상체가 보이도록 위치를 조정하세요.',
                             '허리를 곧게 펴고 어깨의 힘을 빼세요.',
                             '${_data['name']}을 올바르게 잡고 있는지 확인합니다.',
@@ -451,7 +621,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
               AiVoiceService.speak(all);
             },
             icon: Icon(Icons.play_circle_rounded),
-            label: const Text('전체 음성 안내'),
+            label: Text(localeText(context, ko: '전체 음성 안내', en: 'Full voice guide')),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.accent,
               side: BorderSide(color: AppColors.accent),
@@ -471,7 +641,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
         children: [
           Icon(Icons.piano_rounded, color: AppColors.primary, size: 48),
           const SizedBox(height: 16),
-          Text('음의 위치', style: TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.bold)),
+          Text(localeText(context, ko: '음의 위치', en: 'Note Positions'), style: TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.bold)),
           const SizedBox(height: 20),
           Container(
             width: double.infinity,
@@ -483,7 +653,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
           OutlinedButton.icon(
             onPressed: () => AiVoiceService.speak(_data['notePositions'] as String),
             icon: Icon(Icons.volume_up_rounded),
-            label: const Text('AI 음성으로 듣기'),
+            label: Text(localeText(context, ko: 'AI 음성으로 듣기', en: 'Listen with AI voice')),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.accent,
               side: BorderSide(color: AppColors.accent),
@@ -525,7 +695,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                                   decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(6)),
-                                  child: Text('손 모양 확인', style: TextStyle(color: Colors.white, fontSize: 10)),
+                                  child: Text(localeText(context, ko: '손 모양 확인', en: 'Hand position'), style: TextStyle(color: Colors.white, fontSize: 10)),
                                 ),
                               ),
                             ],
@@ -552,14 +722,23 @@ class _TutorialScreenState extends State<TutorialScreen> {
                         children: [
                           Icon(Icons.auto_awesome_rounded, color: AppColors.accentGold, size: 14),
                           const SizedBox(width: 4),
-                          Text('AI 운지법 피드백', style: TextStyle(color: AppColors.accentGold, fontWeight: FontWeight.bold, fontSize: 12)),
+                          Text(localeText(context, ko: 'AI 운지법 피드백', en: 'AI Fingering Feedback'), style: TextStyle(color: AppColors.accentGold, fontWeight: FontWeight.bold, fontSize: 12)),
                         ],
                       ),
                       const SizedBox(height: 8),
                       Expanded(
                         child: _LiveAiFeedback(
                           color: AppColors.accentGold,
-                          feedbacks: [
+                          feedbacks: _langCode == 'en' ? [
+                            'Show your finger position to the camera.',
+                            'Check that you\'re pressing with your fingertips.',
+                            'Arch your fingers so they don\'t touch other strings/keys.',
+                            'Nice! Your hand position is correct.',
+                            'Try spreading your fingers a bit more.',
+                            'Check your wrist angle.',
+                            'Great job! Keep it up.',
+                            'Refer to the fingering guide below.',
+                          ] : [
                             '손가락 모양을 카메라에 보여주세요.',
                             '손가락 끝으로 누르고 있는지 확인합니다.',
                             '다른 줄/건반에 닿지 않게 세워주세요.',
@@ -580,7 +759,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
           const SizedBox(height: 16),
 
           // 운지법 텍스트
-          Text('운지법 가이드', style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(localeText(context, ko: '운지법 가이드', en: 'Fingering Guide'), style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
           Container(
             width: double.infinity,
@@ -592,7 +771,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
           OutlinedButton.icon(
             onPressed: () => AiVoiceService.speak(_data['fingering'] as String),
             icon: Icon(Icons.volume_up_rounded),
-            label: const Text('AI 음성으로 듣기'),
+            label: Text(localeText(context, ko: 'AI 음성으로 듣기', en: 'Listen with AI voice')),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.accent,
               side: BorderSide(color: AppColors.accent),
@@ -615,8 +794,8 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('입문 완료!', style: TextStyle(color: AppColors.scorePerfect, fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text('이제 레슨 탭에서 기본 스케일부터 시작해보세요.', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                      Text(localeText(context, ko: '입문 완료!', en: 'Basics Complete!'), style: TextStyle(color: AppColors.scorePerfect, fontWeight: FontWeight.bold, fontSize: 16)),
+                      Text(localeText(context, ko: '이제 레슨 탭에서 기본 스케일부터 시작해보세요.', en: 'Head to the Lessons tab to start with basic scales.'), style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
                     ],
                   ),
                 ),
@@ -625,7 +804,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
           ),
           const SizedBox(height: 24),
           // 추천 영상
-          RecommendedVideos(instrument: widget.instrument, title: '추천 입문 영상'),
+          RecommendedVideos(instrument: widget.instrument, title: localeText(context, ko: '추천 입문 영상', en: 'Recommended Beginner Videos')),
         ],
       ),
     );

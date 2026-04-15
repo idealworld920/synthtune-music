@@ -112,35 +112,72 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     );
   }
 
+  bool get _isEnglish => Localizations.localeOf(context).languageCode == 'en';
+
   String _generateResponse(String input) {
     final tone = ref.read(chatToneProvider);
     final lower = input.toLowerCase();
 
-    // 맥락 기반: "더 알려줘", "그거", "또" 같은 후속 질문 처리
+    // 영어 모드
+    if (_isEnglish) {
+      final raw = _matchResponseEn(lower);
+      _responseVariant++;
+      return raw;
+    }
+
+    // 맥락 기반 후속 질문
     if (_lastTopic != null && _isFollowUp(lower)) {
       final raw = _getFollowUp(_lastTopic!, lower);
       return _applyTone(raw, tone);
     }
 
     final raw = _matchResponse(lower);
-
-    // 주제 기억
     _lastTopic = _detectTopic(lower);
     _responseVariant++;
 
     return _applyTone(raw, tone);
   }
 
+  String _matchResponseEn(String lower) {
+    if (lower.contains('hi') || lower.contains('hello') || lower.contains('hey')) {
+      final g = ['Hi there! What would you like to practice today?', 'Hello! Ready to make some music?', 'Hey! How can I help you with your music journey?'];
+      return g[_responseVariant % g.length];
+    }
+    if (lower.contains('thank') || lower.contains('thanks')) return "You're welcome! Keep up the great practice!";
+    if (lower.contains('bye') || lower.contains('see you')) return 'See you next time! Keep practicing!';
+    if (lower.contains('piano') || lower.contains('keyboard')) return 'Piano tips:\n• Practice scales daily (5 min)\n• Focus on fingers 4 & 5\n• Hands separately first, then together\n• Use a metronome — start slow\n\nCheck out the Skills tab for finger exercises!';
+    if (lower.contains('guitar') || lower.contains('chord')) return 'Guitar tips:\n• Start with Am, C, G, D chords\n• Press strings with fingertips near the fret\n• Practice chord transitions slowly\n• Your fingers will hurt at first — calluses form in 2 weeks!\n\nTry the Tutorial tab for beginners!';
+    if (lower.contains('violin') || lower.contains('bow')) return 'Violin tips:\n• Let the bow weight do the work — don\'t press\n• Practice long tones on open strings\n• Keep the bow perpendicular to strings\n• Use a mirror to check your posture\n\nThe Tutorial tab has a great starter guide!';
+    if (lower.contains('drum') || lower.contains('rhythm') || lower.contains('beat')) return 'Drum tips:\n• Start with single strokes (RLRL) at BPM 60\n• Accuracy before speed!\n• Practice with a metronome\n• Learn the basic 4-beat pattern first\n\nCheck Skills tab for rudiments!';
+    if (lower.contains('scale') || lower.contains('note')) return 'Scales are the foundation of all music!\n• Start with C major (no sharps/flats)\n• Then G major, D major\n• Practice 5 minutes daily\n• Use the Scales category in Lessons tab!';
+    if (lower.contains('practice') || lower.contains('how') || lower.contains('start')) return 'Effective practice routine:\n1. Warm-up (5 min) — scales\n2. New piece (10 min) — difficult sections\n3. Review (5 min) — previous pieces\n4. Free play (5 min) — fun!\n\n15-30 min daily is enough. Consistency is key!';
+    if (lower.contains('hard') || lower.contains('difficult') || lower.contains('can\'t')) return 'Everyone struggles at first! The key is not to give up. Try:\n• Slow down the tempo\n• Practice the hard part 10 times in isolation\n• Take breaks\n• You WILL improve — trust the process!';
+    if (lower.contains('fun') || lower.contains('love') || lower.contains('great') || lower.contains('good')) return "That's awesome! Enjoying music is the secret to improving. Keep that energy going!";
+    if (lower.contains('app') || lower.contains('feature') || lower.contains('how to')) return 'App features:\n• Lessons: Scales/Songs/Classical/Skills\n• Practice: Record & get AI feedback\n• Training: Set goals & track progress\n• Community: Share & connect\n• AI Chat: Ask me anything!\n\nCheck Settings for customization options!';
+
+    if (lower.length <= 3) {
+      final s = ['Tell me more! What are you curious about?', 'I\'m listening! Feel free to ask anything.', 'Go on! What would you like to know?'];
+      return s[_responseVariant % s.length];
+    }
+    if (lower.contains('?')) {
+      final q = ['Great question! Could you be more specific? For example, ask about a specific instrument or technique.', 'I\'d love to help! Try asking about piano, guitar, violin, drums, or practice tips.'];
+      return q[_responseVariant % q.length];
+    }
+    final d = ['Interesting! If you have any music questions, I\'m here to help. Or we can just chat!', 'Got it! What else would you like to talk about? Music tips, practice advice, or anything else!'];
+    return d[_responseVariant % d.length];
+  }
+
   bool _isFollowUp(String lower) {
     return lower.contains('더') || lower.contains('또') || lower.contains('그거') ||
         lower.contains('자세히') || lower.contains('예를 들') || lower.contains('다른') ||
         lower.contains('계속') || lower.contains('그럼') || lower.contains('그래서') ||
-        lower.contains('왜') || lower == '?' || lower == '응' || lower == 'ㅇㅇ';
+        lower.contains('왜') || lower == '?' || lower == '응' || lower == 'ㅇㅇ' ||
+        lower.contains('more') || lower.contains('also') || lower.contains('tell me') || lower.contains('continue');
   }
 
   String? _detectTopic(String lower) {
-    if (lower.contains('피아노') || lower.contains('건반')) return 'piano';
-    if (lower.contains('기타') || lower.contains('코드')) return 'guitar';
+    if (lower.contains('피아노') || lower.contains('건반') || lower.contains('piano')) return 'piano';
+    if (lower.contains('기타') || lower.contains('코드') || lower.contains('guitar')) return 'guitar';
     if (lower.contains('바이올린') || lower.contains('보잉')) return 'violin';
     if (lower.contains('드럼') || lower.contains('리듬')) return 'drums';
     if (lower.contains('악보') || lower.contains('읽')) return 'theory';

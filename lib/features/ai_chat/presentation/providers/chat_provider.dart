@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../settings/presentation/screens/language_screen.dart';
 
 class ChatMessage {
   final String text;
@@ -142,8 +143,18 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
     return grouped;
   }
 
+  static Future<String> _getSavedLang() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('app_language') ?? 'ko';
+  }
+
+  static String _getWelcomeText() {
+    // 동기적으로 언어 판단 불가하므로 기본 한국어, load 시 언어 체크
+    return 'Hi! I\'m SynthTune AI. Ask me anything about music, practice, or just chat! \n\n안녕하세요! SynthTune AI입니다. 음악, 연습, 일상 등 무엇이든 편하게 이야기해요!';
+  }
+
   static ChatMessage _welcomeMessage() => ChatMessage(
-    text: '안녕하세요! SynthTune AI입니다. 음악, 연습, 일상 등 무엇이든 편하게 이야기해요!',
+    text: _getWelcomeText(),
     isUser: false,
   );
 }
