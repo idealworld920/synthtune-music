@@ -44,7 +44,7 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  'AI 음악 교육',
+                  'SynthTune Music',
                   style: TextStyle(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.bold,

@@ -102,13 +102,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       ),
                     ],
                   ),
-                  child: const Center(
-                    child: Text('🎵', style: TextStyle(fontSize: 48)),
+                  child: Center(
+                    child: Icon(Icons.music_note_rounded, color: Colors.white, size: 48),
                   ),
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'AI 음악 교육',
+                  'SynthTune Music',
                   style: TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 28,
@@ -118,7 +118,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'AI와 함께하는 스마트 음악 학습',
+                  'AI-Powered Music Education',
                   style: TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 14,

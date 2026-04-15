@@ -16,11 +16,11 @@ class EmailService {
       final smtpServer = gmail(_email, _appPassword);
 
       final message = Message()
-        ..from = Address(_email, 'AI 음악 교육 앱')
+        ..from = Address(_email, 'SynthTune Music')
         ..recipients.add(_email)
         ..subject = '[앱 문의] $subject'
         ..text = '''
-AI 음악 교육 앱 문의
+SynthTune Music 문의
 
 보낸 사람: $senderName
 이메일: ${senderEmail ?? '미제공'}
@@ -30,7 +30,7 @@ AI 음악 교육 앱 문의
 $body
 ─────────────────────
 
-이 메일은 AI 음악 교육 앱에서 자동 발송되었습니다.
+이 메일은 SynthTune Music에서 자동 발송되었습니다.
 ''';
 
       await send(message, smtpServer);
