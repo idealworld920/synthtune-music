@@ -15,7 +15,8 @@ import 'shared/services/ai_voice_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await AiVoiceService.init();
+  // AI 음성은 추후 업데이트에서 활성화
+  // await AiVoiceService.init();
   timeago.setLocaleMessages('ko', timeago.KoMessages());
 
   // 저장된 언어 불러오기

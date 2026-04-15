@@ -218,37 +218,31 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   String _applyTone(String text, ChatTone tone) {
     switch (tone) {
       case ChatTone.friendly:
-        return text
-            .replaceAll('합니다.', '해!')
-            .replaceAll('합니다', '해')
-            .replaceAll('하세요.', '해봐!')
-            .replaceAll('하세요', '해봐')
-            .replaceAll('됩니다.', '돼!')
-            .replaceAll('입니다.', '야!')
-            .replaceAll('있습니다.', '있어!')
-            .replaceAll('에요.', '야!')
-            .replaceAll('드릴게요.', '줄게!')
-            .replaceAll('보세요.', '봐!')
-            .replaceAll('거예요.', '거야!')
-            .replaceAll('이에요.', '이야!')
-            .replaceAll('있어요.', '있어!')
-            .replaceAll('돼요.', '돼!')
-            .replaceAll('나요!', '나!')
-            .replaceAll('까요?', '까?');
+        var r = text;
+        // 문장 끝 변환 (존댓말 → 반말)
+        for (final p in [
+          ('습니다.', '어!'), ('세요.', '봐!'), ('에요.', '야!'), ('이에요.', '이야!'),
+          ('돼요.', '돼!'), ('거예요.', '거야!'), ('있어요.', '있어!'), ('해요.', '해!'),
+          ('해주세요.', '해줘!'), ('봐요.', '봐!'), ('까요?', '까?'), ('나요?', '나?'),
+          ('드릴게요.', '줄게!'), ('할게요.', '할게!'), ('볼까요?', '볼까?'),
+        ]) {
+          r = r.replaceAll(p.$1, p.$2);
+        }
+        return '😊 $r';
       case ChatTone.polite:
-        return text; // 기본이 존댓말
+        return text;
       case ChatTone.teacher:
-        return '자, 좋은 질문이에요. $text 궁금한 거 더 있으면 손 들어보세요!';
+        return '👨‍🏫 자, $text\n\n더 궁금한 점이 있으면 질문하세요!';
       case ChatTone.casual:
-        return text
-            .replaceAll('합니다.', '함ㅋ')
-            .replaceAll('하세요.', '해보셈~')
-            .replaceAll('됩니다.', '됨!')
-            .replaceAll('입니다.', '임!')
-            .replaceAll('있습니다.', '있음!')
-            .replaceAll('에요.', '임~')
-            .replaceAll('거예요.', '거임~')
-            .replaceAll('보세요.', '봐봐~');
+        var r = text;
+        for (final p in [
+          ('습니다.', '음~'), ('세요.', '셈~'), ('에요.', '임~'), ('이에요.', '임~'),
+          ('돼요.', '됨~'), ('거예요.', '거임~'), ('있어요.', '있음~'), ('해요.', '함~'),
+          ('해주세요.', '해줘~'), ('봐요.', '봐~'), ('합니다.', '함~'),
+        ]) {
+          r = r.replaceAll(p.$1, p.$2);
+        }
+        return '😎 $r';
     }
   }
 
@@ -699,6 +693,27 @@ class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
             '현재 저장된 대화: $msgCount개',
             style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
           ),
+          const SizedBox(height: 12),
+          // 대화 요약
+          if (msgCount > 0)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('최근 대화 요약', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600, fontSize: 13)),
+                  const SizedBox(height: 6),
+                  ...ref.watch(chatProvider).where((m) => m.isUser).take(3).map((m) => Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text('• ${m.text}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                  )),
+                  if (ref.watch(chatProvider).where((m) => m.isUser).length > 3)
+                    Text('...외 ${ref.watch(chatProvider).where((m) => m.isUser).length - 3}개', style: TextStyle(color: AppColors.textSecondary, fontSize: 11)),
+                ],
+              ),
+            ),
           const SizedBox(height: 20),
           Text(
             AppLocalizations.of(context)?.retentionPeriod ?? '대화 저장 기간',

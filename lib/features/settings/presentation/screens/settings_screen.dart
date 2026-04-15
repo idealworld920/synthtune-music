@@ -126,15 +126,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AppearanceScreen())),
           ),
 
-          // AI 음성 섹션
-          _SectionHeader(title: 'AI 음성'),
-          _SettingsTile(
-            icon: Icons.record_voice_over_rounded,
-            iconColor: AppColors.accent,
-            title: 'AI 음성 설정',
-            subtitle: '음성 스타일, 언어, 켜기/끄기',
-            onTap: () => _showVoiceSettings(context),
-          ),
+          // AI 음성 (추후 업데이트 예정)
+          // _SectionHeader(title: 'AI 음성'),
 
           // 계정 섹션
           _SectionHeader(title: '계정'),
