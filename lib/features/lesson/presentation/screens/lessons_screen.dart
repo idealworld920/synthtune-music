@@ -319,6 +319,7 @@ class _CategoryTabs extends StatelessWidget {
     final selected = ref.watch(selectedCategoryFilterProvider);
     final categories = [
       ('all', '전체', Icons.apps_rounded),
+      ('tutorial', '악기 입문', Icons.school_rounded),
       ('scale', '기본 스케일', Icons.piano_rounded),
       ('nursery', '동요', Icons.child_care_rounded),
       ('classic', '클래식', Icons.library_music_rounded),

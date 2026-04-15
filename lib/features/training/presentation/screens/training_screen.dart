@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../lesson/presentation/providers/lesson_provider.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
+import 'free_practice_screen.dart';
 
 class TrainingScreen extends ConsumerStatefulWidget {
   const TrainingScreen({super.key});
@@ -141,6 +142,14 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
               desc: '취약한 부분을 집중 연습',
               color: AppColors.accentGold,
               onTap: () => context.go('/lessons'),
+            ),
+            const SizedBox(height: 10),
+            _TrainingOptionCard(
+              icon: Icons.music_off_rounded,
+              title: '자유 연습',
+              desc: '어떤 곡이든 녹음하면 AI가 피드백',
+              color: AppColors.scoreMiss,
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FreePracticeScreen())),
             ),
             const SizedBox(height: 24),
 

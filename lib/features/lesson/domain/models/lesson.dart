@@ -60,6 +60,7 @@ class Lesson {
 
   String get categoryLabel {
     switch (category) {
+      case 'tutorial': return '악기 입문';
       case 'scale': return '기본 스케일';
       case 'nursery': return '동요';
       case 'classic': return '클래식';
