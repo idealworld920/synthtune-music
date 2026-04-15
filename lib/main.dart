@@ -7,6 +7,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/settings/presentation/providers/app_settings_provider.dart';
+import 'features/settings/presentation/screens/language_screen.dart';
 import 'firebase_options.dart';
 import 'shared/services/ai_voice_service.dart';
 
@@ -41,11 +42,11 @@ class MyApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
     final themeMode = ref.watch(appThemeModeProvider);
     final font = ref.watch(appFontProvider);
+    final langCode = ref.watch(appLanguageProvider);
     final platformBrightness = MediaQuery.platformBrightnessOf(context);
 
     var theme = _getTheme(themeMode, platformBrightness);
 
-    // 글꼴 적용
     if (font.fontFamily != null) {
       theme = theme.copyWith(
         textTheme: theme.textTheme.apply(fontFamily: font.fontFamily),
@@ -57,6 +58,7 @@ class MyApp extends ConsumerWidget {
       theme: theme,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
+      locale: Locale(langCode),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -64,10 +66,10 @@ class MyApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('ko'),
-        Locale('en'),
-        Locale('ja'),
-        Locale('zh'),
+        Locale('ko'), Locale('en'), Locale('ja'), Locale('zh'),
+        Locale('fr'), Locale('pt'), Locale('es'), Locale('de'),
+        Locale('it'), Locale('ru'), Locale('vi'), Locale('th'),
+        Locale('ar'), Locale('hi'), Locale('id'),
       ],
     );
   }

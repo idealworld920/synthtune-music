@@ -11,6 +11,7 @@ import '../../../subscription/presentation/providers/subscription_provider.dart'
 import '../../../../shared/services/ai_voice_service.dart';
 import 'appearance_screen.dart';
 import 'language_screen.dart';
+import 'profile_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -91,6 +92,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: '현재 플랜: ${tier.name}',
             subtitle: tier.price,
             onTap: () => context.push(RouteNames.subscription),
+          ),
+
+          // 프로필 섹션
+          _SectionHeader(title: '프로필'),
+          _SettingsTile(
+            icon: Icons.person_rounded,
+            iconColor: AppColors.primary,
+            title: '프로필 설정',
+            subtitle: '사진, 닉네임, 비밀번호 변경',
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileScreen())),
           ),
 
           // 언어 섹션

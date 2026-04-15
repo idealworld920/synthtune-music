@@ -58,24 +58,53 @@ class AiVoiceService {
     await _tts.setSpeechRate(rate);
     await _tts.setPitch(pitch);
 
-    // 성별에 맞는 음성 선택 시도
+    // 성별에 맞는 음성 선택
     try {
       final voices = await _tts.getVoices;
       if (voices is List) {
         final voiceList = voices.cast<Map>();
-        final targetGender = _gender == VoiceGender.female ? 'female' : 'male';
+        final langPrefix = _language.split('-').first.toLowerCase();
 
-        // 언어+성별 매칭 음성 찾기
-        final matched = voiceList.where((v) {
-          final name = (v['name'] ?? '').toString().toLowerCase();
+        // 언어 매칭 음성 필터
+        final langVoices = voiceList.where((v) {
           final locale = (v['locale'] ?? '').toString().toLowerCase();
-          final langMatch = locale.startsWith(_language.split('-').first.toLowerCase());
-          final genderMatch = name.contains(targetGender) || name.contains(targetGender[0]);
-          return langMatch && genderMatch;
+          return locale.startsWith(langPrefix);
         }).toList();
 
-        if (matched.isNotEmpty) {
+        if (langVoices.isNotEmpty) {
+          // 성별 키워드로 필터
+          final genderKeywords = _gender == VoiceGender.female
+              ? ['female', 'woman', 'girl', 'yuna', 'siri', 'alice', 'amelie']
+              : ['male', 'man', 'boy', 'junwoo', 'daniel', 'thomas', 'hugo'];
+
+          var matched = langVoices.where((v) {
+            final name = (v['name'] ?? '').toString().toLowerCase();
+            return genderKeywords.any((k) => name.contains(k));
+          }).toList();
+
+          // 매칭 없으면 첫 번째/두 번째로 성별 구분 시도
+          if (matched.isEmpty && langVoices.length > 1) {
+            matched = [langVoices[_gender == VoiceGender.female ? 0 : 1]];
+          } else if (matched.isEmpty) {
+            matched = [langVoices.first];
+          }
+
           await _tts.setVoice({'name': matched.first['name'], 'locale': matched.first['locale']});
+        }
+      }
+    } catch (_) {}
+
+    // Android: 삼성 TTS나 Google TTS 엔진에 따라 자연스러움이 다름
+    // 가능하면 Google TTS 엔진 사용 시도
+    try {
+      final engines = await _tts.getEngines;
+      if (engines is List) {
+        final googleEngine = engines.firstWhere(
+          (e) => e.toString().contains('google'),
+          orElse: () => null,
+        );
+        if (googleEngine != null) {
+          await _tts.setEngine(googleEngine.toString());
         }
       }
     } catch (_) {}
