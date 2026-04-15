@@ -149,16 +149,21 @@ class _TierCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         if (tier == SubscriptionTier.free) return;
-        if (tier == SubscriptionTier.student) {
-          context.push(RouteNames.studentVerification);
+        if (tier.isComingSoon) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${tier.name}은 출시 예정입니다. 업데이트를 기다려주세요!', style: TextStyle(color: AppColors.textPrimary)),
+              backgroundColor: AppColors.bgCard,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
+          );
           return;
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              '결제 기능 준비 중입니다',
-              style: TextStyle(color: AppColors.textPrimary),
-            ),
+            content: Text('결제 기능 준비 중입니다', style: TextStyle(color: AppColors.textPrimary)),
             backgroundColor: AppColors.bgCard,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -295,17 +300,10 @@ class _TierCard extends ConsumerWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (tier == SubscriptionTier.student) {
-                        context.push(RouteNames.studentVerification);
-                        return;
-                      }
+                    onPressed: tier.isComingSoon ? null : () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(
-                            '결제 기능 준비 중입니다',
-                            style: TextStyle(color: AppColors.textPrimary),
-                          ),
+                          content: Text('결제 기능 준비 중입니다', style: TextStyle(color: AppColors.textPrimary)),
                           backgroundColor: AppColors.bgCard,
                           behavior: SnackBarBehavior.floating,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -314,31 +312,31 @@ class _TierCard extends ConsumerWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _isSelected
-                          ? _accentColor.withValues(alpha: 0.2)
-                          : _accentColor,
-                      foregroundColor: _isSelected
-                          ? _accentColor
-                          : AppColors.bgDark,
+                      backgroundColor: tier.isComingSoon
+                          ? AppColors.textSecondary.withValues(alpha: 0.3)
+                          : _isSelected ? _accentColor.withValues(alpha: 0.2) : _accentColor,
+                      foregroundColor: tier.isComingSoon
+                          ? AppColors.textSecondary
+                          : _isSelected ? _accentColor : AppColors.bgDark,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: _isSelected
-                            ? BorderSide(color: _accentColor, width: 1)
-                            : BorderSide.none,
+                        side: _isSelected ? BorderSide(color: _accentColor, width: 1) : BorderSide.none,
                       ),
                       elevation: 0,
                     ),
-                    child: Text(
-                      _isSelected
-                          ? '현재 플랜 이용 중'
-                          : tier == SubscriptionTier.student
-                              ? '학생 인증 후 구독'
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (tier.isComingSoon) Icon(Icons.lock_rounded, size: 16),
+                        if (tier.isComingSoon) const SizedBox(width: 6),
+                        Text(
+                          _isSelected ? '현재 플랜 이용 중'
+                              : tier.isComingSoon ? '출시 예정'
                               : '업그레이드',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ],
                     ),
                   ),
                 ),

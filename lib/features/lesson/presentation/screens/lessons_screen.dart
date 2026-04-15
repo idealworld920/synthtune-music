@@ -351,8 +351,7 @@ class _CategoryTabs extends StatelessWidget {
                   if (tier != SubscriptionTier.premium && tier != SubscriptionTier.student) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(l10n?.premiumFeature ?? '프리미엄 구독 시 나만의 음악을 이용할 수 있습니다.'),
-                        action: SnackBarAction(label: l10n?.upgrade ?? '업그레이드', onPressed: () => context.push(RouteNames.subscription)),
+                        content: Text('나만의 음악은 프리미엄 출시 후 이용 가능합니다.'),
                         backgroundColor: AppColors.bgCard,
                       ),
                     );

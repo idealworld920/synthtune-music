@@ -14,8 +14,8 @@ extension SubscriptionTierExt on SubscriptionTier {
     switch (this) {
       case SubscriptionTier.free: return '₩0 / 월';
       case SubscriptionTier.standard: return '₩9,900 / 월';
-      case SubscriptionTier.premium: return '₩19,900 / 월';
-      case SubscriptionTier.student: return '₩4,900 / 월';
+      case SubscriptionTier.premium: return '₩19,900 / 월 (출시 예정)';
+      case SubscriptionTier.student: return '₩4,900 / 월 (출시 예정)';
     }
   }
 
@@ -23,9 +23,13 @@ extension SubscriptionTierExt on SubscriptionTier {
     switch (this) {
       case SubscriptionTier.free: return '시작하기';
       case SubscriptionTier.standard: return '가장 인기';
-      case SubscriptionTier.premium: return '전문가용';
-      case SubscriptionTier.student: return '학생 인증 필요';
+      case SubscriptionTier.premium: return '출시 예정';
+      case SubscriptionTier.student: return '출시 예정';
     }
+  }
+
+  bool get isComingSoon {
+    return this == SubscriptionTier.premium || this == SubscriptionTier.student;
   }
 
   List<String> get features {
