@@ -17,4 +17,6 @@ class RouteNames {
   static const String settings = '/settings';
   static const String subscription = '/subscription';
   static const String studentVerification = '/subscription/student-verify';
+  static const String compose = '/compose';
+  static const String advancedReport = '/report';
 }

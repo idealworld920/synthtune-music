@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
+import '../../../../shared/widgets/sheet_music_widget.dart';
+import '../../../lesson/domain/models/lesson.dart';
 import '../../../lesson/presentation/providers/lesson_provider.dart';
 import '../providers/practice_provider.dart';
 
@@ -108,125 +110,92 @@ class _NoteDisplay extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (practiceState.status == PracticeStatus.idle) ...[
-            const Text('🎵', style: TextStyle(fontSize: 52)),
-            const SizedBox(height: 12),
-            const Text(
-              '준비가 되면\n녹음 버튼을 누르세요',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
-            ),
-            const SizedBox(height: 12),
-            // 마이크 권한 상태
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.scorePerfect.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.scorePerfect.withValues(alpha: 0.4)),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.mic_rounded, color: AppColors.scorePerfect, size: 16),
-                  SizedBox(width: 6),
-                  Text(
-                    '마이크 준비됨',
-                    style: TextStyle(color: AppColors.scorePerfect, fontSize: 13, fontWeight: FontWeight.w500),
-                  ),
-                ],
+            // 악보 표시
+            Expanded(
+              child: SheetMusicWidget(
+                notes: lesson.targetNotes as List<MusicNote>,
+                instrument: lesson.instrument as String?,
               ),
             ),
-            const SizedBox(height: 16),
-            // 음표 미리보기
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              alignment: WrapAlignment.center,
-              children: lesson.targetNotes.take(8).map<Widget>((note) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // 마이크 상태
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppColors.bgSurface,
-                    borderRadius: BorderRadius.circular(8),
+                    color: AppColors.scorePerfect.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColors.scorePerfect.withValues(alpha: 0.4)),
                   ),
-                  child: Text(
-                    note.noteName,
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'monospace',
-                    ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.mic_rounded, color: AppColors.scorePerfect, size: 16),
+                      SizedBox(width: 6),
+                      Text(
+                        '마이크 준비됨',
+                        style: TextStyle(color: AppColors.scorePerfect, fontSize: 13, fontWeight: FontWeight.w500),
+                      ),
+                    ],
                   ),
-                );
-              }).toList(),
+                ),
+              ],
             ),
           ] else if (practiceState.status == PracticeStatus.countdown) ...[
-            Text(
-              '${practiceState.countdownSeconds}',
-              style: const TextStyle(
-                color: AppColors.primary,
-                fontSize: 80,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: SheetMusicWidget(
+                notes: lesson.targetNotes as List<MusicNote>,
+                instrument: lesson.instrument as String?,
               ),
             ),
-            const Text(
-              '준비하세요!',
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 18),
-            ),
-          ] else if (practiceState.status == PracticeStatus.recording) ...[
-            const _PulsingDot(),
-            const SizedBox(height: 12),
-            const Text(
-              '녹음 중...',
-              style: TextStyle(color: AppColors.scoreMiss, fontSize: 18, fontWeight: FontWeight.bold),
-            ),
             const SizedBox(height: 8),
             Text(
-              '현재 음: ${practiceState.detectedNote}',
-              style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+              '${practiceState.countdownSeconds}',
+              style: const TextStyle(color: AppColors.primary, fontSize: 56, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 12),
-            // 연주해야 할 음표
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              alignment: WrapAlignment.center,
-              children: lesson.targetNotes.take(8).map<Widget>((note) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.4)),
-                  ),
-                  child: Text(
-                    note.noteName,
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'monospace',
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ] else if (practiceState.status == PracticeStatus.analyzing) ...[
-            const SizedBox(
-              width: 48,
-              height: 48,
-              child: CircularProgressIndicator(color: AppColors.accent, strokeWidth: 3),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'AI 분석 중...',
-              style: TextStyle(color: AppColors.accent, fontSize: 18, fontWeight: FontWeight.bold),
+            const Text('준비하세요!', style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+          ] else if (practiceState.status == PracticeStatus.recording) ...[
+            Expanded(
+              child: SheetMusicWidget(
+                notes: lesson.targetNotes as List<MusicNote>,
+                instrument: lesson.instrument as String?,
+                activeNoteIndex: 0, // TODO: 실시간 추적 시 업데이트
+              ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              '음정을 분석하고 있습니다',
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const _PulsingDot(),
+                const SizedBox(width: 10),
+                const Text(
+                  '녹음 중',
+                  style: TextStyle(color: AppColors.scoreMiss, fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  '현재 음: ${practiceState.detectedNote}',
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                ),
+              ],
+            ),
+          ] else if (practiceState.status == PracticeStatus.analyzing) ...[
+            Expanded(
+              child: SheetMusicWidget(
+                notes: lesson.targetNotes as List<MusicNote>,
+                instrument: lesson.instrument as String?,
+              ),
+            ),
+            const SizedBox(height: 12),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: AppColors.accent, strokeWidth: 2.5)),
+                SizedBox(width: 12),
+                Text('AI가 연주를 분석하고 있습니다...', style: TextStyle(color: AppColors.accent, fontSize: 15, fontWeight: FontWeight.w600)),
+              ],
             ),
           ] else if (practiceState.status == PracticeStatus.error) ...[
             const Icon(Icons.error_outline, color: AppColors.scoreMiss, size: 48),

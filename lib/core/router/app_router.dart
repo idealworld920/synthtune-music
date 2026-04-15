@@ -15,6 +15,8 @@ import '../../features/progress/presentation/screens/progress_screen.dart';
 import '../../features/community/presentation/screens/community_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/subscription/presentation/screens/subscription_screen.dart';
+import '../../features/compose/presentation/screens/compose_screen.dart';
+import '../../features/progress/presentation/screens/advanced_report_screen.dart';
 import '../../features/subscription/presentation/screens/student_verification_screen.dart';
 import '../../shared/widgets/bottom_nav_shell.dart';
 import 'route_names.dart';
@@ -111,6 +113,14 @@ GoRouter appRouter(AppRouterRef ref) {
           GoRoute(
             path: RouteNames.studentVerification,
             builder: (_, __) => const StudentVerificationScreen(),
+          ),
+          GoRoute(
+            path: RouteNames.compose,
+            builder: (_, __) => const ComposeScreen(),
+          ),
+          GoRoute(
+            path: RouteNames.advancedReport,
+            builder: (_, __) => const AdvancedReportScreen(),
           ),
         ],
       ),

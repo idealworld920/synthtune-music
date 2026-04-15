@@ -55,6 +55,11 @@ class HomeScreen extends ConsumerWidget {
             ),
             actions: [
               IconButton(
+                icon: const Icon(Icons.edit_note_rounded, color: AppColors.accentGold),
+                tooltip: '악보 만들기',
+                onPressed: () => context.push(RouteNames.compose),
+              ),
+              IconButton(
                 icon: const Icon(Icons.settings_rounded, color: AppColors.textSecondary),
                 onPressed: () => context.push(RouteNames.settings),
               ),

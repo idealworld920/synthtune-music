@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../shared/widgets/primary_button.dart';
+import '../../../../shared/widgets/sheet_music_widget.dart';
 import '../../domain/models/lesson.dart';
 import '../providers/lesson_provider.dart';
 
@@ -128,11 +129,15 @@ class LessonDetailScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // 연주할 음표 목록
-                  Text('연주할 음표 (${lesson.targetNotes.length}개)',
+                  // 악보
+                  Text('악보 (${lesson.targetNotes.length}개 음표)',
                       style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 12),
-                  _NoteList(lesson: lesson),
+                  SheetMusicWidget(
+                    notes: lesson.targetNotes,
+                    instrument: lesson.instrument,
+                    height: 200,
+                  ),
                   const SizedBox(height: 28),
 
                   // 연습 시작 버튼

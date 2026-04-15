@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../auth/presentation/providers/user_profile_provider.dart';
+import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../../domain/models/lesson.dart';
 
 // 레슨 목데이터
@@ -75,6 +77,136 @@ final _allLessons = <Lesson>[
       MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 6.0, duration: 0.75, order: 6),
       MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 6.75, duration: 0.75, order: 7),
       MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 7.5, duration: 1.5, order: 8),
+    ],
+  ),
+  Lesson(
+    id: 'piano_s01',
+    title: 'G장조 음계',
+    description: 'G장조 스케일을 연습합니다. #파(F#)에 주의하세요.',
+    instrument: 'piano',
+    difficulty: 'beginner',
+    durationMinutes: 5,
+    imageEmoji: '🎹',
+    bpm: 60,
+    xpReward: 100,
+    orderIndex: 2,
+    targetNotes: [
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.0, duration: 1.0, order: 0),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 1.0, duration: 1.0, order: 1),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 2.0, duration: 1.0, order: 2),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 3.0, duration: 1.0, order: 3),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 4.0, duration: 1.0, order: 4),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 5.0, duration: 1.0, order: 5),
+      MusicNote(noteName: 'F#4', frequency: NoteFrequency.fSharp4, startTime: 6.0, duration: 1.0, order: 6),
+      MusicNote(noteName: 'G5', frequency: NoteFrequency.g5, startTime: 7.0, duration: 1.0, order: 7),
+    ],
+  ),
+  Lesson(
+    id: 'piano_n01',
+    title: '나비야 나비야',
+    description: '한국 대표 동요! 쉽고 즐거운 멜로디를 피아노로 연주해 보세요.',
+    instrument: 'piano',
+    difficulty: 'beginner',
+    durationMinutes: 6,
+    imageEmoji: '🦋',
+    bpm: 80,
+    xpReward: 130,
+    orderIndex: 3,
+    targetNotes: [
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.0, duration: 0.75, order: 0),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.75, duration: 0.75, order: 1),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 1.5, duration: 1.5, order: 2),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 3.0, duration: 0.75, order: 3),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 3.75, duration: 0.75, order: 4),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 4.5, duration: 1.5, order: 5),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 6.0, duration: 0.75, order: 6),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 6.75, duration: 0.75, order: 7),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 7.5, duration: 0.75, order: 8),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 8.25, duration: 0.75, order: 9),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 9.0, duration: 0.75, order: 10),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 9.75, duration: 0.75, order: 11),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 10.5, duration: 1.5, order: 12),
+    ],
+  ),
+  Lesson(
+    id: 'piano_n02',
+    title: '곰 세 마리',
+    description: '엄마곰 아빠곰 애기곰! 아이들이 좋아하는 동요를 피아노로 연주해 보세요.',
+    instrument: 'piano',
+    difficulty: 'beginner',
+    durationMinutes: 7,
+    imageEmoji: '🐻',
+    bpm: 85,
+    xpReward: 140,
+    orderIndex: 4,
+    targetNotes: [
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 0.7, order: 0),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 0.7, duration: 0.7, order: 1),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 1.4, duration: 0.7, order: 2),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 2.1, duration: 0.7, order: 3),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 2.8, duration: 0.7, order: 4),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 3.5, duration: 0.7, order: 5),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 4.2, duration: 0.7, order: 6),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 4.9, duration: 0.7, order: 7),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 5.6, duration: 0.7, order: 8),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 6.3, duration: 0.7, order: 9),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 7.0, duration: 1.4, order: 10),
+    ],
+  ),
+  Lesson(
+    id: 'piano_n03',
+    title: '산토끼',
+    description: '산토끼 토끼야! 신나는 동요를 피아노로 연주해 봅시다.',
+    instrument: 'piano',
+    difficulty: 'beginner',
+    durationMinutes: 7,
+    imageEmoji: '🐰',
+    bpm: 90,
+    xpReward: 140,
+    orderIndex: 5,
+    targetNotes: [
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.66, order: 0),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.66, duration: 0.66, order: 1),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 1.32, duration: 0.66, order: 2),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.98, duration: 0.66, order: 3),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 2.64, duration: 0.66, order: 4),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 3.3, duration: 0.66, order: 5),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 3.96, duration: 0.66, order: 6),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 4.62, duration: 0.66, order: 7),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 5.28, duration: 0.66, order: 8),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 5.94, duration: 0.66, order: 9),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 6.6, duration: 0.66, order: 10),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 7.26, duration: 1.32, order: 11),
+    ],
+  ),
+  Lesson(
+    id: 'piano_c01',
+    title: '환희의 송가 (베토벤)',
+    description: '베토벤 교향곡 9번의 유명한 선율! 간단한 멜로디로 클래식에 입문해 보세요.',
+    instrument: 'piano',
+    difficulty: 'intermediate',
+    durationMinutes: 10,
+    imageEmoji: '🎼',
+    bpm: 80,
+    xpReward: 250,
+    orderIndex: 6,
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.75, order: 0),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.75, duration: 0.75, order: 1),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 1.5, duration: 0.75, order: 2),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 2.25, duration: 0.75, order: 3),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 3.0, duration: 0.75, order: 4),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 3.75, duration: 0.75, order: 5),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 4.5, duration: 0.75, order: 6),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 5.25, duration: 0.75, order: 7),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 6.0, duration: 0.75, order: 8),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 6.75, duration: 0.75, order: 9),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 7.5, duration: 0.75, order: 10),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 8.25, duration: 0.75, order: 11),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 9.0, duration: 1.1, order: 12),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 10.1, duration: 0.4, order: 13),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 10.5, duration: 1.5, order: 14),
     ],
   ),
   Lesson(
@@ -240,6 +372,33 @@ final _allLessons = <Lesson>[
     ],
   ),
 
+  Lesson(
+    id: 'violin_n01',
+    title: '나비야 나비야 (바이올린)',
+    description: '동요 나비야를 바이올린으로 연주해 봅시다. A현과 E현을 사용합니다.',
+    instrument: 'violin',
+    difficulty: 'beginner',
+    durationMinutes: 8,
+    imageEmoji: '🦋',
+    bpm: 75,
+    xpReward: 150,
+    orderIndex: 3,
+    targetNotes: [
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 0.0, duration: 0.8, order: 0),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 0.8, duration: 0.8, order: 1),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 1.6, duration: 1.6, order: 2),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 3.2, duration: 0.8, order: 3),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 4.0, duration: 0.8, order: 4),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 4.8, duration: 1.6, order: 5),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 6.4, duration: 0.8, order: 6),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 7.2, duration: 0.8, order: 7),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 8.0, duration: 0.8, order: 8),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 8.8, duration: 0.8, order: 9),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 9.6, duration: 0.8, order: 10),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 10.4, duration: 1.6, order: 11),
+    ],
+  ),
+
   // ─── 기타 입문 ───
   Lesson(
     id: 'guitar_001',
@@ -305,11 +464,21 @@ final lessonListProvider = Provider<List<Lesson>>((ref) => _allLessons);
 // 악기별 필터 프로바이더
 final selectedInstrumentFilterProvider = StateProvider<String>((ref) => 'all');
 
-// 필터링된 레슨 목록
+// 필터링된 레슨 목록 (구독 티어 반영)
 final filteredLessonsProvider = Provider<List<Lesson>>((ref) {
   final filter = ref.watch(selectedInstrumentFilterProvider);
   final lessons = ref.watch(lessonListProvider);
-  if (filter == 'all') return lessons;
+  final isStandard = ref.watch(isStandardOrAboveProvider);
+  final profile = ref.watch(userProfileProvider).valueOrNull;
+  final selectedInstrument = profile?.selectedInstrument ?? 'piano';
+
+  if (filter == 'all') {
+    // 무료 티어: 선택한 악기만, 스탠다드+: 전체
+    if (!isStandard) {
+      return lessons.where((l) => l.instrument == selectedInstrument).toList();
+    }
+    return lessons;
+  }
   return lessons.where((l) => l.instrument == filter).toList();
 });
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/router/route_names.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
 import '../providers/progress_provider.dart';
 
@@ -16,7 +18,16 @@ class ProgressScreen extends ConsumerWidget {
     final history = ref.watch(practiceHistoryProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('진도')),
+      appBar: AppBar(
+        title: const Text('진도'),
+        actions: [
+          TextButton.icon(
+            onPressed: () => context.push(RouteNames.advancedReport),
+            icon: const Icon(Icons.analytics_rounded, size: 18, color: AppColors.accentGold),
+            label: const Text('고급 리포트', style: TextStyle(color: AppColors.accentGold, fontSize: 13)),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(

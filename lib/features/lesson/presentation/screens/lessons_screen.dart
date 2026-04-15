@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/router/route_names.dart';
+import '../../../auth/presentation/providers/user_profile_provider.dart';
+import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../../domain/models/lesson.dart';
 import '../providers/lesson_provider.dart';
 
@@ -12,6 +15,9 @@ class LessonsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filter = ref.watch(selectedInstrumentFilterProvider);
     final lessons = ref.watch(filteredLessonsProvider);
+    final isStandard = ref.watch(isStandardOrAboveProvider);
+    final profile = ref.watch(userProfileProvider).valueOrNull;
+    final selectedInstrument = profile?.selectedInstrument ?? 'piano';
 
     final filters = [
       ('all', '전체', '🎼'),
@@ -40,9 +46,23 @@ class LessonsScreen extends ConsumerWidget {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: GestureDetector(
-                    onTap: () => ref
-                        .read(selectedInstrumentFilterProvider.notifier)
-                        .state = f.$1,
+                    onTap: () {
+                      // 무료 티어: 선택한 악기 + 전체만 접근 가능
+                      if (!isStandard && f.$1 != 'all' && f.$1 != selectedInstrument) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('스탠다드 이상 구독 시 전체 악기를 이용할 수 있습니다.'),
+                            action: SnackBarAction(
+                              label: '업그레이드',
+                              onPressed: () => context.push(RouteNames.subscription),
+                            ),
+                            backgroundColor: AppColors.bgCard,
+                          ),
+                        );
+                        return;
+                      }
+                      ref.read(selectedInstrumentFilterProvider.notifier).state = f.$1;
+                    },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
