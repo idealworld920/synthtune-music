@@ -26,12 +26,41 @@ class ChatMessage {
   );
 }
 
-// 저장 기간 설정 (일 수)
-final chatRetentionDaysProvider = StateProvider<int>((ref) => 30);
+// ─── 말투 설정 ───
+enum ChatTone {
+  friendly,  // 친근한 반말
+  polite,    // 존댓말
+  teacher,   // 선생님 말투
+  casual,    // 캐주얼
+}
+
+extension ChatToneExt on ChatTone {
+  String get label {
+    switch (this) {
+      case ChatTone.friendly: return '친근한 반말';
+      case ChatTone.polite: return '존댓말';
+      case ChatTone.teacher: return '선생님';
+      case ChatTone.casual: return '캐주얼';
+    }
+  }
+
+  String get emoji {
+    switch (this) {
+      case ChatTone.friendly: return '😊';
+      case ChatTone.polite: return '🤝';
+      case ChatTone.teacher: return '👨‍🏫';
+      case ChatTone.casual: return '😎';
+    }
+  }
+}
+
+// ─── Providers ───
+final chatToneProvider = StateProvider<ChatTone>((ref) => ChatTone.polite);
 
 class ChatNotifier extends StateNotifier<List<ChatMessage>> {
   static const _storageKey = 'chat_messages';
   static const _retentionKey = 'chat_retention_days';
+  static const _toneKey = 'chat_tone';
 
   ChatNotifier() : super([]) {
     _load();
@@ -45,17 +74,9 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
       final list = (jsonDecode(jsonStr) as List)
           .map((e) => ChatMessage.fromJson(e as Map<String, dynamic>))
           .toList();
-
-      // 저장 기간 지난 메시지 필터링
       final cutoff = DateTime.now().subtract(Duration(days: retentionDays));
       final filtered = list.where((m) => m.time.isAfter(cutoff)).toList();
-
-      if (filtered.isEmpty) {
-        state = [_welcomeMessage()];
-      } else {
-        state = filtered;
-      }
-      // 필터링된 결과 저장
+      state = filtered.isEmpty ? [_welcomeMessage()] : filtered;
       if (filtered.length != list.length) await _save();
     } else {
       state = [_welcomeMessage()];
@@ -64,8 +85,7 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
 
   Future<void> _save() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonStr = jsonEncode(state.map((m) => m.toJson()).toList());
-    await prefs.setString(_storageKey, jsonStr);
+    await prefs.setString(_storageKey, jsonEncode(state.map((m) => m.toJson()).toList()));
   }
 
   void addMessage(ChatMessage msg) {
@@ -90,7 +110,6 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
   Future<void> setRetentionDays(int days) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_retentionKey, days);
-    // 기존 메시지 중 기간 지난 것 정리
     final cutoff = DateTime.now().subtract(Duration(days: days));
     state = state.where((m) => m.time.isAfter(cutoff)).toList();
     if (state.isEmpty) state = [_welcomeMessage()];
@@ -100,6 +119,27 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
   Future<int> getRetentionDays() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt(_retentionKey) ?? 30;
+  }
+
+  Future<void> setTone(ChatTone tone) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_toneKey, tone.name);
+  }
+
+  Future<ChatTone> getTone() async {
+    final prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString(_toneKey) ?? 'polite';
+    return ChatTone.values.firstWhere((t) => t.name == name, orElse: () => ChatTone.polite);
+  }
+
+  /// 날짜별 그룹핑된 대화 내역
+  Map<String, List<ChatMessage>> getGroupedByDate() {
+    final grouped = <String, List<ChatMessage>>{};
+    for (final msg in state) {
+      final key = '${msg.time.year}-${msg.time.month.toString().padLeft(2, '0')}-${msg.time.day.toString().padLeft(2, '0')}';
+      grouped.putIfAbsent(key, () => []).add(msg);
+    }
+    return grouped;
   }
 
   static ChatMessage _welcomeMessage() => ChatMessage(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../providers/chat_provider.dart';
+import 'chat_history_screen.dart';
 
 class AiChatScreen extends ConsumerStatefulWidget {
   const AiChatScreen({super.key});
@@ -100,51 +101,145 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   }
 
   String _generateResponse(String input) {
-    final lower = input.toLowerCase();
+    final tone = ref.read(chatToneProvider);
+    final raw = _matchResponse(input.toLowerCase());
+    return _applyTone(raw, tone);
+  }
 
-    if (lower.contains('안녕') || lower.contains('하이') || lower.contains('hello') || lower.contains('hi')) {
+  String _applyTone(String text, ChatTone tone) {
+    switch (tone) {
+      case ChatTone.friendly:
+        return text
+            .replaceAll('합니다.', '해!')
+            .replaceAll('합니다', '해')
+            .replaceAll('하세요.', '해봐!')
+            .replaceAll('하세요', '해봐')
+            .replaceAll('됩니다.', '돼!')
+            .replaceAll('입니다.', '야!')
+            .replaceAll('있습니다.', '있어!')
+            .replaceAll('에요.', '야!')
+            .replaceAll('드릴게요.', '줄게!')
+            .replaceAll('보세요.', '봐!')
+            .replaceAll('거예요.', '거야!')
+            .replaceAll('이에요.', '이야!')
+            .replaceAll('있어요.', '있어!')
+            .replaceAll('돼요.', '돼!')
+            .replaceAll('나요!', '나!')
+            .replaceAll('까요?', '까?');
+      case ChatTone.polite:
+        return text; // 기본이 존댓말
+      case ChatTone.teacher:
+        return '자, 좋은 질문이에요. $text 궁금한 거 더 있으면 손 들어보세요!';
+      case ChatTone.casual:
+        return text
+            .replaceAll('합니다.', '함ㅋ')
+            .replaceAll('하세요.', '해보셈~')
+            .replaceAll('됩니다.', '됨!')
+            .replaceAll('입니다.', '임!')
+            .replaceAll('있습니다.', '있음!')
+            .replaceAll('에요.', '임~')
+            .replaceAll('거예요.', '거임~')
+            .replaceAll('보세요.', '봐봐~');
+    }
+  }
+
+  String _matchResponse(String lower) {
+    // ── 인사 ──
+    if (lower.contains('안녕') || lower.contains('하이') || lower.contains('hello') || lower.contains('hi') || lower == 'ㅎㅇ') {
       return '안녕하세요! 반갑습니다. 오늘은 어떤 연습을 해볼까요? 궁금한 점이 있으면 뭐든 물어보세요!';
     }
-    if (lower.contains('고마워') || lower.contains('감사') || lower.contains('ㄱㅅ') || lower.contains('땡큐')) {
+    if (lower.contains('고마워') || lower.contains('감사') || lower.contains('ㄱㅅ') || lower.contains('땡큐') || lower.contains('thank')) {
       return '별말씀을요! 도움이 되셨다면 기뻐요. 다른 궁금한 점이 있으면 언제든 물어보세요!';
     }
-    if (lower.contains('잘가') || lower.contains('바이') || lower.contains('bye')) {
+    if (lower.contains('잘가') || lower.contains('바이') || lower.contains('bye') || lower.contains('ㅂㅂ')) {
       return '오늘도 수고하셨어요! 꾸준히 연습하면 반드시 실력이 늘어요. 다음에 또 만나요!';
     }
-    if (lower.contains('힘들') || lower.contains('어려') || lower.contains('못하') || lower.contains('안돼')) {
-      return '누구나 처음엔 어렵게 느껴져요. 중요한 건 포기하지 않는 거예요! 어려운 부분을 알려주시면 더 구체적으로 도와드릴게요.';
+
+    // ── 감정/상태 ──
+    if (lower.contains('힘들') || lower.contains('어려') || lower.contains('못하') || lower.contains('안돼') || lower.contains('포기')) {
+      return '누구나 처음엔 어렵게 느껴져요. 중요한 건 포기하지 않는 거예요! 어려운 구간만 느린 템포로 10번 반복해보세요. 놀라울 정도로 빨리 나아집니다.';
     }
-    if (lower.contains('재미') || lower.contains('좋아') || lower.contains('신나')) {
-      return '음악이 재미있으시다니 정말 좋아요! 즐기면서 연습하는 게 실력 향상의 비결이에요.';
+    if (lower.contains('재미') || lower.contains('좋아') || lower.contains('신나') || lower.contains('잘됐') || lower.contains('됐다')) {
+      return '정말 잘하고 계시네요! 즐기면서 연습하는 게 실력 향상의 비결이에요. 이 기세로 계속 가보시죠!';
     }
-    if (lower.contains('추천') || lower.contains('뭐 할') || lower.contains('뭐해') || lower.contains('시작')) {
-      return '초보라면 "기본 스케일" 카테고리부터 시작하세요! 스케일로 기초를 다진 후 "동요"로 간단한 곡을 연주하고, 자신감이 붙으면 "클래식"에 도전해보세요.';
+    if (lower.contains('지루') || lower.contains('질려') || lower.contains('심심')) {
+      return '같은 곡이 지루하다면 새로운 장르에 도전해보세요! 클래식 탭에서 캉캉이나 터키 행진곡 같은 곡은 템포가 빨라서 재미있을 거예요. 스킬 탭의 테크닉 연습도 새로운 자극이 됩니다.';
+    }
+
+    // ── 추천/시작 ──
+    if (lower.contains('추천') || lower.contains('뭐 할') || lower.contains('뭐해') || lower.contains('시작') || lower.contains('입문') || lower.contains('초보')) {
+      return '초보라면 이 순서를 추천합니다:\n1. "기본 스케일" → 도레미파솔라시도부터\n2. "동요" → 반짝반짝 작은별, 나비야\n3. "스킬" → 아르페지오, 스타카토 등\n4. "클래식" → 환희의 송가, 엘리제\n\n레슨 탭에서 카테고리별로 확인해보세요!';
+    }
+
+    // ── 피아노 상세 ──
+    if (lower.contains('피아노') && (lower.contains('손가락') || lower.contains('운지'))) {
+      return '피아노 운지법 기본 원칙:\n• 엄지=1, 검지=2, 중지=3, 약지=4, 새끼=5\n• C장조 음계: 오른손 1-2-3-1-2-3-4-5\n• 손가락을 세우고 달걀을 쥐듯 둥글게\n• 손목은 건반 높이와 수평으로 유지\n\n스킬 탭의 "한 손 스케일 연습"부터 시작해보세요.';
+    }
+    if (lower.contains('피아노') && (lower.contains('페달') || lower.contains('밟'))) {
+      return '피아노 페달 사용법:\n• 오른쪽 페달(서스테인): 음을 길게 유지\n• "반 페달"을 먼저 연습하세요 — 완전히 밟지 않고 반만\n• 음이 바뀔 때 페달을 놓았다 다시 밟는 "레가토 페달링"\n\n스킬 탭의 "페달링 기초"에서 연습할 수 있어요.';
     }
     if (lower.contains('피아노') || lower.contains('건반')) {
-      return '피아노는 손가락 독립성이 중요합니다. 매일 하논이나 체르니 연습곡으로 기초를 다지세요. 특히 4번, 5번 손가락 강화에 집중하면 좋습니다.';
+      return '피아노 연습 팁:\n• 매일 5분 스케일 → 손가락 독립성 강화\n• 4번(약지), 5번(새끼) 손가락 특히 약하니 집중 훈련\n• 양손 따로 먼저 → 합치기\n• 메트로놈 필수 — 느린 템포부터\n\n하논, 체르니 같은 연습곡이 기초 다지기에 좋습니다.';
+    }
+
+    // ── 기타 상세 ──
+    if (lower.contains('기타') && (lower.contains('바레') || lower.contains('barre') || lower.contains('f코드') || lower.contains('f 코드'))) {
+      return 'F 바레 코드 팁:\n• 검지로 1프렛 전체를 누를 때 손가락 옆면을 사용\n• 엄지는 넥 뒤 중앙에 위치\n• 처음엔 1~2번 줄만 제대로 울리면 성공\n• 매일 30초씩 누르고 버티는 연습\n\n스킬 탭의 "바레 코드 강화"에서 집중 연습할 수 있어요.';
+    }
+    if (lower.contains('기타') && (lower.contains('핑거') || lower.contains('피킹') || lower.contains('아르페지오'))) {
+      return '핑거피킹 기본:\n• 엄지(p)=456번줄, 검지(i)=3번줄, 중지(m)=2번줄, 약지(a)=1번줄\n• p-i-m-a 순서로 천천히\n• 손톱 길이 적당히 유지\n• 트라비스 피킹: p와 i,m을 교차\n\n스킬 탭의 "핑거피킹 기초"에서 연습해보세요.';
     }
     if (lower.contains('기타') || lower.contains('코드')) {
-      return '기타 초보라면 Am, C, G, D 4개 코드부터 시작하세요. 이 4개만으로도 수많은 곡을 연주할 수 있습니다.';
+      return '기타 기본 코드 순서:\n1. Am → 가장 쉬운 코드\n2. C → Am에서 손가락 하나 추가\n3. G → 넓은 스트레치 연습\n4. D → 맑은 소리 내기\n5. Em → 2개 손가락만 사용\n\n이 5개로 수많은 곡을 연주할 수 있습니다. 코드 전환이 핵심이에요!';
     }
-    if (lower.contains('바이올린') || lower.contains('보잉')) {
-      return '바이올린은 보잉이 가장 중요합니다. 활의 무게를 이용해 현을 누르세요. 거울 앞에서 활의 각도를 확인하며 연습해보세요.';
+
+    // ── 바이올린 상세 ──
+    if (lower.contains('바이올린') && (lower.contains('비브라토') || lower.contains('떨림'))) {
+      return '바이올린 비브라토 연습:\n• 손목 비브라토부터 시작 (팔은 나중에)\n• 메트로놈에 맞춰 규칙적으로 왕복\n• 한 음을 길게 울리면서 천천히 흔들기\n• 처음엔 느리게, 점차 빠르게\n\n주의: 비브라토는 기초 음정이 안정된 후에 시작하세요!';
     }
-    if (lower.contains('드럼') || lower.contains('리듬')) {
-      return '드럼의 기본은 메트로놈과 함께 연습하는 것입니다. BPM 60부터 시작해서 싱글 스트로크를 정확하게 치는 연습을 하세요.';
+    if (lower.contains('바이올린') && (lower.contains('자세') || lower.contains('잡는') || lower.contains('턱'))) {
+      return '바이올린 자세 체크:\n• 턱받이에 턱을 가볍게 올려놓기 (꽉 물지 않기)\n• 왼손 엄지는 넥 옆면에 가볍게\n• 팔꿈치는 바이올린 아래로\n• 활은 브릿지와 지판 중간에서 긋기\n\n거울 앞에서 확인하면서 연습하면 좋습니다. 카메라 기능도 활용해보세요!';
     }
-    if (lower.contains('음정') || lower.contains('튜닝')) {
-      return '음정 연습의 핵심은 "듣기"입니다. 피아노나 튜너 앱으로 기준음을 틀어놓고 같은 음을 내는 연습을 하세요.';
+    if (lower.contains('바이올린') || lower.contains('보잉') || lower.contains('활')) {
+      return '바이올린 보잉 핵심:\n• 활의 무게를 이용하세요 — 누르지 말고\n• 전궁(활 전체), 반궁(절반)을 골고루 연습\n• 활이 현에 수직이 되도록 유지\n• 느린 보잉 → 빠른 보잉 순서로\n\n스킬 탭의 "보잉 기초"에서 체계적으로 연습할 수 있어요.';
     }
-    if (lower.contains('악보') || lower.contains('읽')) {
-      return '악보 읽기의 기초는 오선지(5선)와 음자리표를 아는 것입니다. 높은음자리표에서 선 위의 음은 아래부터 미-솔-시-레-파입니다.';
+
+    // ── 드럼 상세 ──
+    if (lower.contains('드럼') && (lower.contains('파라디들') || lower.contains('루디먼트'))) {
+      return '파라디들 연습법:\nR-L-R-R, L-R-L-L (R=오른손, L=왼손)\n• BPM 60부터 시작\n• 악센트를 첫 타에 넣기\n• 양손 균형이 목표\n• 연속 1분 치기 → 점차 빠르게\n\n파라디들은 드럼의 기본 루디먼트 중 가장 중요합니다!';
     }
-    if (lower.contains('스케일') || lower.contains('음계')) {
-      return '스케일은 모든 음악의 기초입니다. C장조부터 시작해서 G장조, D장조 순으로 연습하세요. 매일 5분씩만 해도 큰 차이가 나요!';
+    if (lower.contains('드럼') && (lower.contains('스트로크') || lower.contains('잡는') || lower.contains('그립'))) {
+      return '드럼스틱 그립:\n• 매치드 그립: 양손 같은 방법 (초보 추천)\n• 스틱 1/3 지점을 엄지+검지로 잡기\n• 나머지 손가락은 감싸듯 가볍게\n• 리바운드를 이용 — 치고 튕기기\n\n싱글 스트로크(RLRL)를 완벽하게 먼저 연습하세요.';
     }
-    if (lower.contains('연습') || lower.contains('시간')) {
-      return '하루 15-30분 꾸준한 연습이 가장 효과적입니다. 어려운 부분만 반복하는 "구간 연습"도 효과적입니다.';
+    if (lower.contains('드럼') || lower.contains('리듬') || lower.contains('비트')) {
+      return '드럼 연습 순서:\n1. 싱글 스트로크 (RLRL) → 기본 중의 기본\n2. 4비트 패턴 → 킥-스네어 교대\n3. 8비트 패턴 → 하이햇 추가\n4. 필인 → 마디 전환 연결\n\n메트로놈 필수! BPM 60에서 시작하세요.';
     }
-    return '궁금한 점이 있으시군요! 악기 이름(피아노, 기타 등)이나 연습 관련 키워드로 질문해주시면 더 구체적으로 도와드릴 수 있어요.';
+
+    // ── 음악 이론 ──
+    if (lower.contains('음정') || lower.contains('튜닝') || lower.contains('조율')) {
+      return '음정 연습 방법:\n1. 기준음(A=440Hz) 듣기\n2. 같은 음 소리내기\n3. 녹음해서 비교\n4. 반음씩 위아래로 확장\n\n튜너 앱과 함께 연습하면 효과적입니다. 이 앱의 연습 기능에서 실시간 피치 감지를 활용해보세요!';
+    }
+    if (lower.contains('악보') || lower.contains('읽') || lower.contains('오선')) {
+      return '악보 읽기 기초:\n• 5개 선 = 오선지\n• 높은음자리표(𝄞) 선 위의 음: 미-솔-시-레-파 (아래→위)\n• 칸의 음: 파-라-도-미\n• 가운데 C = 아래 보조선\n• 음표 모양: ○전음표, 𝅗𝅥2분, ♩4분, ♪8분\n\n앱의 악보 표시를 보면서 익혀보세요!';
+    }
+    if (lower.contains('장조') || lower.contains('단조') || lower.contains('조성') || lower.contains('스케일') || lower.contains('음계')) {
+      return '스케일/조성 기초:\n• C장조: 도레미파솔라시도 (검은 건반 없음)\n• G장조: 솔라시도레미파#솔 (파#하나)\n• Am단조: 라시도레미파솔라 (자연단음계)\n\n장조=밝은 느낌, 단조=어두운 느낌\n매일 5분 스케일 연습이 기초 체력입니다!';
+    }
+    if (lower.contains('박자') || lower.contains('템포') || lower.contains('bpm') || lower.contains('메트로놈')) {
+      return '박자와 템포:\n• 4/4박자: 한 마디에 4박 (가장 기본)\n• 3/4박자: 왈츠 리듬\n• BPM: 분당 박자 수 (60=1초에 1박)\n• 연습 시작은 항상 느린 BPM부터!\n\n메트로놈은 정확한 리듬감을 기르는 최고의 도구입니다.';
+    }
+
+    // ── 연습 관련 ──
+    if (lower.contains('연습') || lower.contains('시간') || lower.contains('방법') || lower.contains('효과')) {
+      return '효과적인 연습법:\n1. 워밍업 5분 (스케일 or 기본 연습)\n2. 새 곡 구간 연습 10분 (어려운 부분 반복)\n3. 복습 5분 (이전에 배운 곡)\n4. 자유 연습 5분 (좋아하는 곡)\n\n하루 15-30분이면 충분합니다. 매일 꾸준히가 핵심이에요!';
+    }
+
+    // ── 앱 기능 안내 ──
+    if (lower.contains('앱') || lower.contains('기능') || lower.contains('사용법')) {
+      return '앱 주요 기능 안내:\n• 레슨 탭: 스케일/동요/클래식/스킬 카테고리별 학습\n• 연습: 악보 보면서 마이크로 녹음 → AI 분석\n• 진도: 학습 현황, 고급 리포트\n• 커뮤니티: 연습 기록 공유, Q&A\n• 창작: 나만의 악보 만들기 (프리미엄)\n\n설정에서 구독 플랜도 확인해보세요!';
+    }
+
+    return '궁금한 점이 있으시군요! 더 정확한 답변을 위해 구체적으로 질문해주세요.\n\n예시:\n• "피아노 손가락 번호 알려줘"\n• "기타 F코드 팁"\n• "드럼 파라디들 연습법"\n• "바이올린 비브라토 하는 법"\n• "연습 추천해줘"';
   }
 
   @override
@@ -161,6 +256,11 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           ],
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.history_rounded, color: AppColors.textSecondary, size: 20),
+            tooltip: '대화 내역',
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChatHistoryScreen())),
+          ),
           IconButton(
             icon: const Icon(Icons.settings_rounded, color: AppColors.textSecondary, size: 20),
             tooltip: '대화 설정',
@@ -286,12 +386,17 @@ class _ChatSettingsSheet extends ConsumerStatefulWidget {
 
 class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
   int _selectedDays = 30;
+  ChatTone _selectedTone = ChatTone.polite;
 
   @override
   void initState() {
     super.initState();
     ref.read(chatProvider.notifier).getRetentionDays().then((d) {
       if (mounted) setState(() => _selectedDays = d);
+    });
+    ref.read(chatProvider.notifier).getTone().then((t) {
+      if (mounted) setState(() => _selectedTone = t);
+      ref.read(chatToneProvider.notifier).state = t;
     });
   }
 
@@ -354,6 +459,49 @@ class _ChatSettingsSheetState extends ConsumerState<_ChatSettingsSheet> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('저장 기간이 ${opt.$2}로 변경되었습니다.'),
+                        duration: const Duration(seconds: 1),
+                      ),
+                    );
+                  }
+                },
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 24),
+
+          // 말투 설정
+          const Text(
+            'AI 말투',
+            style: TextStyle(color: AppColors.textPrimary, fontSize: 15, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'AI 음악 선생님의 말투를 설정합니다.',
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: ChatTone.values.map((tone) {
+              final isSelected = _selectedTone == tone;
+              return ChoiceChip(
+                avatar: Text(tone.emoji, style: const TextStyle(fontSize: 14)),
+                label: Text(tone.label, style: TextStyle(
+                  fontSize: 13,
+                  color: isSelected ? Colors.white : AppColors.textSecondary,
+                )),
+                selected: isSelected,
+                selectedColor: AppColors.accent,
+                backgroundColor: AppColors.bgCard,
+                onSelected: (_) async {
+                  setState(() => _selectedTone = tone);
+                  ref.read(chatToneProvider.notifier).state = tone;
+                  await ref.read(chatProvider.notifier).setTone(tone);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('말투가 "${tone.label}"로 변경되었습니다.'),
                         duration: const Duration(seconds: 1),
                       ),
                     );
