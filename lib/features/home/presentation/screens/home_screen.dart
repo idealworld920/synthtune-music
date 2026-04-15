@@ -4,8 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/widgets/app_logo.dart';
-import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
 import '../../../lesson/domain/models/lesson.dart';
 import '../../../lesson/presentation/providers/lesson_provider.dart';
@@ -18,7 +16,6 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profileState = ref.watch(userProfileProvider);
     final featuredLessons = ref.watch(featuredLessonsProvider);
-    final showAds = ref.watch(showAdsProvider);
 
     return Scaffold(
       // 광고 배너는 BottomNavShell에서 전체 탭 적용
@@ -417,48 +414,6 @@ class _Tag extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w500),
-      ),
-    );
-  }
-}
-
-
-class _AdBanner extends StatelessWidget {
-  const _AdBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 56,
-      color: AppColors.bgSurface,
-      child: Row(
-        children: [
-          const SizedBox(width: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.textSecondary.withValues(alpha: 0.5)),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text('광고', style: TextStyle(color: AppColors.textSecondary, fontSize: 10)),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              '스탠다드로 업그레이드하고 광고를 제거하세요',
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pushNamed('/subscription'),
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-            ),
-            child: Text(AppLocalizations.of(context)?.upgrade ?? '업그레이드', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-          ),
-        ],
       ),
     );
   }

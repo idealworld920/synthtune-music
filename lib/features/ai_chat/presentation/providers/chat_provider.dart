@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../settings/presentation/screens/language_screen.dart';
 
 class ChatMessage {
   final String text;
@@ -141,11 +140,6 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
       grouped.putIfAbsent(key, () => []).add(msg);
     }
     return grouped;
-  }
-
-  static Future<String> _getSavedLang() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('app_language') ?? 'ko';
   }
 
   static String _getWelcomeText() {

@@ -10,7 +10,6 @@ import 'core/theme/app_theme.dart';
 import 'features/settings/presentation/providers/app_settings_provider.dart';
 import 'features/settings/presentation/screens/language_screen.dart';
 import 'firebase_options.dart';
-import 'shared/services/ai_voice_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

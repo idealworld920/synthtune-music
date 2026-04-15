@@ -220,35 +220,3 @@ class _InfoChip extends StatelessWidget {
     );
   }
 }
-
-class _NoteList extends StatelessWidget {
-  final Lesson lesson;
-  const _NoteList({required this.lesson});
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: lesson.targetNotes.map((note) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: AppColors.bgSurface,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.bgCard),
-          ),
-          child: Text(
-            note.noteName,
-            style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'monospace',
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}

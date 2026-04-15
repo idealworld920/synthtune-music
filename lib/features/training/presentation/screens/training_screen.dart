@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../lesson/presentation/providers/lesson_provider.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
 import 'ai_recommend_screen.dart';
 import 'free_practice_screen.dart';

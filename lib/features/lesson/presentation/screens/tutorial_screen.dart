@@ -10,8 +10,6 @@ class _TutorialData {
   static Map<String, Map<String, dynamic>> getData(String langCode) =>
       langCode == 'en' ? _dataEn : _dataKo;
 
-  static Map<String, Map<String, dynamic>> get data => _dataKo;
-
   static Map<String, Map<String, dynamic>> get _dataKo => {
     'piano': {
       'name': '피아노',

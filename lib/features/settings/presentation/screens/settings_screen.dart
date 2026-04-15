@@ -10,7 +10,6 @@ import '../../../subscription/domain/subscription_tier.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/services/ai_voice_service.dart';
 import 'appearance_screen.dart';
 import 'language_screen.dart';
 import 'profile_screen.dart';
@@ -151,110 +150,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               child: Center(child: CircularProgressIndicator()),
             ),
         ],
-      ),
-    );
-  }
-
-  void _showVoiceSettings(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.bgSurface,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setSheetState) {
-          var enabled = AiVoiceService.isEnabled;
-          var style = AiVoiceService.currentStyle;
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('AI 음성 설정', style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 20),
-
-                  // 켜기/끄기
-                  SwitchListTile(
-                    title: Text('AI 음성 피드백', style: TextStyle(color: AppColors.textPrimary)),
-                    subtitle: Text('연습 중 실시간 음성 안내', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
-                    value: enabled,
-                    activeColor: AppColors.accent,
-                    onChanged: (v) { setSheetState(() => enabled = v); AiVoiceService.setEnabled(v); },
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // 성별 선택
-                  Text('음성 성별', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: VoiceGender.values.map((g) {
-                      final isSel = AiVoiceService.currentGender == g;
-                      return Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(right: g == VoiceGender.female ? 8 : 0),
-                          child: ChoiceChip(
-                            avatar: Icon(g == VoiceGender.female ? Icons.female_rounded : Icons.male_rounded, size: 18, color: isSel ? Colors.white : AppColors.textSecondary),
-                            label: Text(g.label, style: TextStyle(fontSize: 13, color: isSel ? Colors.white : AppColors.textSecondary)),
-                            selected: isSel,
-                            selectedColor: AppColors.primary,
-                            backgroundColor: AppColors.bgCard,
-                            onSelected: (_) {
-                              AiVoiceService.setGender(g);
-                              setSheetState(() {});
-                              AiVoiceService.speak('안녕하세요, ${g.label} 음성입니다.');
-                            },
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // 음성 스타일
-                  Text('음성 스타일', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: VoiceStyle.values.map((s) {
-                      final isSelected = style == s;
-                      return ChoiceChip(
-                        label: Text(s.label, style: TextStyle(fontSize: 13, color: isSelected ? Colors.white : AppColors.textSecondary)),
-                        selected: isSelected,
-                        selectedColor: AppColors.accent,
-                        backgroundColor: AppColors.bgCard,
-                        onSelected: (_) {
-                          setSheetState(() => style = s);
-                          AiVoiceService.setStyle(s);
-                          AiVoiceService.speak('안녕하세요, ${s.label} 스타일입니다.');
-                        },
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // 테스트 버튼
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () => AiVoiceService.speak('좋아요, 음정이 정확합니다. 이 조자로 계속해보세요.'),
-                      icon: Icon(Icons.play_arrow_rounded),
-                      label: const Text('음성 테스트'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.accent,
-                        side: BorderSide(color: AppColors.accent),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
-          );
-        },
       ),
     );
   }
