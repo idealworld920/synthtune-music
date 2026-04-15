@@ -129,11 +129,7 @@ class PracticeScreen extends ConsumerWidget {
             // 카메라 PIP (녹음 중일 때 표시)
             if (practiceState.status == PracticeStatus.recording ||
                 practiceState.status == PracticeStatus.countdown)
-              const Positioned(
-                top: 80,
-                right: 12,
-                child: _CameraPip(),
-              ),
+              const _DraggableCameraPip(),
           ],
         ),
       ),
@@ -683,4 +679,79 @@ void _showFullSheet(BuildContext context, dynamic lesson) {
       ),
     ),
   );
+}
+
+/// 드래그 가능 + 가장자리 패널화 카메라 PIP
+class _DraggableCameraPip extends StatefulWidget {
+  const _DraggableCameraPip();
+
+  @override
+  State<_DraggableCameraPip> createState() => _DraggableCameraPipState();
+}
+
+class _DraggableCameraPipState extends State<_DraggableCameraPip> {
+  double _top = 80;
+  double _left = -1; // -1 = right aligned
+  bool _isEdge = false; // 가장자리 패널 모드
+
+  @override
+  Widget build(BuildContext context) {
+    final screenW = MediaQuery.of(context).size.width;
+    final screenH = MediaQuery.of(context).size.height;
+
+    // 초기 위치 (오른쪽 정렬)
+    if (_left < 0) _left = screenW - 130;
+
+    if (_isEdge) {
+      // 가장자리 패널 모드 (얇은 바)
+      final isRight = _left > screenW / 2;
+      return Positioned(
+        top: _top,
+        left: isRight ? null : 0,
+        right: isRight ? 0 : null,
+        child: GestureDetector(
+          onTap: () => setState(() => _isEdge = false),
+          child: Container(
+            width: 36,
+            height: 100,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.8),
+              borderRadius: BorderRadius.horizontal(
+                left: isRight ? const Radius.circular(12) : Radius.zero,
+                right: isRight ? Radius.zero : const Radius.circular(12),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.videocam_rounded, color: Colors.white, size: 18),
+                const SizedBox(height: 4),
+                Text('AI', style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Positioned(
+      top: _top,
+      left: _left,
+      child: GestureDetector(
+        onPanUpdate: (details) {
+          setState(() {
+            _top = (_top + details.delta.dy).clamp(40, screenH - 250);
+            _left = (_left + details.delta.dx).clamp(-20, screenW - 20);
+          });
+        },
+        onPanEnd: (details) {
+          // 가장자리 감지 (화면 밖 20px 이내면 패널화)
+          if (_left < 10 || _left > screenW - 50) {
+            setState(() => _isEdge = true);
+          }
+        },
+        child: const _CameraPip(),
+      ),
+    );
+  }
 }

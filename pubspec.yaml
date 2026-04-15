@@ -62,6 +62,9 @@ dependencies:
   # Share
   share_plus: ^10.1.4
 
+  # Audio Player
+  audioplayers: ^6.1.0
+
   # Localization
   flutter_localizations:
     sdk: flutter

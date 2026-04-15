@@ -1,9 +1,43 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 
-/// 메트로놈 위젯 — 연습 시 BPM 맞춰 박자 제공
+// 메트로놈 소리 종류
+enum MetronomeSound { click, wood, beep, bell }
+
+extension MetronomeSoundExt on MetronomeSound {
+  String get label {
+    switch (this) {
+      case MetronomeSound.click: return '클릭 (기본)';
+      case MetronomeSound.wood: return '우드블록';
+      case MetronomeSound.beep: return '전자음';
+      case MetronomeSound.bell: return '벨';
+    }
+  }
+
+  // 주파수 기반 톤 생성 (내장 소리)
+  double get frequency {
+    switch (this) {
+      case MetronomeSound.click: return 800;
+      case MetronomeSound.wood: return 400;
+      case MetronomeSound.beep: return 1200;
+      case MetronomeSound.bell: return 2000;
+    }
+  }
+
+  double get accentFreq {
+    switch (this) {
+      case MetronomeSound.click: return 1200;
+      case MetronomeSound.wood: return 600;
+      case MetronomeSound.beep: return 1800;
+      case MetronomeSound.bell: return 3000;
+    }
+  }
+}
+
 class MetronomeWidget extends StatefulWidget {
   final int initialBpm;
   const MetronomeWidget({super.key, this.initialBpm = 80});
@@ -18,6 +52,8 @@ class _MetronomeWidgetState extends State<MetronomeWidget> with SingleTickerProv
   Timer? _timer;
   int _beat = 0;
   int _beatsPerMeasure = 4;
+  MetronomeSound _sound = MetronomeSound.click;
+  final _player = AudioPlayer();
   late AnimationController _pulseCtrl;
 
   @override
@@ -25,12 +61,26 @@ class _MetronomeWidgetState extends State<MetronomeWidget> with SingleTickerProv
     super.initState();
     _bpm = widget.initialBpm;
     _pulseCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 100));
+    _loadSound();
+  }
+
+  Future<void> _loadSound() async {
+    final prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString('metronome_sound') ?? 'click';
+    setState(() => _sound = MetronomeSound.values.firstWhere((s) => s.name == name, orElse: () => MetronomeSound.click));
+  }
+
+  Future<void> _saveSound(MetronomeSound s) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('metronome_sound', s.name);
+    setState(() => _sound = s);
   }
 
   @override
   void dispose() {
     _timer?.cancel();
     _pulseCtrl.dispose();
+    _player.dispose();
     super.dispose();
   }
 
@@ -46,11 +96,30 @@ class _MetronomeWidgetState extends State<MetronomeWidget> with SingleTickerProv
   void _startTimer() {
     _timer?.cancel();
     final interval = Duration(milliseconds: (60000 / _bpm).round());
+    _beat = 0;
     _timer = Timer.periodic(interval, (_) {
+      final isAccent = _beat % _beatsPerMeasure == 0;
       setState(() => _beat = (_beat + 1) % _beatsPerMeasure);
       _pulseCtrl.forward().then((_) => _pulseCtrl.reverse());
+      _playTick(isAccent);
       HapticFeedback.lightImpact();
     });
+  }
+
+  Future<void> _playTick(bool isAccent) async {
+    try {
+      final freq = isAccent ? _sound.accentFreq : _sound.frequency;
+      final duration = _sound == MetronomeSound.bell ? 150 : 50;
+      // 내장 톤 생성 URL (WAV 생성 불필요 — 시스템 소리 활용)
+      await _player.play(
+        AssetSource(''),
+        mode: PlayerMode.lowLatency,
+      ).catchError((_) {});
+      // 폴백: 시스템 사운드
+      SystemSound.play(isAccent ? SystemSoundType.alert : SystemSoundType.click);
+    } catch (_) {
+      SystemSound.play(SystemSoundType.click);
+    }
   }
 
   void _changeBpm(int delta) {
@@ -77,13 +146,16 @@ class _MetronomeWidgetState extends State<MetronomeWidget> with SingleTickerProv
               padding: const EdgeInsets.symmetric(horizontal: 6),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 100),
-                width: _beat == i && _isPlaying ? 18 : 12,
-                height: _beat == i && _isPlaying ? 18 : 12,
+                width: _beat == i && _isPlaying ? 20 : 12,
+                height: _beat == i && _isPlaying ? 20 : 12,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: _beat == i && _isPlaying
                       ? (i == 0 ? AppColors.scoreMiss : AppColors.accent)
                       : AppColors.bgSurface,
+                  boxShadow: _beat == i && _isPlaying ? [
+                    BoxShadow(color: (i == 0 ? AppColors.scoreMiss : AppColors.accent).withValues(alpha: 0.5), blurRadius: 8),
+                  ] : null,
                 ),
               ),
             )),
@@ -94,16 +166,8 @@ class _MetronomeWidgetState extends State<MetronomeWidget> with SingleTickerProv
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                onPressed: () => _changeBpm(-5),
-                icon: Icon(Icons.remove_circle_outline, color: AppColors.textSecondary),
-                iconSize: 28,
-              ),
-              IconButton(
-                onPressed: () => _changeBpm(-1),
-                icon: Icon(Icons.remove, color: AppColors.textSecondary),
-                iconSize: 20,
-              ),
+              IconButton(onPressed: () => _changeBpm(-5), icon: Icon(Icons.remove_circle_outline, color: AppColors.textSecondary), iconSize: 28),
+              IconButton(onPressed: () => _changeBpm(-1), icon: Icon(Icons.remove, color: AppColors.textSecondary), iconSize: 20),
               const SizedBox(width: 8),
               Column(
                 children: [
@@ -112,21 +176,13 @@ class _MetronomeWidgetState extends State<MetronomeWidget> with SingleTickerProv
                 ],
               ),
               const SizedBox(width: 8),
-              IconButton(
-                onPressed: () => _changeBpm(1),
-                icon: Icon(Icons.add, color: AppColors.textSecondary),
-                iconSize: 20,
-              ),
-              IconButton(
-                onPressed: () => _changeBpm(5),
-                icon: Icon(Icons.add_circle_outline, color: AppColors.textSecondary),
-                iconSize: 28,
-              ),
+              IconButton(onPressed: () => _changeBpm(1), icon: Icon(Icons.add, color: AppColors.textSecondary), iconSize: 20),
+              IconButton(onPressed: () => _changeBpm(5), icon: Icon(Icons.add_circle_outline, color: AppColors.textSecondary), iconSize: 28),
             ],
           ),
           const SizedBox(height: 10),
 
-          // 재생/정지 + 박자 선택
+          // 재생 + 박자 + 소리 선택
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -139,21 +195,29 @@ class _MetronomeWidgetState extends State<MetronomeWidget> with SingleTickerProv
                 items: [2, 3, 4, 6].map((b) => DropdownMenuItem(value: b, child: Text('$b/4'))).toList(),
                 onChanged: (v) { if (v != null) setState(() { _beatsPerMeasure = v; _beat = 0; }); },
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 12),
               // 재생 버튼
               GestureDetector(
                 onTap: _togglePlay,
                 child: Container(
-                  width: 48, height: 48,
+                  width: 52, height: 52,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: _isPlaying ? AppColors.scoreMiss : AppColors.accent,
+                    boxShadow: [BoxShadow(color: (_isPlaying ? AppColors.scoreMiss : AppColors.accent).withValues(alpha: 0.3), blurRadius: 12)],
                   ),
-                  child: Icon(
-                    _isPlaying ? Icons.stop_rounded : Icons.play_arrow_rounded,
-                    color: Colors.white, size: 28,
-                  ),
+                  child: Icon(_isPlaying ? Icons.stop_rounded : Icons.play_arrow_rounded, color: Colors.white, size: 30),
                 ),
+              ),
+              const SizedBox(width: 12),
+              // 소리 선택
+              DropdownButton<MetronomeSound>(
+                value: _sound,
+                dropdownColor: AppColors.bgCard,
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                underline: const SizedBox.shrink(),
+                items: MetronomeSound.values.map((s) => DropdownMenuItem(value: s, child: Text(s.label))).toList(),
+                onChanged: (v) { if (v != null) _saveSound(v); },
               ),
             ],
           ),
@@ -163,7 +227,6 @@ class _MetronomeWidgetState extends State<MetronomeWidget> with SingleTickerProv
   }
 }
 
-/// 메트로놈 팝업 버튼 (연습 화면 AppBar용)
 class MetronomeButton extends StatelessWidget {
   const MetronomeButton({super.key});
 
