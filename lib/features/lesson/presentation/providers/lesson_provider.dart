@@ -17,6 +17,7 @@ final _allLessons = <Lesson>[
     bpm: 60,
     xpReward: 100,
     orderIndex: 1,
+    category: 'scale',
     targetNotes: [
       MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 1.0, order: 0),
       MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 1.0, duration: 1.0, order: 1),
@@ -39,6 +40,7 @@ final _allLessons = <Lesson>[
     bpm: 70,
     xpReward: 150,
     orderIndex: 2,
+    category: 'nursery',
     targetNotes: [
       MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 0.8, order: 0),
       MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.8, duration: 0.8, order: 1),
@@ -67,6 +69,7 @@ final _allLessons = <Lesson>[
     bpm: 80,
     xpReward: 150,
     orderIndex: 3,
+    category: 'nursery',
     targetNotes: [
       MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 0.75, order: 0),
       MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.75, duration: 0.75, order: 1),
@@ -90,6 +93,7 @@ final _allLessons = <Lesson>[
     bpm: 60,
     xpReward: 100,
     orderIndex: 2,
+    category: 'scale',
     targetNotes: [
       MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.0, duration: 1.0, order: 0),
       MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 1.0, duration: 1.0, order: 1),
@@ -112,6 +116,7 @@ final _allLessons = <Lesson>[
     bpm: 80,
     xpReward: 130,
     orderIndex: 3,
+    category: 'nursery',
     targetNotes: [
       MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.0, duration: 0.75, order: 0),
       MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.75, duration: 0.75, order: 1),
@@ -139,6 +144,7 @@ final _allLessons = <Lesson>[
     bpm: 85,
     xpReward: 140,
     orderIndex: 4,
+    category: 'nursery',
     targetNotes: [
       MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 0.7, order: 0),
       MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 0.7, duration: 0.7, order: 1),
@@ -164,6 +170,7 @@ final _allLessons = <Lesson>[
     bpm: 90,
     xpReward: 140,
     orderIndex: 5,
+    category: 'nursery',
     targetNotes: [
       MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.66, order: 0),
       MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.66, duration: 0.66, order: 1),
@@ -190,6 +197,7 @@ final _allLessons = <Lesson>[
     bpm: 80,
     xpReward: 250,
     orderIndex: 6,
+    category: 'classic',
     isLocked: true,
     targetNotes: [
       MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.75, order: 0),
@@ -220,6 +228,7 @@ final _allLessons = <Lesson>[
     bpm: 90,
     xpReward: 300,
     orderIndex: 4,
+    category: 'classic',
     isLocked: true,
     targetNotes: [
       MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.5, order: 0),
@@ -246,6 +255,7 @@ final _allLessons = <Lesson>[
     bpm: 70,
     xpReward: 120,
     orderIndex: 1,
+    category: 'scale',
     targetNotes: [
       MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.0, duration: 0.5, order: 0),
       MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 1.0, duration: 0.5, order: 1),
@@ -268,6 +278,7 @@ final _allLessons = <Lesson>[
     bpm: 80,
     xpReward: 150,
     orderIndex: 2,
+    category: 'scale',
     targetNotes: [
       MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.0, duration: 0.4, order: 0),
       MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.0, duration: 0.4, order: 1),
@@ -290,6 +301,7 @@ final _allLessons = <Lesson>[
     bpm: 100,
     xpReward: 250,
     orderIndex: 3,
+    category: 'scale',
     isLocked: true,
     targetNotes: [
       MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.0, duration: 0.3, order: 0),
@@ -315,6 +327,7 @@ final _allLessons = <Lesson>[
     bpm: 50,
     xpReward: 120,
     orderIndex: 1,
+    category: 'scale',
     targetNotes: [
       MusicNote(noteName: 'G3', frequency: NoteFrequency.g3, startTime: 0.0, duration: 2.0, order: 0),
       MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 2.0, duration: 2.0, order: 1),
@@ -333,6 +346,7 @@ final _allLessons = <Lesson>[
     bpm: 65,
     xpReward: 160,
     orderIndex: 2,
+    category: 'nursery',
     targetNotes: [
       MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.0, duration: 0.8, order: 0),
       MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.8, duration: 0.8, order: 1),
@@ -360,6 +374,7 @@ final _allLessons = <Lesson>[
     bpm: 70,
     xpReward: 260,
     orderIndex: 3,
+    category: 'classic',
     isLocked: true,
     targetNotes: [
       MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 0.0, duration: 0.8, order: 0),
@@ -383,6 +398,7 @@ final _allLessons = <Lesson>[
     bpm: 75,
     xpReward: 150,
     orderIndex: 3,
+    category: 'nursery',
     targetNotes: [
       MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 0.0, duration: 0.8, order: 0),
       MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 0.8, duration: 0.8, order: 1),
@@ -411,6 +427,7 @@ final _allLessons = <Lesson>[
     bpm: 60,
     xpReward: 120,
     orderIndex: 1,
+    category: 'scale',
     targetNotes: [
       MusicNote(noteName: 'A2', frequency: 110.00, startTime: 0.0, duration: 2.0, order: 0),
       MusicNote(noteName: 'A2', frequency: 110.00, startTime: 2.0, duration: 2.0, order: 1),
@@ -429,6 +446,7 @@ final _allLessons = <Lesson>[
     bpm: 60,
     xpReward: 120,
     orderIndex: 2,
+    category: 'scale',
     targetNotes: [
       MusicNote(noteName: 'G2', frequency: 98.00, startTime: 0.0, duration: 2.0, order: 0),
       MusicNote(noteName: 'G2', frequency: 98.00, startTime: 2.0, duration: 2.0, order: 1),
@@ -447,6 +465,7 @@ final _allLessons = <Lesson>[
     bpm: 75,
     xpReward: 250,
     orderIndex: 3,
+    category: 'classic',
     isLocked: true,
     targetNotes: [
       MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.8, order: 0),
@@ -464,22 +483,35 @@ final lessonListProvider = Provider<List<Lesson>>((ref) => _allLessons);
 // 악기별 필터 프로바이더
 final selectedInstrumentFilterProvider = StateProvider<String>((ref) => 'all');
 
-// 필터링된 레슨 목록 (구독 티어 반영)
+// 카테고리 필터 프로바이더
+final selectedCategoryFilterProvider = StateProvider<String>((ref) => 'all');
+
+// 필터링된 레슨 목록 (구독 티어 + 카테고리 반영)
 final filteredLessonsProvider = Provider<List<Lesson>>((ref) {
-  final filter = ref.watch(selectedInstrumentFilterProvider);
+  final instrumentFilter = ref.watch(selectedInstrumentFilterProvider);
+  final categoryFilter = ref.watch(selectedCategoryFilterProvider);
   final lessons = ref.watch(lessonListProvider);
   final isStandard = ref.watch(isStandardOrAboveProvider);
   final profile = ref.watch(userProfileProvider).valueOrNull;
   final selectedInstrument = profile?.selectedInstrument ?? 'piano';
 
-  if (filter == 'all') {
-    // 무료 티어: 선택한 악기만, 스탠다드+: 전체
+  var result = lessons.toList();
+
+  // 악기 필터
+  if (instrumentFilter == 'all') {
     if (!isStandard) {
-      return lessons.where((l) => l.instrument == selectedInstrument).toList();
+      result = result.where((l) => l.instrument == selectedInstrument).toList();
     }
-    return lessons;
+  } else {
+    result = result.where((l) => l.instrument == instrumentFilter).toList();
   }
-  return lessons.where((l) => l.instrument == filter).toList();
+
+  // 카테고리 필터
+  if (categoryFilter != 'all') {
+    result = result.where((l) => l.category == categoryFilter).toList();
+  }
+
+  return result;
 });
 
 // 특정 레슨 가져오기

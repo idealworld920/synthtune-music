@@ -101,6 +101,8 @@ class LessonsScreen extends ConsumerWidget {
               },
             ),
           ),
+          // 카테고리 탭
+          _CategoryTabs(ref: ref),
           // 레슨 목록
           Expanded(
             child: ListView.separated(
@@ -273,6 +275,65 @@ class _Chip extends StatelessWidget {
       child: Text(label,
           style:
               TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w500)),
+    );
+  }
+}
+
+class _CategoryTabs extends StatelessWidget {
+  final WidgetRef ref;
+  const _CategoryTabs({required this.ref});
+
+  @override
+  Widget build(BuildContext context) {
+    final selected = ref.watch(selectedCategoryFilterProvider);
+    final categories = [
+      ('all', '전체', Icons.apps_rounded),
+      ('scale', '기본 스케일', Icons.piano_rounded),
+      ('nursery', '동요', Icons.child_care_rounded),
+      ('classic', '클래식', Icons.library_music_rounded),
+    ];
+
+    return SizedBox(
+      height: 44,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        itemCount: categories.length,
+        itemBuilder: (context, i) {
+          final c = categories[i];
+          final isSelected = selected == c.$1;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () => ref.read(selectedCategoryFilterProvider.notifier).state = c.$1,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: isSelected ? AppColors.accent : Colors.transparent,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isSelected ? AppColors.accent : AppColors.bgSurface,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(c.$3, size: 15, color: isSelected ? Colors.white : AppColors.textSecondary),
+                    const SizedBox(width: 4),
+                    Text(
+                      c.$2,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : AppColors.textSecondary,
+                        fontSize: 12,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

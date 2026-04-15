@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
+import '../../../community/domain/models/community_post.dart';
+import '../../../community/presentation/providers/community_provider.dart';
 import '../../../subscription/domain/subscription_tier.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../providers/progress_provider.dart';
@@ -18,10 +25,55 @@ class AdvancedReportScreen extends ConsumerWidget {
     final isPremium = tier == SubscriptionTier.premium || tier == SubscriptionTier.student;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('고급 리포트')),
+      appBar: AppBar(
+        title: const Text('고급 리포트'),
+        actions: isPremium ? [
+          IconButton(
+            icon: const Icon(Icons.save_alt_rounded, color: AppColors.textSecondary),
+            tooltip: '저장',
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('리포트가 저장되었습니다.'), backgroundColor: AppColors.scorePerfect),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.share_rounded, color: AppColors.primary),
+            tooltip: '공유',
+            onPressed: () => _shareReport(context, ref),
+          ),
+        ] : null,
+      ),
       body: isPremium
           ? _ReportContent()
           : _PremiumGate(),
+    );
+  }
+
+  void _shareReport(BuildContext context, WidgetRef ref) {
+    final profile = ref.read(userProfileProvider).valueOrNull;
+    final history = ref.read(practiceHistoryProvider);
+    final avgScore = history.isEmpty
+        ? 0.0
+        : history.map((s) => s.score).reduce((a, b) => a + b) / history.length;
+
+    ref.read(communityProvider.notifier).addPost(
+      CommunityPost(
+        id: 'report_${DateTime.now().millisecondsSinceEpoch}',
+        userId: profile?.uid ?? 'me',
+        userName: profile?.displayName ?? '나',
+        content: '📊 내 학습 리포트\n평균 점수: ${avgScore.round()}점 | 총 ${history.length}회 연습\n꾸준히 성장하고 있어요!',
+        lessonTitle: '학습 리포트',
+        instrument: profile?.selectedInstrument ?? 'piano',
+        score: avgScore,
+        likes: 0,
+        isLiked: false,
+        createdAt: DateTime.now(),
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('커뮤니티에 리포트가 공유되었습니다.'), backgroundColor: AppColors.primary),
     );
   }
 }

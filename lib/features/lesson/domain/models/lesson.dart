@@ -27,6 +27,7 @@ class Lesson {
   final bool isLocked;
   final int xpReward;
   final int orderIndex;
+  final String category; // 'scale', 'nursery', 'classic'
 
   const Lesson({
     required this.id,
@@ -41,6 +42,7 @@ class Lesson {
     this.isLocked = false,
     required this.xpReward,
     required this.orderIndex,
+    this.category = 'scale',
   });
 
   String get difficultyLabel {
@@ -53,6 +55,15 @@ class Lesson {
         return '고급';
       default:
         return difficulty;
+    }
+  }
+
+  String get categoryLabel {
+    switch (category) {
+      case 'scale': return '기본 스케일';
+      case 'nursery': return '동요';
+      case 'classic': return '클래식';
+      default: return category;
     }
   }
 

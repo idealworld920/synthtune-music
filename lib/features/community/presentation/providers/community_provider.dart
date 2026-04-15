@@ -21,6 +21,24 @@ class CommunityNotifier extends StateNotifier<List<CommunityPost>> {
   void addPost(CommunityPost post) {
     state = [post, ...state];
   }
+
+  void addComment(String postId, Comment comment) {
+    state = state.map((post) {
+      if (post.id == postId) {
+        return post.copyWith(comments: [...post.comments, comment]);
+      }
+      return post;
+    }).toList();
+  }
+
+  void sharePost(String postId) {
+    state = state.map((post) {
+      if (post.id == postId) {
+        return post.copyWith(shares: post.shares + 1);
+      }
+      return post;
+    }).toList();
+  }
 }
 
 List<CommunityPost> _mockPosts() {
