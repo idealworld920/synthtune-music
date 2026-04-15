@@ -18,6 +18,7 @@ class LessonsScreen extends ConsumerWidget {
     final lessons = ref.watch(filteredLessonsProvider);
     final isStandard = ref.watch(isStandardOrAboveProvider);
     final profile = ref.watch(userProfileProvider).valueOrNull;
+    final categoryFilter = ref.watch(selectedCategoryFilterProvider);
     final selectedInstrument = profile?.selectedInstrument ?? 'piano';
 
     final filters = [
@@ -106,14 +107,41 @@ class LessonsScreen extends ConsumerWidget {
           _CategoryTabs(ref: ref),
           // 난이도 필터
           _DifficultyTabs(ref: ref),
-          // 레슨 목록
+          // 레슨 목록 or 나만의 음악 안내
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: lessons.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, i) => _LessonListCard(lesson: lessons[i]),
-            ),
+            child: categoryFilter == 'my' && lessons.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.create_rounded, color: AppColors.accentGold, size: 56),
+                        const SizedBox(height: 16),
+                        Text('나만의 음악을 만들고\n연습하자!', textAlign: TextAlign.center, style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 8),
+                        Text('창작 탭에서 악보를 만들고\n여기서 연습할 수 있어요', textAlign: TextAlign.center, style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: () => context.push(RouteNames.compose),
+                          icon: Icon(Icons.create_rounded),
+                          label: const Text('악보 만들기'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.accentGold,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : lessons.isEmpty
+                    ? Center(child: Text('해당 조건의 레슨이 없습니다.', style: TextStyle(color: AppColors.textSecondary)))
+                    : ListView.separated(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: lessons.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        itemBuilder: (context, i) => _LessonListCard(lesson: lessons[i]),
+                      ),
           ),
         ],
       ),
