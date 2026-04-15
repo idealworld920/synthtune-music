@@ -106,22 +106,37 @@ class PracticeScreen extends ConsumerWidget {
                       ),
                     );
                   }
-                  return Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        // 악보 영역 (세로 모드: 더 넓게)
-                        Expanded(
-                          flex: 4,
-                          child: _NoteDisplay(lesson: lesson, practiceState: practiceState),
+                  return Column(
+                    children: [
+                      // 악보 전체화면 (세로 모드)
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => _showFullSheet(context, lesson),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
+                            child: _NoteDisplay(lesson: lesson, practiceState: practiceState),
+                          ),
                         ),
-                        const SizedBox(height: 12),
-                        _PitchMeter(state: practiceState),
-                        const SizedBox(height: 16),
-                        _ControlArea(lesson: lesson, state: practiceState),
-                        const SizedBox(height: 8),
-                      ],
-                    ),
+                      ),
+                      // 하단 컴팩트 컨트롤 패널
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.bgSurface,
+                          border: Border(top: BorderSide(color: AppColors.bgCard)),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // 피치 미터 (축소)
+                            _PitchMeter(state: practiceState),
+                            const SizedBox(height: 8),
+                            // 컨트롤 버튼
+                            _ControlArea(lesson: lesson, state: practiceState),
+                          ],
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),

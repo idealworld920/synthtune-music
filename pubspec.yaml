@@ -65,6 +65,9 @@ dependencies:
   # Audio Player
   audioplayers: ^6.1.0
 
+  # TTS
+  flutter_tts: ^4.2.0
+
   # Localization
   flutter_localizations:
     sdk: flutter
