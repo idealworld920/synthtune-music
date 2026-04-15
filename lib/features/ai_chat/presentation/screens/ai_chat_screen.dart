@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../shared/services/email_service.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../community/domain/models/community_post.dart';
 import '../../../community/presentation/providers/community_provider.dart';
@@ -188,15 +189,26 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               child: const Text('아니오', style: TextStyle(color: AppColors.textSecondary)),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(ctx).pop();
-                // 커뮤니티 feedback 카테고리에 자동 등록
                 final user = ref.read(currentUserProvider);
+                final userName = user?.displayName ?? '사용자';
+                final userEmail = user?.email ?? '';
+
+                // 1. 이메일 전송
+                final sent = await EmailService.sendInquiry(
+                  senderName: userName,
+                  subject: '사용자 문의 - $userName',
+                  body: userText,
+                  senderEmail: userEmail,
+                );
+
+                // 2. 커뮤니티 feedback에도 등록
                 ref.read(communityProvider.notifier).addPost(
                   CommunityPost(
                     id: 'inquiry_${DateTime.now().millisecondsSinceEpoch}',
                     userId: user?.uid ?? 'guest',
-                    userName: user?.displayName ?? '사용자',
+                    userName: userName,
                     content: '📩 [AI 챗봇 문의]\n$userText',
                     lessonTitle: '',
                     instrument: '',
@@ -207,8 +219,12 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                     category: 'feedback',
                   ),
                 );
+
+                if (!mounted) return;
                 ref.read(chatProvider.notifier).addMessage(ChatMessage(
-                  text: '문의 내용이 운영팀에 전달되었습니다. 커뮤니티 → 문의·의견 탭에서도 확인할 수 있어요. 빠른 시일 내에 답변드리겠습니다!',
+                  text: sent
+                      ? '문의 내용이 이메일로 전송되었습니다! 커뮤니티 → 문의·의견에서도 확인할 수 있어요. 빠른 시일 내에 답변드리겠습니다!'
+                      : '문의 내용이 커뮤니티 → 문의·의견에 등록되었습니다. (이메일 전송은 네트워크 상태에 따라 지연될 수 있어요)',
                   isUser: false,
                 ));
                 _scrollToBottom();
