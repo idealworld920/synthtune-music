@@ -45,22 +45,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     _logoCtrl.forward();
 
-    // 로고 등장 후 → 사용자 확인 → 환영 인사 → 포탈 효과 → 진입
-    Future.delayed(const Duration(milliseconds: 1500), () async {
+    Future.delayed(const Duration(milliseconds: 1500), () {
       if (!mounted) return;
-
-      // 권한 화면 체크
-      final shouldShowPermission = await PermissionScreen.shouldShow();
-      if (shouldShowPermission && mounted) {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => PermissionScreen(onComplete: () {
-            Navigator.of(context).pop();
-            _showWelcomeAndEnter();
-          }),
-        ));
-      } else {
-        _showWelcomeAndEnter();
-      }
+      _showWelcomeAndEnter();
     });
   }
 
