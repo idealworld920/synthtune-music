@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../lesson/presentation/providers/lesson_provider.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
+import 'ai_recommend_screen.dart';
 import 'free_practice_screen.dart';
 
 class TrainingScreen extends ConsumerStatefulWidget {
@@ -139,9 +140,9 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
             _TrainingOptionCard(
               icon: Icons.auto_awesome_rounded,
               title: 'AI 추천 연습',
-              desc: '취약한 부분을 집중 연습',
+              desc: '데이터 기반 맞춤 추천 목표·곡',
               color: AppColors.accentGold,
-              onTap: () => context.go('/lessons'),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AiRecommendScreen())),
             ),
             const SizedBox(height: 10),
             _TrainingOptionCard(
