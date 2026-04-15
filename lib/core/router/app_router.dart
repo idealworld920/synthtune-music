@@ -46,6 +46,8 @@ GoRouter appRouter(AppRouterRef ref) {
       final isAuthRoute = authRoutes.any((r) => path.startsWith(r));
 
       if (!isLoggedIn && !isAuthRoute) return RouteNames.login;
+      // 온보딩 중이면 리다이렉트 하지 않음
+      if (path == RouteNames.onboarding) return null;
       if (isLoggedIn && isAuthRoute) return RouteNames.home;
       return null;
     },

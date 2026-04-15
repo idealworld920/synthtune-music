@@ -70,13 +70,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
             });
           });
         } else {
-          context.go(RouteNames.login);
+          context.go(RouteNames.onboarding);
         }
       },
       loading: () {
         Future.delayed(const Duration(milliseconds: 500), _showWelcomeAndEnter);
       },
-      error: (_, __) => context.go(RouteNames.login),
+      error: (_, __) => context.go(RouteNames.onboarding),
     );
   }
 

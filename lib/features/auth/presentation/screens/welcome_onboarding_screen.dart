@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/app_logo.dart';
+import '../providers/auth_provider.dart';
 import '../providers/user_profile_provider.dart';
 
 class WelcomeOnboardingScreen extends ConsumerStatefulWidget {
@@ -20,7 +21,7 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
     with TickerProviderStateMixin {
   final _pageCtrl = PageController();
   int _currentPage = 0;
-  final _totalPages = 9;
+  final _totalPages = 10;
 
   // 데이터
   String _selectedInstrument = 'piano';
@@ -29,6 +30,8 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
   String _nickname = '';
   File? _profileImage;
   bool _subscribeInterest = false;
+  bool _isSignedIn = false;
+  bool _isSigningIn = false;
 
   // 축하 애니메이션
   late AnimationController _celebrateCtrl;
@@ -58,6 +61,13 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
   }
 
   void _nextPage() {
+    // 회원가입 페이지(2)에서 로그인 안 했으면 막기
+    if (_currentPage == 2 && !_isSignedIn) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('계정을 연동해주세요'), backgroundColor: AppColors.scoreMiss),
+      );
+      return;
+    }
     if (_currentPage < _totalPages - 1) {
       _pageCtrl.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
       setState(() => _currentPage++);
@@ -109,6 +119,7 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
                 children: [
                   _IntroPage(),
                   _HowToUsePage(),
+                  _SignUpPage(),
                   _InstrumentPage(),
                   _PurposePage(),
                   _NicknamePage(),
@@ -208,7 +219,125 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
     );
   }
 
-  // ─── 3. 악기 고르기 ───
+  // ─── 3. 회원가입 (Google / 이메일) ───
+  Widget _SignUpPage() {
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.account_circle_rounded, color: AppColors.primary, size: 56),
+          const SizedBox(height: 20),
+          Text('계정 만들기', style: TextStyle(color: AppColors.textPrimary, fontSize: 24, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Text('학습 기록을 저장하고\n다양한 기기에서 이어서 학습하세요', textAlign: TextAlign.center, style: TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.5)),
+          const SizedBox(height: 32),
+
+          if (_isSignedIn) ...[
+            // 로그인 완료 상태
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: AppColors.scorePerfect.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.scorePerfect.withValues(alpha: 0.4)),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.check_circle_rounded, color: AppColors.scorePerfect, size: 28),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('계정 연동 완료!', style: TextStyle(color: AppColors.scorePerfect, fontWeight: FontWeight.bold, fontSize: 16)),
+                        const SizedBox(height: 4),
+                        Text('다음 단계로 진행하세요', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ] else ...[
+            // Google 로그인 버튼
+            SizedBox(
+              width: double.infinity,
+              height: 54,
+              child: OutlinedButton.icon(
+                onPressed: _isSigningIn ? null : () async {
+                  setState(() => _isSigningIn = true);
+                  try {
+                    await ref.read(authNotifierProvider.notifier).signInWithGoogle();
+                    final state = ref.read(authNotifierProvider);
+                    if (state is! AsyncError) {
+                      setState(() { _isSignedIn = true; _isSigningIn = false; });
+                    } else {
+                      setState(() => _isSigningIn = false);
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('로그인 실패. 다시 시도해주세요.'), backgroundColor: AppColors.scoreMiss),
+                        );
+                      }
+                    }
+                  } catch (_) {
+                    setState(() => _isSigningIn = false);
+                  }
+                },
+                icon: _isSigningIn
+                    ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.textPrimary))
+                    : Icon(Icons.g_mobiledata_rounded, size: 28),
+                label: Text('Google로 계속하기', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.textPrimary,
+                  side: BorderSide(color: AppColors.primary, width: 1.5),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(child: Divider(color: AppColors.bgCard)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Text('또는', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                ),
+                Expanded(child: Divider(color: AppColors.bgCard)),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // 이메일 가입 버튼
+            SizedBox(
+              width: double.infinity,
+              height: 54,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  // 기존 회원가입 화면으로
+                  context.push(RouteNames.register);
+                },
+                icon: Icon(Icons.email_outlined),
+                label: Text('이메일로 가입하기', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.textSecondary,
+                  side: BorderSide(color: AppColors.bgCard),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // 이미 계정이 있는 경우
+            GestureDetector(
+              onTap: () => context.push(RouteNames.login),
+              child: Text('이미 계정이 있으신가요? 로그인', style: TextStyle(color: AppColors.primary, fontSize: 14)),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  // ─── 4. 악기 고르기 ───
   Widget _InstrumentPage() {
     return Padding(
       padding: const EdgeInsets.all(32),
