@@ -144,7 +144,19 @@ class PracticeNotifier extends StateNotifier<PracticeState> {
         ? 0.0
         : (hitCount / noteResults.length * 100).roundToDouble();
 
-    final xpEarned = (score / 100 * lesson.xpReward).round();
+    // 난이도별 EXP: Easy 10~20, Medium 20~30, Hard 30~50
+    int baseXp;
+    switch (lesson.difficulty) {
+      case 'beginner':
+        baseXp = 10 + ((score / 100) * 10).round(); // 10~20
+      case 'intermediate':
+        baseXp = 20 + ((score / 100) * 10).round(); // 20~30
+      case 'advanced':
+        baseXp = 30 + ((score / 100) * 20).round(); // 30~50
+      default:
+        baseXp = 10;
+    }
+    final xpEarned = baseXp;
     final userId = _ref.read(currentUserProvider)?.uid ?? 'unknown';
 
     final session = PracticeSession(

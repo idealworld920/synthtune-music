@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../../core/constants/app_colors.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -15,6 +16,7 @@ class CommunityScreen extends ConsumerWidget {
     final selectedCat = ref.watch(selectedCommunityCategory);
 
     final categories = [
+      ('all', '전체', Icons.dashboard_rounded),
       ('practice', '연습 기록', Icons.music_note_rounded),
       ('qna', 'Q&A', Icons.help_outline_rounded),
       ('notice', '공지사항', Icons.campaign_rounded),
@@ -465,13 +467,11 @@ class _PostCard extends ConsumerWidget {
               ),
               const SizedBox(width: 20),
 
-              // 공유
+              // 외부 공유
               GestureDetector(
                 onTap: () {
                   ref.read(communityProvider.notifier).sharePost(post.id);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('공유되었습니다.'), duration: Duration(seconds: 1)),
-                  );
+                  Share.share('[SynthTune Music]\n${post.userName}: ${post.content}\n\n#SynthTuneMusic #AI음악교육');
                 },
                 child: Row(
                   children: [

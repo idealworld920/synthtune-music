@@ -59,6 +59,9 @@ dependencies:
   # Image Picker
   image_picker: ^1.1.2
 
+  # Share
+  share_plus: ^10.1.4
+
   # Localization
   flutter_localizations:
     sdk: flutter

@@ -127,12 +127,13 @@ List<CommunityPost> _mockPosts() {
 }
 
 // 커뮤니티 카테고리 필터
-final selectedCommunityCategory = StateProvider<String>((ref) => 'practice');
+final selectedCommunityCategory = StateProvider<String>((ref) => 'all');
 
 // 필터된 커뮤니티 게시글
 final filteredCommunityProvider = Provider<List<CommunityPost>>((ref) {
   final category = ref.watch(selectedCommunityCategory);
   final posts = ref.watch(communityProvider);
+  if (category == 'all') return posts;
   return posts.where((p) => p.category == category).toList();
 });
 

@@ -60,28 +60,41 @@ class UserProfile {
     }
   }
 
+  // 레벨 시스템: 1단계=100EXP, 2단계=200EXP, 3단계=300EXP... (+100씩)
   int get currentLevel {
-    if (xpPoints < 500) return 1;
-    if (xpPoints < 1500) return 2;
-    if (xpPoints < 3000) return 3;
-    if (xpPoints < 5000) return 4;
-    if (xpPoints < 8000) return 5;
-    return 6;
+    int level = 1;
+    int totalNeeded = 0;
+    while (true) {
+      totalNeeded += level * 100;
+      if (xpPoints < totalNeeded) return level;
+      level++;
+      if (level > 99) return 99;
+    }
   }
 
-  int get xpForNextLevel {
-    final levels = [500, 1500, 3000, 5000, 8000, 12000];
-    final lvl = currentLevel;
-    if (lvl > levels.length) return levels.last;
-    return levels[lvl - 1];
+  // 현재 레벨 최대 EXP
+  int get xpForCurrentLevel => currentLevel * 100;
+
+  // 현재 레벨 시작 EXP
+  int get _xpAtLevelStart {
+    int total = 0;
+    for (int i = 1; i < currentLevel; i++) {
+      total += i * 100;
+    }
+    return total;
   }
 
+  // 다음 레벨까지 필요한 총 EXP
+  int get xpForNextLevel => _xpAtLevelStart + xpForCurrentLevel;
+
+  // 현재 레벨 내 진행률
   double get xpProgress {
-    final levels = [0, 500, 1500, 3000, 5000, 8000];
-    final lvl = currentLevel - 1;
-    final start = lvl < levels.length ? levels[lvl] : levels.last;
-    final end = xpForNextLevel;
-    if (end == start) return 1.0;
-    return ((xpPoints - start) / (end - start)).clamp(0.0, 1.0);
+    final current = xpPoints - _xpAtLevelStart;
+    final needed = xpForCurrentLevel;
+    if (needed == 0) return 1.0;
+    return (current / needed).clamp(0.0, 1.0);
   }
+
+  // 현재 레벨 내 현재 EXP
+  int get xpInCurrentLevel => xpPoints - _xpAtLevelStart;
 }

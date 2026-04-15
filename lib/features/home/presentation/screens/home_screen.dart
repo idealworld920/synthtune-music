@@ -160,13 +160,29 @@ class _ProfileCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Text(
-                  profile.displayName,
-                  style: TextStyle(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      profile.displayName,
+                      style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text('Lv.${profile.currentLevel}', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 12)),
+                        ),
+                        const SizedBox(width: 8),
+                        Text('${profile.xpInCurrentLevel} / ${profile.xpForCurrentLevel} EXP', style: TextStyle(color: AppColors.textSecondary, fontSize: 11)),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               // 연속 출석
@@ -191,11 +207,11 @@ class _ProfileCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '다음 레벨까지',
+                'Lv.${profile.currentLevel} → Lv.${profile.currentLevel + 1}',
                 style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
               ),
               Text(
-                '${profile.xpPoints} / ${profile.xpForNextLevel} XP',
+                '${profile.xpInCurrentLevel} / ${profile.xpForCurrentLevel} EXP',
                 style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
               ),
             ],
