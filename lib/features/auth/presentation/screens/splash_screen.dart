@@ -15,53 +15,79 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fadeAnim;
-  late Animation<double> _scaleAnim;
+    with TickerProviderStateMixin {
+  late AnimationController _logoCtrl;
+  late AnimationController _welcomeCtrl;
+  late AnimationController _portalCtrl;
+  late Animation<double> _logoFade;
+  late Animation<double> _logoScale;
+  late Animation<double> _welcomeFade;
+  late Animation<double> _portalScale;
+  bool _showWelcome = false;
+  String _userName = '';
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-    _fadeAnim = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    _scaleAnim = Tween(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
-    );
-    _controller.forward();
 
-    Future.delayed(const Duration(milliseconds: 2200), () async {
+    // 로고 등장
+    _logoCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
+    _logoFade = CurvedAnimation(parent: _logoCtrl, curve: Curves.easeIn);
+    _logoScale = Tween(begin: 0.6, end: 1.0).animate(CurvedAnimation(parent: _logoCtrl, curve: Curves.elasticOut));
+
+    // 환영 메시지
+    _welcomeCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
+    _welcomeFade = CurvedAnimation(parent: _welcomeCtrl, curve: Curves.easeIn);
+
+    // 포탈 효과 (확대되며 사라짐)
+    _portalCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
+    _portalScale = Tween(begin: 1.0, end: 3.0).animate(CurvedAnimation(parent: _portalCtrl, curve: Curves.easeIn));
+
+    _logoCtrl.forward();
+
+    // 로고 등장 후 → 사용자 확인 → 환영 인사 → 포탈 효과 → 진입
+    Future.delayed(const Duration(milliseconds: 1500), () async {
       if (!mounted) return;
-      // 첫 사용 시 권한 안내 화면 표시
+
+      // 권한 화면 체크
       final shouldShowPermission = await PermissionScreen.shouldShow();
       if (shouldShowPermission && mounted) {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => PermissionScreen(onComplete: () {
             Navigator.of(context).pop();
-            _checkAuth();
+            _showWelcomeAndEnter();
           }),
         ));
       } else {
-        _checkAuth();
+        _showWelcomeAndEnter();
       }
     });
   }
 
-  void _checkAuth() {
+  void _showWelcomeAndEnter() {
     final authState = ref.read(authStateProvider);
     authState.when(
       data: (user) {
         if (user != null) {
-          context.go(RouteNames.home);
+          setState(() {
+            _userName = user.displayName ?? '사용자';
+            _showWelcome = true;
+          });
+          _welcomeCtrl.forward();
+
+          // 환영 인사 후 포탈 효과 → 홈
+          Future.delayed(const Duration(milliseconds: 1800), () {
+            if (!mounted) return;
+            _portalCtrl.forward().then((_) {
+              if (mounted) context.go(RouteNames.home);
+            });
+          });
         } else {
           context.go(RouteNames.login);
         }
       },
       loading: () {
-        Future.delayed(const Duration(milliseconds: 500), _checkAuth);
+        Future.delayed(const Duration(milliseconds: 500), _showWelcomeAndEnter);
       },
       error: (_, __) => context.go(RouteNames.login),
     );
@@ -69,7 +95,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _logoCtrl.dispose();
+    _welcomeCtrl.dispose();
+    _portalCtrl.dispose();
     super.dispose();
   }
 
@@ -77,45 +105,137 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgDark,
-      body: Center(
-        child: FadeTransition(
-          opacity: _fadeAnim,
-          child: ScaleTransition(
-            scale: _scaleAnim,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const AppLogo(size: 120),
-                const SizedBox(height: 24),
-                Text(
-                  'SynthTune Music',
-                  style: TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
+      body: AnimatedBuilder(
+        animation: _portalCtrl,
+        builder: (_, __) => Opacity(
+          opacity: _portalCtrl.isAnimating ? (1.0 - _portalCtrl.value / 3.0).clamp(0.0, 1.0) : 1.0,
+          child: Transform.scale(
+            scale: _portalScale.value,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // 로고
+                  FadeTransition(
+                    opacity: _logoFade,
+                    child: ScaleTransition(
+                      scale: _logoScale,
+                      child: const AppLogo(size: 120),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'AI-Powered Music Education',
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 14,
+
+                  const SizedBox(height: 32),
+
+                  // 앱 이름
+                  FadeTransition(
+                    opacity: _logoFade,
+                    child: Text(
+                      'SynthTune Music',
+                      style: TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 48),
-                const SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ],
+
+                  const SizedBox(height: 32),
+
+                  // 환영 인사 (로그인 상태일 때)
+                  if (_showWelcome)
+                    FadeTransition(
+                      opacity: _welcomeFade,
+                      child: Column(
+                        children: [
+                          Text(
+                            '어서오세요',
+                            style: TextStyle(
+                              color: AppColors.accent,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w300,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            '$_userName님',
+                            style: TextStyle(
+                              color: AppColors.textPrimary,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          // 반짝이는 파티클 효과 (간단한 점)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(5, (i) => Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                              child: _TwinkleDot(delay: i * 200),
+                            )),
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    const SizedBox(
+                      width: 24, height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                    ),
+                ],
+              ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 반짝이는 점 애니메이션
+class _TwinkleDot extends StatefulWidget {
+  final int delay;
+  const _TwinkleDot({required this.delay});
+
+  @override
+  State<_TwinkleDot> createState() => _TwinkleDotState();
+}
+
+class _TwinkleDotState extends State<_TwinkleDot> with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
+    Future.delayed(Duration(milliseconds: widget.delay), () {
+      if (mounted) _ctrl.repeat(reverse: true);
+    });
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _ctrl,
+      builder: (_, __) => Container(
+        width: 6,
+        height: 6,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.accent.withValues(alpha: 0.3 + _ctrl.value * 0.7),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.accent.withValues(alpha: _ctrl.value * 0.5),
+              blurRadius: 8,
+            ),
+          ],
         ),
       ),
     );

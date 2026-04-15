@@ -28,19 +28,17 @@ class HomeScreen extends ConsumerWidget {
             floating: true,
             backgroundColor: AppColors.bgDark,
             surfaceTintColor: Colors.transparent,
-            title: Row(
-              children: [
-                const AppLogoSmall(size: 32),
-                const SizedBox(width: 10),
-                Text(
-                  'SynthTune Music',
-                  style: TextStyle(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+            title: profileState.when(
+              loading: () => const SizedBox.shrink(),
+              error: (_, __) => const SizedBox.shrink(),
+              data: (profile) => Text(
+                '어서오세요, ${profile?.displayName ?? '사용자'}님',
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 17,
                 ),
-              ],
+              ),
             ),
             actions: [
               IconButton(
