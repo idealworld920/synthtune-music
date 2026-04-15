@@ -8,6 +8,7 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
 import '../../../subscription/domain/subscription_tier.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../shared/services/ai_voice_service.dart';
 import 'appearance_screen.dart';
 import 'language_screen.dart';
@@ -347,11 +348,35 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   padding: const EdgeInsets.all(14),
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(color: AppColors.accentGold.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.accentGold.withValues(alpha: 0.3))),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.info_outline, color: AppColors.accentGold, size: 18),
-                      const SizedBox(width: 10),
-                      Expanded(child: Text('현재 ${tier.name} 구독 중입니다.\n탈퇴 시 남은 기간에 대해 Google Play를 통해 환불 요청할 수 있습니다.', style: TextStyle(color: AppColors.accentGold, fontSize: 12, height: 1.4))),
+                      Row(
+                        children: [
+                          Icon(Icons.warning_amber_rounded, color: AppColors.accentGold, size: 18),
+                          const SizedBox(width: 8),
+                          Text('구독 해지 필요', style: TextStyle(color: AppColors.accentGold, fontWeight: FontWeight.bold, fontSize: 14)),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text('현재 ${tier.name} 구독 중입니다.\n탈퇴 전에 Google Play에서 구독을 해지해주세요.\n해지 후 남은 기간에 대해 환불 요청이 가능합니다.', style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.4)),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: () async {
+                            final uri = Uri.parse('https://play.google.com/store/account/subscriptions');
+                            if (await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+                          },
+                          icon: Icon(Icons.open_in_new_rounded, size: 16),
+                          label: const Text('Google Play 구독 관리'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.accentGold,
+                            side: BorderSide(color: AppColors.accentGold),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

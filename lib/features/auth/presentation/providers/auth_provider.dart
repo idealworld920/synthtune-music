@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../shared/providers/firebase_providers.dart';
 
 part 'auth_provider.g.dart';
@@ -63,8 +65,9 @@ class AuthNotifier extends _$AuthNotifier {
     state = await AsyncValue.guard(() async {
       final user = ref.read(firebaseAuthProvider).currentUser;
       if (user == null) throw Exception('로그인 상태가 아닙니다.');
+      final uid = user.uid;
 
-      // Google 계정이면 재인증 필요
+      // Google 계정이면 재인증
       final googleUser = await GoogleSignIn().signIn();
       if (googleUser != null) {
         final googleAuth = await googleUser.authentication;
@@ -75,6 +78,23 @@ class AuthNotifier extends _$AuthNotifier {
         await user.reauthenticateWithCredential(credential);
       }
 
+      // 1. Firestore 사용자 데이터 완전 삭제
+      final firestore = FirebaseFirestore.instance;
+      try {
+        await firestore.collection('users').doc(uid).delete();
+        // 사용자 관련 하위 컬렉션 삭제
+        final subCollections = ['practice_history', 'compositions', 'settings'];
+        for (final sub in subCollections) {
+          final docs = await firestore.collection('users').doc(uid).collection(sub).get();
+          for (final doc in docs.docs) { await doc.reference.delete(); }
+        }
+      } catch (_) {}
+
+      // 2. 로컬 데이터 완전 삭제
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      // 3. 계정 삭제
       await user.delete();
       await GoogleSignIn().signOut();
     });
