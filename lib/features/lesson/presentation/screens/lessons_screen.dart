@@ -104,6 +104,8 @@ class LessonsScreen extends ConsumerWidget {
           ),
           // 카테고리 탭
           _CategoryTabs(ref: ref),
+          // 난이도 필터
+          _DifficultyTabs(ref: ref),
           // 레슨 목록
           Expanded(
             child: ListView.separated(
@@ -347,6 +349,55 @@ class _CategoryTabs extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _DifficultyTabs extends StatelessWidget {
+  final WidgetRef ref;
+  const _DifficultyTabs({required this.ref});
+
+  @override
+  Widget build(BuildContext context) {
+    final selected = ref.watch(selectedDifficultyFilterProvider);
+    final difficulties = [
+      ('all', '전체', null),
+      ('beginner', 'Easy', AppColors.scorePerfect),
+      ('intermediate', 'Medium', AppColors.accentGold),
+      ('advanced', 'Hard', AppColors.scoreMiss),
+    ];
+
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+        itemCount: difficulties.length,
+        itemBuilder: (context, i) {
+          final d = difficulties[i];
+          final isSelected = selected == d.$1;
+          final color = d.$3 ?? AppColors.textSecondary;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () => ref.read(selectedDifficultyFilterProvider.notifier).state = d.$1,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                  color: isSelected ? color.withValues(alpha: 0.2) : Colors.transparent,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: isSelected ? color : AppColors.bgSurface),
+                ),
+                child: Text(d.$2, style: TextStyle(
+                  color: isSelected ? color : AppColors.textSecondary,
+                  fontSize: 12,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.normal,
+                )),
               ),
             ),
           );

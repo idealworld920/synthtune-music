@@ -3086,6 +3086,9 @@ final selectedInstrumentFilterProvider = StateProvider<String>((ref) => 'all');
 // 카테고리 필터 프로바이더
 final selectedCategoryFilterProvider = StateProvider<String>((ref) => 'all');
 
+// 난이도 필터 프로바이더
+final selectedDifficultyFilterProvider = StateProvider<String>((ref) => 'all');
+
 // 필터링된 레슨 목록 (구독 티어 + 카테고리 반영)
 final filteredLessonsProvider = Provider<List<Lesson>>((ref) {
   final instrumentFilter = ref.watch(selectedInstrumentFilterProvider);
@@ -3113,6 +3116,12 @@ final filteredLessonsProvider = Provider<List<Lesson>>((ref) {
   }
   if (categoryFilter != 'all') {
     result = result.where((l) => l.category == categoryFilter).toList();
+  }
+
+  // 난이도 필터
+  final difficultyFilter = ref.watch(selectedDifficultyFilterProvider);
+  if (difficultyFilter != 'all') {
+    result = result.where((l) => l.difficulty == difficultyFilter).toList();
   }
 
   return result;

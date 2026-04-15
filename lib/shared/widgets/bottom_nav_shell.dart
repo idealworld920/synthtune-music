@@ -10,7 +10,7 @@ class BottomNavShell extends StatelessWidget {
   int _locationToIndex(String location) {
     if (location.startsWith('/lessons') || location.startsWith('/practice')) {
       return 1;
-    } else if (location.startsWith(RouteNames.progress)) {
+    } else if (location.startsWith(RouteNames.training)) {
       return 2;
     } else if (location.startsWith(RouteNames.community)) {
       return 3;
@@ -37,7 +37,7 @@ class BottomNavShell extends StatelessWidget {
             case 1:
               context.go(RouteNames.lessons);
             case 2:
-              context.go(RouteNames.progress);
+              context.go(RouteNames.training);
             case 3:
               context.go(RouteNames.community);
             case 4:
@@ -47,7 +47,7 @@ class BottomNavShell extends StatelessWidget {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
           BottomNavigationBarItem(icon: Icon(Icons.music_note_rounded), label: '레슨'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_rounded), label: '진도'),
+          BottomNavigationBarItem(icon: Icon(Icons.fitness_center_rounded), label: '연습'),
           BottomNavigationBarItem(icon: Icon(Icons.people_rounded), label: '커뮤니티'),
           BottomNavigationBarItem(icon: Icon(Icons.auto_awesome_rounded), label: 'AI'),
         ],

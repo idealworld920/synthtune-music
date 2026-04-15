@@ -14,6 +14,7 @@ import '../../features/practice/presentation/screens/practice_screen.dart';
 import '../../features/ai_feedback/presentation/screens/feedback_result_screen.dart';
 import '../../features/progress/presentation/screens/progress_screen.dart';
 import '../../features/community/presentation/screens/community_screen.dart';
+import '../../features/training/presentation/screens/training_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/subscription/presentation/screens/subscription_screen.dart';
 import '../../features/ai_chat/presentation/screens/ai_chat_screen.dart';
@@ -99,6 +100,10 @@ GoRouter appRouter(AppRouterRef ref) {
           GoRoute(
             path: RouteNames.progress,
             builder: (_, __) => const ProgressScreen(),
+          ),
+          GoRoute(
+            path: RouteNames.training,
+            builder: (_, __) => const TrainingScreen(),
           ),
           GoRoute(
             path: RouteNames.community,

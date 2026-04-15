@@ -42,8 +42,8 @@ class HomeScreen extends ConsumerWidget {
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.edit_note_rounded, color: AppColors.accentGold),
-                tooltip: '악보 만들기',
+                icon: Icon(Icons.create_rounded, color: AppColors.accentGold),
+                tooltip: '창작',
                 onPressed: () => context.push(RouteNames.compose),
               ),
               IconButton(
@@ -208,6 +208,21 @@ class _ProfileCard extends StatelessWidget {
               backgroundColor: AppColors.bgCard,
               valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
               minHeight: 6,
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () => context.push(RouteNames.progress),
+              icon: Icon(Icons.bar_chart_rounded, size: 18),
+              label: const Text('진도 보기'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                side: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+              ),
             ),
           ),
         ],
