@@ -6,6 +6,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/sheet_music_widget.dart';
 import '../../../../shared/utils/motivation.dart';
+import '../../../../shared/widgets/metronome_widget.dart';
 import '../../../lesson/domain/models/lesson.dart';
 import '../../../lesson/presentation/providers/lesson_provider.dart';
 import '../providers/practice_provider.dart';
@@ -61,6 +62,16 @@ class PracticeScreen extends ConsumerWidget {
               if (context.mounted) context.pop();
             },
           ),
+          actions: [
+            // 악보 전체보기
+            IconButton(
+              icon: Icon(Icons.fullscreen_rounded, color: AppColors.textSecondary),
+              tooltip: '악보 전체보기',
+              onPressed: () => _showFullSheet(context, lesson),
+            ),
+            // 메트로놈
+            const MetronomeButton(),
+          ],
         ),
         body: Stack(
           children: [
@@ -636,4 +647,40 @@ class _CameraPipState extends State<_CameraPip> {
       ),
     );
   }
+}
+
+// ─── 악보 전체보기 ───
+void _showFullSheet(BuildContext context, dynamic lesson) {
+  showDialog(
+    context: context,
+    builder: (_) => Dialog.fullscreen(
+      backgroundColor: AppColors.bgDark,
+      child: Scaffold(
+        backgroundColor: AppColors.bgDark,
+        appBar: AppBar(
+          title: Text(lesson.title as String),
+          leading: IconButton(
+            icon: const Icon(Icons.close_rounded),
+            onPressed: () => Navigator.pop(context),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.screen_rotation_rounded, color: AppColors.textSecondary),
+              tooltip: '가로/세로 전환',
+              onPressed: () {},
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: SheetMusicWidget(
+            notes: lesson.targetNotes as List<MusicNote>,
+            instrument: lesson.instrument as String?,
+            height: 300,
+            showLabels: true,
+          ),
+        ),
+      ),
+    ),
+  );
 }

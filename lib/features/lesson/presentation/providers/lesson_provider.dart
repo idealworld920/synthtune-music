@@ -3609,6 +3609,838 @@ final _allLessons = <Lesson>[
       MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 1.33, duration: 0.38, order: 7),
     ],
   ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Piano Advanced Scale (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Piano Advanced Scale 2: 전체 음계 하강
+  Lesson(
+    id: 'piano_sa02',
+    title: '전체 음계 하강',
+    description: 'C5부터 C4까지 빠르게 내려오는 하강 스케일입니다. 손가락 컨트롤에 집중하세요.',
+    instrument: 'piano',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '⬇️',
+    bpm: 140,
+    xpReward: 360,
+    orderIndex: 300,
+    category: 'scale',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 0.0, duration: 0.43, order: 0),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 0.43, duration: 0.43, order: 1),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.86, duration: 0.43, order: 2),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.29, duration: 0.43, order: 3),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 1.72, duration: 0.43, order: 4),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 2.15, duration: 0.43, order: 5),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 2.58, duration: 0.43, order: 6),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 3.01, duration: 0.86, order: 7),
+    ],
+  ),
+
+  // Piano Advanced Scale 3: 블루스 스케일
+  Lesson(
+    id: 'piano_sa03',
+    title: '블루스 스케일',
+    description: 'C 블루스 스케일을 빠르게 오르내립니다. 재즈와 블루스의 핵심 음계를 마스터하세요!',
+    instrument: 'piano',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🎷',
+    bpm: 130,
+    xpReward: 370,
+    orderIndex: 301,
+    category: 'scale',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 0.46, order: 0),
+      MusicNote(noteName: 'D#4', frequency: NoteFrequency.dSharp4, startTime: 0.46, duration: 0.46, order: 1),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 0.92, duration: 0.46, order: 2),
+      MusicNote(noteName: 'F#4', frequency: NoteFrequency.fSharp4, startTime: 1.38, duration: 0.46, order: 3),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.84, duration: 0.46, order: 4),
+      MusicNote(noteName: 'A#4', frequency: NoteFrequency.aSharp4, startTime: 2.30, duration: 0.46, order: 5),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 2.76, duration: 0.46, order: 6),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 3.22, duration: 0.46, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Piano Advanced Nursery (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Piano Advanced Nursery 1: 작은 별 재즈 편곡
+  Lesson(
+    id: 'piano_na02',
+    title: '작은 별 재즈 편곡',
+    description: '작은 별을 재즈풍으로 편곡했습니다. 스윙 리듬과 꾸밈음을 넣어 연주하세요.',
+    instrument: 'piano',
+    difficulty: 'advanced',
+    durationMinutes: 12,
+    imageEmoji: '🌟',
+    bpm: 120,
+    xpReward: 350,
+    orderIndex: 302,
+    category: 'nursery',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 0.5, order: 0),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.5, duration: 0.25, order: 1),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.75, duration: 0.5, order: 2),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.25, duration: 0.25, order: 3),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 1.5, duration: 0.5, order: 4),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 2.0, duration: 0.25, order: 5),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 2.25, duration: 0.75, order: 6),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 3.0, duration: 0.5, order: 7),
+    ],
+  ),
+
+  // Piano Advanced Nursery 2: 산토끼 고속 변주
+  Lesson(
+    id: 'piano_na03',
+    title: '산토끼 고속 변주',
+    description: '산토끼를 빠른 템포로 변주합니다. 복잡한 리듬 패턴과 장식음이 포함됩니다.',
+    instrument: 'piano',
+    difficulty: 'advanced',
+    durationMinutes: 12,
+    imageEmoji: '🐇',
+    bpm: 140,
+    xpReward: 360,
+    orderIndex: 303,
+    category: 'nursery',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.43, order: 0),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.43, duration: 0.43, order: 1),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.86, duration: 0.43, order: 2),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.29, duration: 0.21, order: 3),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 1.50, duration: 0.43, order: 4),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 1.93, duration: 0.43, order: 5),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 2.36, duration: 0.43, order: 6),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 2.79, duration: 0.86, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Piano Advanced Skill (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Piano Advanced Skill 2: 옥타브 점프 연습
+  Lesson(
+    id: 'piano_ska02',
+    title: '옥타브 점프 연습',
+    description: '넓은 음역을 빠르게 오가는 옥타브 점프 훈련입니다. 정확한 위치 감각이 필요합니다.',
+    instrument: 'piano',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🦘',
+    bpm: 130,
+    xpReward: 370,
+    orderIndex: 304,
+    category: 'skill',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 0.46, order: 0),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 0.46, duration: 0.46, order: 1),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 0.92, duration: 0.46, order: 2),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 1.38, duration: 0.46, order: 3),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 1.84, duration: 0.46, order: 4),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 2.30, duration: 0.46, order: 5),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 2.76, duration: 0.46, order: 6),
+      MusicNote(noteName: 'F5', frequency: NoteFrequency.f5, startTime: 3.22, duration: 0.46, order: 7),
+    ],
+  ),
+
+  // Piano Advanced Skill 3: 트릴 연습
+  Lesson(
+    id: 'piano_ska03',
+    title: '트릴 연습',
+    description: '인접한 두 음을 빠르게 번갈아 치는 트릴 테크닉입니다. 손가락 독립성의 극한 도전!',
+    instrument: 'piano',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🌊',
+    bpm: 150,
+    xpReward: 380,
+    orderIndex: 305,
+    category: 'skill',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.2, order: 0),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 0.2, duration: 0.2, order: 1),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.4, duration: 0.2, order: 2),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 0.6, duration: 0.2, order: 3),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.8, duration: 0.2, order: 4),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 1.0, duration: 0.2, order: 5),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.2, duration: 0.2, order: 6),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 1.4, duration: 0.4, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Guitar Advanced Scale (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Guitar Advanced Scale 2: 펜타토닉 고속 런
+  Lesson(
+    id: 'guitar_sa02',
+    title: '펜타토닉 고속 런',
+    description: 'A 마이너 펜타토닉 스케일을 빠르게 오르내립니다. 록 기타의 핵심 스케일!',
+    instrument: 'guitar',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🎸',
+    bpm: 140,
+    xpReward: 370,
+    orderIndex: 306,
+    category: 'scale',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.0, duration: 0.43, order: 0),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 0.43, duration: 0.43, order: 1),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 0.86, duration: 0.43, order: 2),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 1.29, duration: 0.43, order: 3),
+      MusicNote(noteName: 'G5', frequency: NoteFrequency.g5, startTime: 1.72, duration: 0.43, order: 4),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 2.15, duration: 0.43, order: 5),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 2.58, duration: 0.43, order: 6),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 3.01, duration: 0.43, order: 7),
+    ],
+  ),
+
+  // Guitar Advanced Scale 3: 도리안 모드 스케일
+  Lesson(
+    id: 'guitar_sa03',
+    title: '도리안 모드 스케일',
+    description: 'D 도리안 모드 스케일을 빠르게 연주합니다. 재즈와 펑크의 필수 모드!',
+    instrument: 'guitar',
+    difficulty: 'advanced',
+    durationMinutes: 12,
+    imageEmoji: '🎸',
+    bpm: 130,
+    xpReward: 380,
+    orderIndex: 307,
+    category: 'scale',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 0.0, duration: 0.46, order: 0),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.46, duration: 0.46, order: 1),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 0.92, duration: 0.46, order: 2),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.38, duration: 0.46, order: 3),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 1.84, duration: 0.46, order: 4),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 2.30, duration: 0.46, order: 5),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 2.76, duration: 0.46, order: 6),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 3.22, duration: 0.92, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Guitar Advanced Nursery (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Guitar Advanced Nursery 1: 반짝반짝 작은별 핑거스타일
+  Lesson(
+    id: 'guitar_na02',
+    title: '반짝반짝 핑거스타일',
+    description: '작은 별을 기타 핑거스타일로 화려하게 편곡했습니다. 빠른 아르페지오 포함!',
+    instrument: 'guitar',
+    difficulty: 'advanced',
+    durationMinutes: 12,
+    imageEmoji: '✨',
+    bpm: 120,
+    xpReward: 360,
+    orderIndex: 308,
+    category: 'nursery',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 0.5, order: 0),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.5, duration: 0.25, order: 1),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.75, duration: 0.5, order: 2),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 1.25, duration: 0.25, order: 3),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 1.5, duration: 0.5, order: 4),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 2.0, duration: 0.5, order: 5),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 2.5, duration: 0.25, order: 6),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 2.75, duration: 0.75, order: 7),
+    ],
+  ),
+
+  // Guitar Advanced Nursery 2: 나비야 고속 피킹
+  Lesson(
+    id: 'guitar_na03',
+    title: '나비야 고속 피킹',
+    description: '나비야를 빠른 얼터네이트 피킹으로 연주합니다. 오른손 정확도가 핵심!',
+    instrument: 'guitar',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🦋',
+    bpm: 140,
+    xpReward: 370,
+    orderIndex: 309,
+    category: 'nursery',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.0, duration: 0.43, order: 0),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.43, duration: 0.43, order: 1),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.86, duration: 0.43, order: 2),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 1.29, duration: 0.43, order: 3),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 1.72, duration: 0.43, order: 4),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 2.15, duration: 0.43, order: 5),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 2.58, duration: 0.43, order: 6),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 3.01, duration: 0.86, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Guitar Advanced Skill (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Guitar Advanced Skill 2: 해머온 풀오프 연습
+  Lesson(
+    id: 'guitar_ska02',
+    title: '해머온 풀오프 연습',
+    description: '빠른 해머온과 풀오프를 연속으로 사용하는 레가토 테크닉입니다.',
+    instrument: 'guitar',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🔨',
+    bpm: 130,
+    xpReward: 380,
+    orderIndex: 310,
+    category: 'skill',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.46, order: 0),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.46, duration: 0.23, order: 1),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.69, duration: 0.46, order: 2),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.15, duration: 0.23, order: 3),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 1.38, duration: 0.46, order: 4),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 1.84, duration: 0.46, order: 5),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 2.30, duration: 0.46, order: 6),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 2.76, duration: 0.92, order: 7),
+    ],
+  ),
+
+  // Guitar Advanced Skill 3: 탭핑 연습
+  Lesson(
+    id: 'guitar_ska03',
+    title: '탭핑 연습',
+    description: '오른손으로 프렛을 탭하는 양손 탭핑 테크닉입니다. 넓은 음역을 활용하세요.',
+    instrument: 'guitar',
+    difficulty: 'advanced',
+    durationMinutes: 12,
+    imageEmoji: '👆',
+    bpm: 120,
+    xpReward: 390,
+    orderIndex: 311,
+    category: 'skill',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.5, order: 0),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.5, duration: 0.5, order: 1),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 1.0, duration: 0.5, order: 2),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 1.5, duration: 0.5, order: 3),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 2.0, duration: 0.5, order: 4),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 2.5, duration: 0.5, order: 5),
+      MusicNote(noteName: 'G5', frequency: NoteFrequency.g5, startTime: 3.0, duration: 0.5, order: 6),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 3.5, duration: 0.5, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Guitar Beginner Classic (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Guitar Beginner Classic 2: 작은 세레나데 (하이든)
+  Lesson(
+    id: 'guitar_cb02',
+    title: '작은 세레나데 (하이든)',
+    description: '하이든의 아름다운 세레나데를 기타로 쉽게 편곡했습니다. 부드럽게 연주해 보세요.',
+    instrument: 'guitar',
+    difficulty: 'beginner',
+    durationMinutes: 8,
+    imageEmoji: '🌙',
+    bpm: 70,
+    xpReward: 150,
+    orderIndex: 312,
+    category: 'classic',
+    targetNotes: [
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.86, order: 0),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 0.86, duration: 0.86, order: 1),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 1.72, duration: 0.86, order: 2),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 2.58, duration: 0.86, order: 3),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 3.44, duration: 0.86, order: 4),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 4.30, duration: 0.86, order: 5),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 5.16, duration: 1.72, order: 6),
+    ],
+  ),
+
+  // Guitar Beginner Classic 3: 미뉴에트 쉬운 멜로디 (바흐)
+  Lesson(
+    id: 'guitar_cb03',
+    title: '미뉴에트 쉬운 멜로디',
+    description: '바흐의 미뉴에트 G장조를 기타로 쉽게 편곡했습니다. 우아한 3박자를 느껴보세요.',
+    instrument: 'guitar',
+    difficulty: 'beginner',
+    durationMinutes: 8,
+    imageEmoji: '🎼',
+    bpm: 75,
+    xpReward: 150,
+    orderIndex: 313,
+    category: 'classic',
+    targetNotes: [
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.0, duration: 0.8, order: 0),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.8, duration: 0.8, order: 1),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 1.6, duration: 0.8, order: 2),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 2.4, duration: 0.8, order: 3),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 3.2, duration: 0.8, order: 4),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 4.0, duration: 0.8, order: 5),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 4.8, duration: 0.8, order: 6),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 5.6, duration: 1.6, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Violin Advanced Scale (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Violin Advanced Scale 2: 멜로딕 마이너 스케일
+  Lesson(
+    id: 'violin_sa02',
+    title: '멜로딕 마이너 스케일',
+    description: 'A 멜로딕 마이너 스케일을 빠르게 올라갑니다. 상행과 하행이 다른 점에 주의하세요.',
+    instrument: 'violin',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🎻',
+    bpm: 130,
+    xpReward: 370,
+    orderIndex: 314,
+    category: 'scale',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.0, duration: 0.46, order: 0),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 0.46, duration: 0.46, order: 1),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 0.92, duration: 0.46, order: 2),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 1.38, duration: 0.46, order: 3),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 1.84, duration: 0.46, order: 4),
+      MusicNote(noteName: 'F#4', frequency: NoteFrequency.fSharp4, startTime: 2.30, duration: 0.46, order: 5),
+      MusicNote(noteName: 'G#4', frequency: NoteFrequency.gSharp4, startTime: 2.76, duration: 0.46, order: 6),
+      MusicNote(noteName: 'A5', frequency: NoteFrequency.a5, startTime: 3.22, duration: 0.92, order: 7),
+    ],
+  ),
+
+  // Violin Advanced Scale 3: 전음계 스케일
+  Lesson(
+    id: 'violin_sa03',
+    title: '전음계 스케일',
+    description: '전음(홀음)만으로 구성된 스케일입니다. 독특한 음색과 빠른 포지션 이동에 도전하세요.',
+    instrument: 'violin',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🎻',
+    bpm: 120,
+    xpReward: 360,
+    orderIndex: 315,
+    category: 'scale',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 0.5, order: 0),
+      MusicNote(noteName: 'D4', frequency: NoteFrequency.d4, startTime: 0.5, duration: 0.5, order: 1),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 1.0, duration: 0.5, order: 2),
+      MusicNote(noteName: 'F#4', frequency: NoteFrequency.fSharp4, startTime: 1.5, duration: 0.5, order: 3),
+      MusicNote(noteName: 'G#4', frequency: NoteFrequency.gSharp4, startTime: 2.0, duration: 0.5, order: 4),
+      MusicNote(noteName: 'A#4', frequency: NoteFrequency.aSharp4, startTime: 2.5, duration: 0.5, order: 5),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 3.0, duration: 0.5, order: 6),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 3.5, duration: 1.0, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Violin Advanced Nursery (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Violin Advanced Nursery 1: 곰 세 마리 비르투오소
+  Lesson(
+    id: 'violin_na02',
+    title: '곰 세 마리 비르투오소',
+    description: '곰 세 마리를 바이올린 비르투오소 스타일로 연주합니다. 빠른 보잉과 포지션 이동 포함!',
+    instrument: 'violin',
+    difficulty: 'advanced',
+    durationMinutes: 12,
+    imageEmoji: '🐻',
+    bpm: 140,
+    xpReward: 370,
+    orderIndex: 316,
+    category: 'nursery',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 0.0, duration: 0.43, order: 0),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.43, duration: 0.43, order: 1),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.86, duration: 0.43, order: 2),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 1.29, duration: 0.21, order: 3),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.50, duration: 0.43, order: 4),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 1.93, duration: 0.43, order: 5),
+      MusicNote(noteName: 'C4', frequency: NoteFrequency.c4, startTime: 2.36, duration: 0.43, order: 6),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 2.79, duration: 0.86, order: 7),
+    ],
+  ),
+
+  // Violin Advanced Nursery 2: 학교 종 카프리스
+  Lesson(
+    id: 'violin_na03',
+    title: '학교 종 카프리스',
+    description: '학교 종을 바이올린 카프리스 풍으로 편곡했습니다. 화려한 장식음과 빠른 패시지!',
+    instrument: 'violin',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🔔',
+    bpm: 130,
+    xpReward: 360,
+    orderIndex: 317,
+    category: 'nursery',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.0, duration: 0.46, order: 0),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.46, duration: 0.46, order: 1),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.92, duration: 0.46, order: 2),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 1.38, duration: 0.46, order: 3),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.84, duration: 0.46, order: 4),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 2.30, duration: 0.46, order: 5),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 2.76, duration: 0.46, order: 6),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 3.22, duration: 0.92, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Violin Advanced Skill (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Violin Advanced Skill 2: 피치카토 연습
+  Lesson(
+    id: 'violin_ska02',
+    title: '피치카토 연습',
+    description: '줄을 튕기는 피치카토 테크닉을 빠르게 연속으로 사용합니다. 리듬 정확도가 핵심!',
+    instrument: 'violin',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '👌',
+    bpm: 120,
+    xpReward: 370,
+    orderIndex: 318,
+    category: 'skill',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 0.0, duration: 0.5, order: 0),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 0.5, duration: 0.25, order: 1),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 0.75, duration: 0.5, order: 2),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 1.25, duration: 0.25, order: 3),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 1.5, duration: 0.5, order: 4),
+      MusicNote(noteName: 'F5', frequency: NoteFrequency.f5, startTime: 2.0, duration: 0.5, order: 5),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 2.5, duration: 0.25, order: 6),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 2.75, duration: 0.75, order: 7),
+    ],
+  ),
+
+  // Violin Advanced Skill 3: 스피카토 연습
+  Lesson(
+    id: 'violin_ska03',
+    title: '스피카토 연습',
+    description: '활을 튕기듯 연주하는 스피카토 테크닉입니다. 오른손의 탄력 있는 컨트롤이 필요합니다.',
+    instrument: 'violin',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🏹',
+    bpm: 140,
+    xpReward: 380,
+    orderIndex: 319,
+    category: 'skill',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.21, order: 0),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 0.21, duration: 0.21, order: 1),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 0.42, duration: 0.21, order: 2),
+      MusicNote(noteName: 'E5', frequency: NoteFrequency.e5, startTime: 0.63, duration: 0.43, order: 3),
+      MusicNote(noteName: 'D5', frequency: NoteFrequency.d5, startTime: 1.06, duration: 0.21, order: 4),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 1.27, duration: 0.21, order: 5),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.48, duration: 0.21, order: 6),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 1.69, duration: 0.43, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Violin Beginner Classic (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Violin Beginner Classic 2: 자장가 (브람스)
+  Lesson(
+    id: 'violin_cb02',
+    title: '자장가 (브람스)',
+    description: '브람스의 자장가를 바이올린으로 부드럽게 연주해 봅시다. 따뜻한 음색을 만들어 보세요.',
+    instrument: 'violin',
+    difficulty: 'beginner',
+    durationMinutes: 8,
+    imageEmoji: '🌛',
+    bpm: 65,
+    xpReward: 150,
+    orderIndex: 320,
+    category: 'classic',
+    targetNotes: [
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.92, order: 0),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.92, duration: 0.46, order: 1),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.38, duration: 0.92, order: 2),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 2.30, duration: 0.46, order: 3),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 2.76, duration: 0.92, order: 4),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 3.68, duration: 0.92, order: 5),
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 4.60, duration: 1.84, order: 6),
+    ],
+  ),
+
+  // Violin Beginner Classic 3: 봄 (비발디)
+  Lesson(
+    id: 'violin_cb03',
+    title: '봄 (비발디)',
+    description: '비발디 사계 중 "봄"의 유명한 주제를 쉽게 편곡했습니다. 밝고 경쾌하게 연주하세요.',
+    instrument: 'violin',
+    difficulty: 'beginner',
+    durationMinutes: 8,
+    imageEmoji: '🌸',
+    bpm: 80,
+    xpReward: 150,
+    orderIndex: 321,
+    category: 'classic',
+    targetNotes: [
+      MusicNote(noteName: 'E4', frequency: NoteFrequency.e4, startTime: 0.0, duration: 0.75, order: 0),
+      MusicNote(noteName: 'F4', frequency: NoteFrequency.f4, startTime: 0.75, duration: 0.37, order: 1),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.12, duration: 0.75, order: 2),
+      MusicNote(noteName: 'G4', frequency: NoteFrequency.g4, startTime: 1.87, duration: 0.75, order: 3),
+      MusicNote(noteName: 'A4', frequency: NoteFrequency.a4, startTime: 2.62, duration: 0.37, order: 4),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 2.99, duration: 0.75, order: 5),
+      MusicNote(noteName: 'B4', frequency: NoteFrequency.b4, startTime: 3.74, duration: 0.75, order: 6),
+      MusicNote(noteName: 'C5', frequency: NoteFrequency.c5, startTime: 4.49, duration: 1.5, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Drums Advanced Classic (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Drums Advanced Classic 2: 대포 서곡 리듬 (차이콥스키)
+  Lesson(
+    id: 'drums_ca01',
+    title: '대포 서곡 리듬',
+    description: '차이콥스키 대포 서곡의 극적인 리듬 패턴입니다. 강약 조절과 빠른 전환에 도전하세요.',
+    instrument: 'drums',
+    difficulty: 'advanced',
+    durationMinutes: 12,
+    imageEmoji: '💣',
+    bpm: 130,
+    xpReward: 380,
+    orderIndex: 322,
+    category: 'classic',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.0, duration: 0.46, order: 0),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.46, duration: 0.23, order: 1),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.69, duration: 0.23, order: 2),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.92, duration: 0.46, order: 3),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 1.38, duration: 0.23, order: 4),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 1.61, duration: 0.46, order: 5),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 2.07, duration: 0.23, order: 6),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 2.30, duration: 0.46, order: 7),
+    ],
+  ),
+
+  // Drums Advanced Classic 3: 운명 교향곡 리듬 (베토벤)
+  Lesson(
+    id: 'drums_ca02',
+    title: '운명 교향곡 리듬',
+    description: '베토벤 교향곡 5번의 유명한 "운명" 리듬 모티프를 드럼으로 표현합니다.',
+    instrument: 'drums',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🎭',
+    bpm: 110,
+    xpReward: 370,
+    orderIndex: 323,
+    category: 'classic',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.0, duration: 0.27, order: 0),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.27, duration: 0.27, order: 1),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.54, duration: 0.27, order: 2),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.81, duration: 0.82, order: 3),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 1.63, duration: 0.27, order: 4),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 1.90, duration: 0.27, order: 5),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 2.17, duration: 0.27, order: 6),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 2.44, duration: 0.82, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Drums Advanced Nursery (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Drums Advanced Nursery 1: 곰 세 마리 드럼 솔로
+  Lesson(
+    id: 'drums_na02',
+    title: '곰 세 마리 드럼 솔로',
+    description: '곰 세 마리 리듬을 고급 드럼 솔로로 편곡했습니다. 복잡한 필인과 악센트가 포함!',
+    instrument: 'drums',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🐻',
+    bpm: 130,
+    xpReward: 370,
+    orderIndex: 324,
+    category: 'nursery',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.0, duration: 0.46, order: 0),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.46, duration: 0.23, order: 1),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.69, duration: 0.23, order: 2),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.92, duration: 0.46, order: 3),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 1.38, duration: 0.23, order: 4),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 1.61, duration: 0.46, order: 5),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 2.07, duration: 0.23, order: 6),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 2.30, duration: 0.46, order: 7),
+    ],
+  ),
+
+  // Drums Advanced Nursery 2: 학교 종 더블 베이스 드럼
+  Lesson(
+    id: 'drums_na03',
+    title: '학교 종 더블 킥',
+    description: '학교 종 리듬에 더블 킥 패턴을 넣은 고급 편곡입니다. 발의 독립성을 훈련합니다.',
+    instrument: 'drums',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🔔',
+    bpm: 140,
+    xpReward: 380,
+    orderIndex: 325,
+    category: 'nursery',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.0, duration: 0.21, order: 0),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.21, duration: 0.21, order: 1),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.42, duration: 0.43, order: 2),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.85, duration: 0.21, order: 3),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 1.06, duration: 0.21, order: 4),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 1.27, duration: 0.21, order: 5),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 1.48, duration: 0.43, order: 6),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 1.91, duration: 0.43, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Drums Advanced Skill (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Drums Advanced Skill 2: 플램 드래그
+  Lesson(
+    id: 'drums_ska02',
+    title: '플램 드래그',
+    description: '플램과 드래그를 조합한 고급 루디먼트입니다. 스틱 컨트롤의 정밀함을 훈련합니다.',
+    instrument: 'drums',
+    difficulty: 'advanced',
+    durationMinutes: 10,
+    imageEmoji: '🪘',
+    bpm: 110,
+    xpReward: 380,
+    orderIndex: 326,
+    category: 'skill',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.0, duration: 0.14, order: 0),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.14, duration: 0.41, order: 1),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.55, duration: 0.27, order: 2),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.82, duration: 0.27, order: 3),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 1.09, duration: 0.14, order: 4),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 1.23, duration: 0.41, order: 5),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 1.64, duration: 0.27, order: 6),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 1.91, duration: 0.55, order: 7),
+    ],
+  ),
+
+  // Drums Advanced Skill 3: 리니어 드럼 패턴
+  Lesson(
+    id: 'drums_ska03',
+    title: '리니어 드럼 패턴',
+    description: '두 소리가 동시에 나지 않는 리니어 패턴입니다. 킥·스네어·하이햇을 순차적으로 빠르게 연주!',
+    instrument: 'drums',
+    difficulty: 'advanced',
+    durationMinutes: 12,
+    imageEmoji: '📐',
+    bpm: 130,
+    xpReward: 390,
+    orderIndex: 327,
+    category: 'skill',
+    isLocked: true,
+    targetNotes: [
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.0, duration: 0.23, order: 0),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.23, duration: 0.23, order: 1),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.46, duration: 0.23, order: 2),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.69, duration: 0.23, order: 3),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.92, duration: 0.23, order: 4),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 1.15, duration: 0.23, order: 5),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 1.38, duration: 0.23, order: 6),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 1.61, duration: 0.46, order: 7),
+    ],
+  ),
+
+  // ═══════════════════════════════════════════════════════
+  // ─── Drums Beginner Scale (2 lessons) ───
+  // ═══════════════════════════════════════════════════════
+
+  // Drums Beginner Scale 3: 8비트 기본 패턴
+  Lesson(
+    id: 'drums_sb01',
+    title: '8비트 기본 패턴',
+    description: '하이햇으로 8비트를 유지하며 킥과 스네어를 넣는 기본 록 비트입니다.',
+    instrument: 'drums',
+    difficulty: 'beginner',
+    durationMinutes: 8,
+    imageEmoji: '🥁',
+    bpm: 80,
+    xpReward: 130,
+    orderIndex: 328,
+    category: 'scale',
+    targetNotes: [
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.0, duration: 0.37, order: 0),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.0, duration: 0.37, order: 1),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.37, duration: 0.37, order: 2),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.74, duration: 0.37, order: 3),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.74, duration: 0.37, order: 4),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 1.11, duration: 0.37, order: 5),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 1.48, duration: 0.37, order: 6),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 1.85, duration: 0.75, order: 7),
+    ],
+  ),
+
+  // Drums Beginner Scale 4: 셔플 리듬 입문
+  Lesson(
+    id: 'drums_sb02',
+    title: '셔플 리듬 입문',
+    description: '스윙 느낌의 셔플 리듬을 배워봅시다. 3연음 느낌으로 하이햇을 연주합니다.',
+    instrument: 'drums',
+    difficulty: 'beginner',
+    durationMinutes: 8,
+    imageEmoji: '🥁',
+    bpm: 75,
+    xpReward: 130,
+    orderIndex: 329,
+    category: 'scale',
+    targetNotes: [
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 0.0, duration: 0.4, order: 0),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 0.4, duration: 0.4, order: 1),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 0.8, duration: 0.4, order: 2),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 1.2, duration: 0.4, order: 3),
+      MusicNote(noteName: '킥', frequency: NoteFrequency.drumKick, startTime: 1.6, duration: 0.4, order: 4),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 2.0, duration: 0.4, order: 5),
+      MusicNote(noteName: '스네어', frequency: NoteFrequency.drumSnare, startTime: 2.4, duration: 0.4, order: 6),
+      MusicNote(noteName: '하이햇', frequency: NoteFrequency.drumHihat, startTime: 2.8, duration: 0.8, order: 7),
+    ],
+  ),
 ];
 
 // 전체 레슨 목록 프로바이더

@@ -7,6 +7,7 @@ import '../../../auth/presentation/providers/user_profile_provider.dart';
 import '../../../lesson/domain/models/lesson.dart';
 import '../../../practice/domain/models/practice_session.dart';
 import '../../../../shared/utils/motivation.dart';
+import '../../../../shared/widgets/sheet_music_widget.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
 
 class FeedbackResultScreen extends ConsumerStatefulWidget {
@@ -164,6 +165,41 @@ class _FeedbackResultScreenState extends ConsumerState<FeedbackResultScreen>
                       ],
                     ),
                     const SizedBox(height: 20),
+
+                    // AI 코치 악보 피드백
+                    if (_lesson != null && session.noteResults.isNotEmpty) ...[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: [
+                            Icon(Icons.auto_awesome_rounded, color: AppColors.accent, size: 18),
+                            const SizedBox(width: 6),
+                            Text('AI 코치 악보 피드백', style: Theme.of(context).textTheme.titleMedium),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SheetMusicWidget(
+                        notes: _lesson!.targetNotes,
+                        instrument: _lesson!.instrument,
+                        height: 180,
+                        hitResults: session.noteResults.map((r) => r.isHit).toList(),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 10, height: 10, decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.scorePerfect)),
+                          const SizedBox(width: 4),
+                          Text('적중', style: TextStyle(color: AppColors.textSecondary, fontSize: 11)),
+                          const SizedBox(width: 16),
+                          Container(width: 10, height: 10, decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFFE07070))),
+                          const SizedBox(width: 4),
+                          Text('미스', style: TextStyle(color: AppColors.textSecondary, fontSize: 11)),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                    ],
 
                     // 음표별 결과
                     if (session.noteResults.isNotEmpty) ...[

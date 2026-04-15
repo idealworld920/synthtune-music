@@ -84,7 +84,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logoutConfirm => 'Are you sure you want to log out?';
 
   @override
-  String get deleteConfirm => 'All learning data will be permanently deleted.\nAre you sure?';
+  String get deleteConfirm =>
+      'All learning data will be permanently deleted.\nAre you sure?';
 
   @override
   String get cancel => 'Cancel';
@@ -318,7 +319,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get micPermission => 'Microphone Access';
 
   @override
-  String get micPermissionDesc => 'Record your performance and\nAI analyzes pitch in real-time.';
+  String get micPermissionDesc =>
+      'Record your performance and\nAI analyzes pitch in real-time.';
 
   @override
   String get micPermissionWhy => 'Needed for accurate feedback';
@@ -327,7 +329,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cameraPermission => 'Camera Access';
 
   @override
-  String get cameraPermissionDesc => 'Film your playing posture for\nAI posture feedback.';
+  String get cameraPermissionDesc =>
+      'Film your playing posture for\nAI posture feedback.';
 
   @override
   String get cameraPermissionWhy => 'Needed for posture analysis';
