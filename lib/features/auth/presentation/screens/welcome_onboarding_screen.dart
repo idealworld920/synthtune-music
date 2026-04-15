@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -211,7 +212,13 @@ class _WelcomeOnboardingState extends ConsumerState<WelcomeOnboardingScreen>
                 final l = langs[i];
                 final isSel = _selectedLanguage == l.$1;
                 return GestureDetector(
-                  onTap: () => setState(() => _selectedLanguage = l.$1),
+                  onTap: () async {
+                    setState(() => _selectedLanguage = l.$1);
+                    // 즉시 앱 언어 변경
+                    ref.read(appLanguageProvider.notifier).state = l.$1;
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('app_language', l.$1);
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       color: isSel ? AppColors.primary.withValues(alpha: 0.2) : AppColors.bgCard,
