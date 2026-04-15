@@ -14,6 +14,8 @@ class BottomNavShell extends StatelessWidget {
       return 2;
     } else if (location.startsWith(RouteNames.community)) {
       return 3;
+    } else if (location.startsWith(RouteNames.aiChat)) {
+      return 4;
     }
     return 0;
   }
@@ -27,6 +29,7 @@ class BottomNavShell extends StatelessWidget {
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
+        type: BottomNavigationBarType.fixed,
         onTap: (index) {
           switch (index) {
             case 0:
@@ -37,16 +40,16 @@ class BottomNavShell extends StatelessWidget {
               context.go(RouteNames.progress);
             case 3:
               context.go(RouteNames.community);
+            case 4:
+              context.go(RouteNames.aiChat);
           }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.music_note_rounded), label: '레슨'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_rounded), label: '진도'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.people_rounded), label: '커뮤니티'),
+          BottomNavigationBarItem(icon: Icon(Icons.music_note_rounded), label: '레슨'),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_rounded), label: '진도'),
+          BottomNavigationBarItem(icon: Icon(Icons.people_rounded), label: '커뮤니티'),
+          BottomNavigationBarItem(icon: Icon(Icons.auto_awesome_rounded), label: 'AI'),
         ],
       ),
     );

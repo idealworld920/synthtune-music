@@ -63,6 +63,8 @@ class Lesson {
       case 'scale': return '기본 스케일';
       case 'nursery': return '동요';
       case 'classic': return '클래식';
+      case 'skill': return '스킬';
+      case 'my': return '나만의 음악';
       default: return category;
     }
   }

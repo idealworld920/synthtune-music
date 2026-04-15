@@ -15,6 +15,7 @@ import '../../features/progress/presentation/screens/progress_screen.dart';
 import '../../features/community/presentation/screens/community_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/subscription/presentation/screens/subscription_screen.dart';
+import '../../features/ai_chat/presentation/screens/ai_chat_screen.dart';
 import '../../features/compose/presentation/screens/compose_screen.dart';
 import '../../features/progress/presentation/screens/advanced_report_screen.dart';
 import '../../features/subscription/presentation/screens/student_verification_screen.dart';
@@ -101,6 +102,10 @@ GoRouter appRouter(AppRouterRef ref) {
           GoRoute(
             path: RouteNames.community,
             builder: (_, __) => const CommunityScreen(),
+          ),
+          GoRoute(
+            path: RouteNames.aiChat,
+            builder: (_, __) => const AiChatScreen(),
           ),
           GoRoute(
             path: RouteNames.settings,

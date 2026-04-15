@@ -292,6 +292,7 @@ class _CategoryTabs extends StatelessWidget {
       ('scale', '기본 스케일', Icons.piano_rounded),
       ('nursery', '동요', Icons.child_care_rounded),
       ('classic', '클래식', Icons.library_music_rounded),
+      ('skill', '스킬', Icons.fitness_center_rounded),
       ('my', '나만의 음악', Icons.create_rounded),
     ];
 

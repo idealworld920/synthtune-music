@@ -64,24 +64,54 @@ class PracticeScreen extends ConsumerWidget {
         body: Stack(
           children: [
             SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    // 음표 악보 영역
-                    Expanded(
-                      flex: 3,
-                      child: _NoteDisplay(lesson: lesson, practiceState: practiceState),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final isLandscape = constraints.maxWidth > constraints.maxHeight;
+                  if (isLandscape) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Row(
+                        children: [
+                          // 악보 영역 (가로 모드: 왼쪽 넓게)
+                          Expanded(
+                            flex: 3,
+                            child: _NoteDisplay(lesson: lesson, practiceState: practiceState),
+                          ),
+                          const SizedBox(width: 12),
+                          // 컨트롤 영역 (가로 모드: 오른쪽)
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _PitchMeter(state: practiceState),
+                                const SizedBox(height: 16),
+                                _ControlArea(lesson: lesson, state: practiceState),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        // 악보 영역 (세로 모드: 더 넓게)
+                        Expanded(
+                          flex: 4,
+                          child: _NoteDisplay(lesson: lesson, practiceState: practiceState),
+                        ),
+                        const SizedBox(height: 12),
+                        _PitchMeter(state: practiceState),
+                        const SizedBox(height: 16),
+                        _ControlArea(lesson: lesson, state: practiceState),
+                        const SizedBox(height: 8),
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    // 피치 미터
-                    _PitchMeter(state: practiceState),
-                    const SizedBox(height: 24),
-                    // 컨트롤 버튼
-                    _ControlArea(lesson: lesson, state: practiceState),
-                    const SizedBox(height: 16),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
             // 카메라 PIP (녹음 중일 때 표시)
@@ -453,6 +483,13 @@ class _CameraPipState extends State<_CameraPip> {
   CameraController? _controller;
   bool _initialized = false;
   bool _hidden = false;
+  int _sizeMode = 0; // 0=small, 1=medium, 2=large
+
+  static const _sizes = [
+    (110.0, 150.0),  // small
+    (170.0, 230.0),  // medium
+    (250.0, 340.0),  // large
+  ];
 
   @override
   void initState() {
@@ -501,9 +538,10 @@ class _CameraPipState extends State<_CameraPip> {
       );
     }
 
+    final (w, h) = _sizes[_sizeMode];
     return Container(
-      width: 110,
-      height: 150,
+      width: w,
+      height: h,
       decoration: BoxDecoration(
         color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(14),
@@ -527,21 +565,42 @@ class _CameraPipState extends State<_CameraPip> {
                   ],
                 ),
               ),
-            // 닫기 버튼
+            // 크기 조정 + 닫기 버튼
             Positioned(
               top: 2,
               right: 2,
-              child: GestureDetector(
-                onTap: () => setState(() => _hidden = true),
-                child: Container(
-                  width: 22,
-                  height: 22,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.6),
-                    shape: BoxShape.circle,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: () => setState(() => _sizeMode = (_sizeMode + 1) % 3),
+                    child: Container(
+                      width: 22,
+                      height: 22,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.6),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        _sizeMode == 2 ? Icons.zoom_in_map_rounded : Icons.zoom_out_map_rounded,
+                        color: Colors.white, size: 14,
+                      ),
+                    ),
                   ),
-                  child: const Icon(Icons.close, color: Colors.white, size: 14),
-                ),
+                  const SizedBox(width: 4),
+                  GestureDetector(
+                    onTap: () => setState(() => _hidden = true),
+                    child: Container(
+                      width: 22,
+                      height: 22,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.6),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.close, color: Colors.white, size: 14),
+                    ),
+                  ),
+                ],
               ),
             ),
             // AI 분석 라벨

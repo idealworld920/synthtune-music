@@ -28,7 +28,8 @@ class SheetMusicWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
+      height: height == 180 ? null : height,  // 기본값이면 부모에 맞춤
+      constraints: height == 180 ? const BoxConstraints(minHeight: 120) : null,
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.bgCard,
