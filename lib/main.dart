@@ -49,7 +49,7 @@ class MyApp extends ConsumerWidget {
     }
 
     return MaterialApp.router(
-      title: 'AI 음악 교육',
+      title: 'SynthTune Music',
       theme: theme,
       routerConfig: router,
       debugShowCheckedModeBanner: false,

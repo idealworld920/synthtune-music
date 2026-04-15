@@ -1,5 +1,5 @@
 name: ai_music_edu
-description: AI-powered music education app
+description: SynthTune Music - AI-powered music education app
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -64,6 +64,9 @@ dependencies:
   # UI
   cached_network_image: ^3.4.1
   shimmer: ^3.0.0
+
+  # App Icon
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
