@@ -339,47 +339,84 @@ class _TutorialScreenState extends State<TutorialScreen> {
     final postures = _data['posture'] as List<String>;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // 카메라 프리뷰
-          Container(
-            height: 200,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.bgCard,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.primary.withValues(alpha: 0.4), width: 2),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(14),
-              child: _cameraReady && _cameraCtrl != null
-                  ? Stack(
-                      children: [
-                        CameraPreview(_cameraCtrl!),
-                        Positioned(
-                          bottom: 8, left: 8,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(8)),
-                            child: Text('자세를 확인하세요', style: TextStyle(color: Colors.white, fontSize: 11)),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
+          // 카메라 + AI 피드백 영역
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 카메라 프리뷰
+              Expanded(
+                child: Container(
+                  height: 220,
+                  decoration: BoxDecoration(
+                    color: AppColors.bgCard,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.4), width: 2),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: _cameraReady && _cameraCtrl != null
+                        ? Stack(
+                            children: [
+                              CameraPreview(_cameraCtrl!),
+                              Positioned(
+                                bottom: 6, left: 6,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                  decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(6)),
+                                  child: Text('실시간 영상', style: TextStyle(color: Colors.white, fontSize: 10)),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Center(child: Icon(Icons.videocam_off_rounded, color: AppColors.textSecondary, size: 32)),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              // AI 자세 피드백 텍스트
+              Expanded(
+                child: Container(
+                  height: 220,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.accent.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Icon(Icons.videocam_off_rounded, color: AppColors.textSecondary, size: 32),
-                          const SizedBox(height: 8),
-                          Text('카메라 사용 불가', style: TextStyle(color: AppColors.textSecondary)),
+                          Icon(Icons.auto_awesome_rounded, color: AppColors.accent, size: 14),
+                          const SizedBox(width: 4),
+                          Text('AI 자세 피드백', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold, fontSize: 12)),
                         ],
                       ),
-                    ),
-            ),
+                      const SizedBox(height: 8),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _AiFeedbackItem(text: '카메라에 상체가 보이도록 위치를 조정하세요.', delay: 0),
+                              _AiFeedbackItem(text: '허리를 곧게 펴고 어깨의 힘을 빼세요.', delay: 1),
+                              _AiFeedbackItem(text: '${_data['name']}을 올바르게 잡고 있는지 확인합니다.', delay: 2),
+                              _AiFeedbackItem(text: '각 자세 항목을 탭하면 음성으로 안내해드려요.', delay: 3),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
 
           // 자세 가이드
           ...postures.asMap().entries.map((e) => Padding(
@@ -459,20 +496,95 @@ class _TutorialScreenState extends State<TutorialScreen> {
   // ─── 4. 운지법 ───
   Widget _FingeringPage() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          Icon(Icons.back_hand_rounded, color: AppColors.accentGold, size: 48),
-          const SizedBox(height: 16),
-          Text('운지법', style: TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 20),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(color: AppColors.bgCard, borderRadius: BorderRadius.circular(16)),
-            child: Text(_data['fingering'] as String, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, height: 1.7)),
+          // 카메라 + AI 운지법 피드백
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 카메라
+              Expanded(
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: AppColors.bgCard,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.accentGold.withValues(alpha: 0.4), width: 2),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: _cameraReady && _cameraCtrl != null
+                        ? Stack(
+                            children: [
+                              CameraPreview(_cameraCtrl!),
+                              Positioned(
+                                bottom: 6, left: 6,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                  decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(6)),
+                                  child: Text('손 모양 확인', style: TextStyle(color: Colors.white, fontSize: 10)),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Center(child: Icon(Icons.videocam_off_rounded, color: AppColors.textSecondary, size: 32)),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              // AI 운지법 피드백
+              Expanded(
+                child: Container(
+                  height: 200,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.accentGold.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.accentGold.withValues(alpha: 0.3)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.auto_awesome_rounded, color: AppColors.accentGold, size: 14),
+                          const SizedBox(width: 4),
+                          Text('AI 운지법 피드백', style: TextStyle(color: AppColors.accentGold, fontWeight: FontWeight.bold, fontSize: 12)),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _AiFeedbackItem(text: '손가락 모양을 카메라에 보여주세요.', delay: 0, color: AppColors.accentGold),
+                              _AiFeedbackItem(text: '손가락 끝으로 누르고 있는지 확인합니다.', delay: 1, color: AppColors.accentGold),
+                              _AiFeedbackItem(text: '다른 줄/건반에 닿지 않게 세워주세요.', delay: 2, color: AppColors.accentGold),
+                              _AiFeedbackItem(text: '아래 운지법을 참고하세요.', delay: 3, color: AppColors.accentGold),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
+
+          // 운지법 텍스트
+          Text('운지법 가이드', style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(color: AppColors.bgCard, borderRadius: BorderRadius.circular(14)),
+            child: Text(_data['fingering'] as String, style: TextStyle(color: AppColors.textPrimary, fontSize: 14, height: 1.7)),
+          ),
+          const SizedBox(height: 12),
           OutlinedButton.icon(
             onPressed: () => AiVoiceService.speak(_data['fingering'] as String),
             icon: Icon(Icons.volume_up_rounded),
@@ -508,6 +620,47 @@ class _TutorialScreenState extends State<TutorialScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AiFeedbackItem extends StatefulWidget {
+  final String text;
+  final int delay;
+  final Color color;
+  const _AiFeedbackItem({required this.text, required this.delay, this.color = AppColors.accent});
+
+  @override
+  State<_AiFeedbackItem> createState() => _AiFeedbackItemState();
+}
+
+class _AiFeedbackItemState extends State<_AiFeedbackItem> {
+  bool _visible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 500 + widget.delay * 800), () {
+      if (mounted) setState(() => _visible = true);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: _visible ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 400),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.check_circle_rounded, color: widget.color, size: 14),
+            const SizedBox(width: 6),
+            Expanded(child: Text(widget.text, style: TextStyle(color: AppColors.textPrimary, fontSize: 12, height: 1.4))),
+          ],
+        ),
       ),
     );
   }
