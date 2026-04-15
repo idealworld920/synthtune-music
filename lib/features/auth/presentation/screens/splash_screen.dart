@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../providers/auth_provider.dart';
+import 'permission_screen.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -31,8 +32,20 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
     _controller.forward();
 
-    Future.delayed(const Duration(milliseconds: 2200), () {
-      if (mounted) _checkAuth();
+    Future.delayed(const Duration(milliseconds: 2200), () async {
+      if (!mounted) return;
+      // 첫 사용 시 권한 안내 화면 표시
+      final shouldShowPermission = await PermissionScreen.shouldShow();
+      if (shouldShowPermission && mounted) {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => PermissionScreen(onComplete: () {
+            Navigator.of(context).pop();
+            _checkAuth();
+          }),
+        ));
+      } else {
+        _checkAuth();
+      }
     });
   }
 
