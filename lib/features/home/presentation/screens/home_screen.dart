@@ -20,7 +20,7 @@ class HomeScreen extends ConsumerWidget {
     final showAds = ref.watch(showAdsProvider);
 
     return Scaffold(
-      bottomNavigationBar: showAds ? const _AdBanner() : null,
+      // 광고 배너는 BottomNavShell에서 전체 탭 적용
       body: CustomScrollView(
         slivers: [
           // 앱바

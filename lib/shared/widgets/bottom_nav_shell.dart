@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/constants/app_colors.dart';
 import '../../core/router/route_names.dart';
+import '../../features/subscription/presentation/providers/subscription_provider.dart';
 
-class BottomNavShell extends StatelessWidget {
+class BottomNavShell extends ConsumerWidget {
   final Widget child;
 
   const BottomNavShell({super.key, required this.child});
@@ -21,12 +24,49 @@ class BottomNavShell extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final location = GoRouterState.of(context).uri.path;
     final currentIndex = _locationToIndex(location);
+    final showAds = ref.watch(showAdsProvider);
 
     return Scaffold(
-      body: child,
+      body: Column(
+        children: [
+          Expanded(child: child),
+          // 광고 배너 (무료 티어 - 모든 탭에 표시)
+          if (showAds)
+            Container(
+              height: 50,
+              color: AppColors.bgSurface,
+              child: Row(
+                children: [
+                  const SizedBox(width: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.textSecondary.withValues(alpha: 0.4)),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text('AD', style: TextStyle(color: AppColors.textSecondary, fontSize: 9, fontWeight: FontWeight.bold)),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      '광고 없이 연습하려면 스탠다드로 업그레이드',
+                      style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => context.push(RouteNames.subscription),
+                    style: TextButton.styleFrom(foregroundColor: AppColors.primary, padding: const EdgeInsets.symmetric(horizontal: 12)),
+                    child: Text('제거', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
