@@ -33,8 +33,28 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
       return Scaffold(appBar: AppBar(), body: Center(child: Text('글을 찾을 수 없습니다.', style: TextStyle(color: AppColors.textSecondary))));
     }
 
+    final currentUser = ref.watch(currentUserProvider);
+    final isMyPost = currentUser?.uid == post.userId;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('게시글')),
+      appBar: AppBar(
+        title: const Text('게시글'),
+        actions: [
+          if (isMyPost)
+            PopupMenuButton<String>(
+              icon: Icon(Icons.more_vert_rounded, color: AppColors.textSecondary),
+              color: AppColors.bgCard,
+              onSelected: (value) {
+                if (value == 'edit') _showEditDialog(context, ref, post);
+                if (value == 'delete') _showDeleteDialog(context, ref, post);
+              },
+              itemBuilder: (_) => [
+                PopupMenuItem(value: 'edit', child: Row(children: [Icon(Icons.edit_rounded, size: 18, color: AppColors.primary), const SizedBox(width: 8), Text('수정', style: TextStyle(color: AppColors.textPrimary))])),
+                PopupMenuItem(value: 'delete', child: Row(children: [Icon(Icons.delete_rounded, size: 18, color: AppColors.scoreMiss), const SizedBox(width: 8), Text('삭제', style: TextStyle(color: AppColors.scoreMiss))])),
+              ],
+            ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -242,6 +262,93 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showEditDialog(BuildContext context, WidgetRef ref, CommunityPost post) {
+    final ctrl = TextEditingController(text: post.content);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.bgSurface,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('게시글 수정', style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            TextField(
+              controller: ctrl,
+              maxLines: 5,
+              style: TextStyle(color: AppColors.textPrimary),
+              decoration: InputDecoration(
+                hintText: '내용을 수정하세요',
+                hintStyle: TextStyle(color: AppColors.textSecondary),
+                filled: true, fillColor: AppColors.bgCard,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    style: OutlinedButton.styleFrom(foregroundColor: AppColors.textSecondary, side: BorderSide(color: AppColors.bgCard), padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                    child: const Text('취소'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (ctrl.text.trim().isEmpty) return;
+                      ref.read(communityProvider.notifier).editPost(post.id, ctrl.text.trim());
+                      Navigator.pop(ctx);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('게시글이 수정되었습니다.'), backgroundColor: AppColors.scorePerfect),
+                      );
+                    },
+                    child: const Text('수정 완료'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, WidgetRef ref, CommunityPost post) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.bgCard,
+        title: Text('게시글 삭제', style: TextStyle(color: AppColors.textPrimary)),
+        content: Text('이 게시글을 삭제하시겠습니까?\n삭제 후 되돌릴 수 없습니다.', style: TextStyle(color: AppColors.textSecondary)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text('취소', style: TextStyle(color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              ref.read(communityProvider.notifier).deletePost(post.id);
+              Navigator.of(context).pop(); // 상세 화면도 닫기
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('게시글이 삭제되었습니다.'), backgroundColor: AppColors.scoreMiss),
+              );
+            },
+            child: Text('삭제', style: TextStyle(color: AppColors.scoreMiss)),
           ),
         ],
       ),

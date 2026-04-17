@@ -22,6 +22,25 @@ class CommunityNotifier extends StateNotifier<List<CommunityPost>> {
     state = [post, ...state];
   }
 
+  void editPost(String postId, String newContent) {
+    state = state.map((post) {
+      if (post.id == postId) {
+        return CommunityPost(
+          id: post.id, userId: post.userId, userName: post.userName,
+          content: newContent, lessonTitle: post.lessonTitle, instrument: post.instrument,
+          score: post.score, likes: post.likes, isLiked: post.isLiked,
+          createdAt: post.createdAt, audioUrl: post.audioUrl, mediaUrls: post.mediaUrls,
+          mediaType: post.mediaType, comments: post.comments, shares: post.shares, category: post.category,
+        );
+      }
+      return post;
+    }).toList();
+  }
+
+  void deletePost(String postId) {
+    state = state.where((post) => post.id != postId).toList();
+  }
+
   void addComment(String postId, Comment comment) {
     state = state.map((post) {
       if (post.id == postId) {
