@@ -6,6 +6,8 @@ import 'package:camera/camera.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/sheet_music_widget.dart';
+import '../../../../shared/widgets/vexflow_sheet.dart';
+import '../../../../shared/widgets/fullscreen_sheet.dart';
 import '../../../../shared/utils/motivation.dart';
 import '../../../../shared/widgets/metronome_widget.dart';
 import '../../../lesson/domain/models/lesson.dart';
@@ -177,9 +179,9 @@ class _NoteDisplay extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (practiceState.status == PracticeStatus.idle) ...[
-            // 악보 표시
+            // VexFlow 악보 표시
             Expanded(
-              child: SheetMusicWidget(
+              child: VexFlowSheet(
                 notes: lesson.targetNotes as List<MusicNote>,
                 instrument: lesson.instrument as String?,
               ),
@@ -663,6 +665,20 @@ class _CameraPipState extends State<_CameraPip> {
 
 // ─── 악보 전체보기 ───
 void _showFullSheet(BuildContext context, dynamic lesson) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => FullscreenSheet(
+        notes: lesson.targetNotes as List<MusicNote>,
+        instrument: lesson.instrument as String?,
+        title: lesson.title as String,
+      ),
+    ),
+  );
+}
+
+// 기존 전체화면 (미사용)
+void _showFullSheetOld(BuildContext context, dynamic lesson) {
   showDialog(
     context: context,
     builder: (_) => Dialog.fullscreen(
@@ -675,13 +691,6 @@ void _showFullSheet(BuildContext context, dynamic lesson) {
             icon: const Icon(Icons.close_rounded),
             onPressed: () => Navigator.pop(context),
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.screen_rotation_rounded, color: AppColors.textSecondary),
-              tooltip: '가로/세로 전환',
-              onPressed: () {},
-            ),
-          ],
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),

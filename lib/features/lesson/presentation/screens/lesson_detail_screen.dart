@@ -6,6 +6,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../shared/widgets/primary_button.dart';
 import '../../../../shared/widgets/recommended_videos.dart';
 import '../../../../shared/widgets/sheet_music_widget.dart';
+import '../../../../shared/widgets/vexflow_sheet.dart';
 import '../../domain/models/lesson.dart';
 import '../providers/lesson_provider.dart';
 
@@ -135,10 +136,10 @@ class LessonDetailScreen extends ConsumerWidget {
                   Text('악보 (${lesson.targetNotes.length}개 음표)',
                       style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 12),
-                  SheetMusicWidget(
+                  VexFlowSheet(
                     notes: lesson.targetNotes,
                     instrument: lesson.instrument,
-                    height: 200,
+                    height: 220,
                   ),
                   const SizedBox(height: 24),
 
