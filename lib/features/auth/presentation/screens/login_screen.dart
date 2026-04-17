@@ -1,3 +1,4 @@
+import '../../../../core/utils/locale_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -95,12 +96,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const Center(child: AppLogo(size: 80)),
                 const SizedBox(height: 32),
                 Text(
-                  '다시 오셨군요!',
+                  localeText(context, ko: '다시 오셨군요!', en: 'Welcome back!'),
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '계속 연습하러 들어오세요',
+                  localeText(context, ko: '계속 연습하러 들어오세요', en: 'Let\'s continue practicing'),
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 36),
@@ -154,8 +155,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const _GoogleLogo(),
-                    label: const Text(
-                      'Google로 계속하기',
+                    label: Text(
+                      localeText(context, ko: 'Google로 계속하기', en: 'Continue with Google'),
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     style: OutlinedButton.styleFrom(
@@ -191,13 +192,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '계정이 없으신가요?  ',
+                      localeText(context, ko: '계정이 없으신가요?  ', en: 'Don\'t have an account?  '),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     GestureDetector(
                       onTap: () => context.go(RouteNames.register),
                       child: const Text(
-                        '회원가입',
+                        'Sign Up',
                         style: TextStyle(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w600,
