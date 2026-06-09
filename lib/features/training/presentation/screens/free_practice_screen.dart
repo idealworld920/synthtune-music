@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:record/record.dart';
@@ -115,23 +118,163 @@ class _FreePracticeScreenState extends ConsumerState<FreePracticeScreen>
     setState(() => _state = _PracticeState.analyzing);
     AiVoiceService.speak('분석 중입니다.');
 
-    await Future.delayed(const Duration(seconds: 2));
+    // 실제 녹음 오디오를 분석 (분석과 최소 연출 지연을 동시에 진행)
+    final analysisFuture = _analyzeRecording();
+    await Future.delayed(const Duration(milliseconds: 1500));
+    final analysis = await analysisFuture;
     if (!mounted) return;
 
-    final score = 60 + (DateTime.now().second % 35);
-    String title, body;
+    AiVoiceService.speak(analysis.title);
+    setState(() {
+      _state = _PracticeState.done;
+      _feedbackScore = analysis.score;
+      _feedbackTitle = analysis.title;
+      _feedbackBody = analysis.body;
+    });
+  }
+
+  /// 녹음된 PCM16 오디오에서 음량(RMS)·연주 비율·길이를 추출해 점수와 피드백 생성
+  Future<_Analysis> _analyzeRecording() async {
+    try {
+      final path = _recordingPath;
+      if (path == null) return _fallbackAnalysis();
+      final file = File(path);
+      if (!await file.exists()) return _fallbackAnalysis();
+      final bytes = await file.readAsBytes();
+
+      // WAV 헤더(RIFF)가 있으면 44바이트 건너뛰기
+      int offset = 0;
+      if (bytes.length > 44 && bytes[0] == 0x52 && bytes[1] == 0x49 && bytes[2] == 0x46 && bytes[3] == 0x46) {
+        offset = 44;
+      }
+      final sampleCount = (bytes.length - offset) ~/ 2;
+      if (sampleCount < 2000) return _fallbackAnalysis();
+
+      final data = ByteData.sublistView(bytes, offset);
+      const frameSize = 1024; // 약 23ms @44.1kHz
+      double sumSquares = 0;
+      double peak = 0;
+      double frameEnergy = 0;
+      int frameSamples = 0;
+      int frameCount = 0;
+      int activeFrames = 0;
+
+      for (int i = 0; i < sampleCount; i++) {
+        final s = data.getInt16(i * 2, Endian.little) / 32768.0;
+        final a = s.abs();
+        sumSquares += s * s;
+        if (a > peak) peak = a;
+        frameEnergy += s * s;
+        if (++frameSamples >= frameSize) {
+          final frameRms = sqrt(frameEnergy / frameSamples);
+          if (frameRms > 0.02) activeFrames++;
+          frameCount++;
+          frameEnergy = 0;
+          frameSamples = 0;
+        }
+      }
+
+      final rms = sqrt(sumSquares / sampleCount);
+      final activeRatio = frameCount == 0 ? 0.0 : activeFrames / frameCount;
+      final seconds = _elapsed.inSeconds;
+
+      return _scoreFromMetrics(rms: rms, peak: peak, activeRatio: activeRatio, seconds: seconds);
+    } catch (_) {
+      return _fallbackAnalysis();
+    }
+  }
+
+  _Analysis _scoreFromMetrics({required double rms, required double peak, required double activeRatio, required int seconds}) {
+    // 거의 무음이거나 너무 짧으면 안내
+    if (rms < 0.01 || activeRatio < 0.05 || seconds < 2) {
+      return const _Analysis(
+        score: 0,
+        title: '소리가 잘 들리지 않아요',
+        body: '녹음에서 연주 소리가 거의 감지되지 않았어요.\n\n• 마이크에 더 가까이서 연주해보세요\n• 주변 소음이 적은 곳에서 시도해보세요\n• 최소 5초 이상 연주해보세요',
+      );
+    }
+
+    // 연주 비율 (끊김 없이 꾸준히 소리가 났는지)
+    final presence = (activeRatio.clamp(0.0, 0.85) / 0.85);
+    // 음량 적정성
+    double volume;
+    if (rms < 0.03) {
+      volume = (rms / 0.03) * 0.6;
+    } else if (rms <= 0.3) {
+      volume = 1.0;
+    } else {
+      volume = (1.0 - ((rms - 0.3) / 0.4)).clamp(0.4, 1.0);
+    }
+    final clipping = peak > 0.98;
+    // 연주 길이 적정성 (20초 이상이면 충분)
+    final duration = (seconds / 20).clamp(0.3, 1.0);
+
+    double raw = (presence * 0.45 + volume * 0.30 + duration * 0.25) * 100;
+    if (clipping) raw -= 8;
+    final score = raw.clamp(35, 98).round();
+
+    // 지표 기반 동적 관찰
+    final observations = <String>[];
+    if (activeRatio < 0.45) observations.add('중간중간 소리가 끊겨요 — 프레이즈를 끝까지 이어보세요');
+    if (rms < 0.03) observations.add('음량이 작아요 — 마이크에 가까이서 또렷하게 연주해보세요');
+    if (clipping) observations.add('소리가 너무 커서 음이 뭉개져요 — 마이크와 거리를 두세요');
+    if (seconds < 8) observations.add('연주가 짧아요 — 조금 더 길게 연주하면 분석이 정확해져요');
+
+    String title, lead;
     if (score >= 85) {
       title = '훌륭한 연주!';
-      body = '음정이 안정적이고 리듬감도 좋습니다.\n\n개선점:\n• 다이나믹 변화를 더 주면 좋겠어요\n• 고음부 음정을 조금 더 신경 써보세요';
+      lead = '음량이 안정적이고 연주가 끊김 없이 이어졌어요.';
     } else if (score >= 70) {
       title = '좋은 연주예요!';
-      body = '전반적으로 안정적입니다.\n\n잘한 점:\n• 리듬이 일정해요\n• 곡의 흐름을 잘 이해하고 있어요\n\n개선점:\n• 고음부 음정 불안\n• 프레이즈 호흡을 더 자연스럽게';
+      lead = '전반적으로 안정적인 연주였어요.';
+    } else if (score >= 55) {
+      title = '잘하고 있어요!';
+      lead = '기본 흐름은 좋아요. 몇 가지만 다듬어볼까요?';
     } else {
       title = '좋은 시작이에요!';
-      body = '연습하면 반드시 나아질 거예요!\n\n관찰된 사항:\n• 기본 멜로디 라인은 잘 따라가고 있어요\n• 느린 템포부터 시작해보세요\n• 어려운 구간은 분리해서 반복 연습하세요';
+      lead = '연습하면 반드시 나아질 거예요!';
     }
-    AiVoiceService.speak(title);
-    setState(() { _state = _PracticeState.done; _feedbackScore = score; _feedbackTitle = title; _feedbackBody = body; });
+
+    final goodPoints = <String>[];
+    if (activeRatio >= 0.6) goodPoints.add('연주가 끊김 없이 꾸준히 이어졌어요');
+    if (rms >= 0.05 && rms <= 0.3 && !clipping) goodPoints.add('음량이 또렷하고 적당해요');
+    if (seconds >= 15) goodPoints.add('충분한 길이로 연주했어요');
+
+    final buf = StringBuffer(lead);
+    if (goodPoints.isNotEmpty) {
+      buf.write('\n\n잘한 점:');
+      for (final g in goodPoints) {
+        buf.write('\n• $g');
+      }
+    }
+    if (observations.isNotEmpty) {
+      buf.write('\n\n개선점:');
+      for (final o in observations) {
+        buf.write('\n• $o');
+      }
+    } else if (score >= 85) {
+      buf.write('\n\n개선점:\n• 다이나믹(셈여림) 변화를 더 주면 표현이 풍부해져요');
+    }
+
+    return _Analysis(score: score, title: title, body: buf.toString());
+  }
+
+  _Analysis _fallbackAnalysis() {
+    // 오디오를 읽지 못한 경우 길이 기반 간이 평가
+    final seconds = _elapsed.inSeconds;
+    if (seconds < 2) {
+      return const _Analysis(
+        score: 0,
+        title: '녹음이 너무 짧아요',
+        body: '연주를 조금 더 길게 녹음해보세요.\n최소 5초 이상이면 분석이 가능해요.',
+      );
+    }
+    final score = (55 + (seconds.clamp(0, 30))).clamp(55, 85);
+    return _Analysis(
+      score: score,
+      title: '좋은 연주예요!',
+      body: '꾸준히 연주를 이어갔어요.\n\n• 느린 템포부터 정확하게 연습해보세요\n• 어려운 구간은 분리해서 반복하면 좋아요',
+    );
   }
 
   void _reset() => setState(() { _state = _PracticeState.idle; _feedbackScore = 0; _elapsed = Duration.zero; _liveFeedback = ''; });
@@ -433,6 +576,15 @@ class _FreePracticeScreenState extends ConsumerState<FreePracticeScreen>
       ),
     );
   }
+}
+
+// ─── 분석 결과 ───
+
+class _Analysis {
+  final int score;
+  final String title;
+  final String body;
+  const _Analysis({required this.score, required this.title, required this.body});
 }
 
 // ─── 위젯들 ───

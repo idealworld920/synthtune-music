@@ -6,6 +6,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../auth/presentation/providers/user_profile_provider.dart';
 import '../../../lesson/presentation/providers/lesson_provider.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
+import '../providers/training_goal_provider.dart';
 
 class AiRecommendScreen extends ConsumerWidget {
   const AiRecommendScreen({super.key});
@@ -121,6 +122,35 @@ class AiRecommendScreen extends ConsumerWidget {
                   const SizedBox(height: 10),
                   _RecItem(icon: Icons.timer_rounded, label: '추천 시간', value: '하루 $recMinutes분', color: AppColors.accentGold),
                 ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  ref.read(trainingGoalProvider.notifier).state = TrainingGoal(
+                    targetCount: recCount,
+                    targetMinutes: recMinutes,
+                    goal: recGoal,
+                  );
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(SnackBar(
+                      content: const Text('오늘의 목표에 적용했어요!'),
+                      backgroundColor: AppColors.primary,
+                      behavior: SnackBarBehavior.floating,
+                    ));
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.check_circle_rounded, size: 18),
+                label: const Text('이 목표 적용하기'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                ),
               ),
             ),
             const SizedBox(height: 24),

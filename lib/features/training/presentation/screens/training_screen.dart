@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../progress/presentation/providers/progress_provider.dart';
+import '../providers/training_goal_provider.dart';
 import 'ai_recommend_screen.dart';
 import 'free_practice_screen.dart';
 
@@ -15,14 +16,16 @@ class TrainingScreen extends ConsumerStatefulWidget {
 }
 
 class _TrainingScreenState extends ConsumerState<TrainingScreen> {
-  int _targetCount = 3;
-  int _targetMinutes = 15;
-  String _goal = '';
   int _completedToday = 0;
   bool _showAchievement = false;
 
   @override
   Widget build(BuildContext context) {
+    final goal = ref.watch(trainingGoalProvider);
+    final targetCount = goal.targetCount;
+    final targetMinutes = goal.targetMinutes;
+    final goalText = goal.goal;
+
     final history = ref.watch(practiceHistoryProvider);
     final todayHistory = history.where((s) {
       final now = DateTime.now();
@@ -30,7 +33,7 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
     }).toList();
     _completedToday = todayHistory.length;
 
-    final isGoalMet = _completedToday >= _targetCount;
+    final isGoalMet = _completedToday >= targetCount;
 
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)?.practiceStart ?? '연습')),
@@ -73,12 +76,12 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
                       Expanded(
                         child: Column(
                           children: [
-                            Text('$_completedToday / $_targetCount회', style: TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.bold)),
+                            Text('$_completedToday / $targetCount회', style: TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.bold)),
                             const SizedBox(height: 6),
                             ClipRRect(
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
-                                value: (_completedToday / _targetCount).clamp(0.0, 1.0),
+                                value: (_completedToday / targetCount).clamp(0.0, 1.0),
                                 backgroundColor: AppColors.bgCard,
                                 valueColor: AlwaysStoppedAnimation(isGoalMet ? AppColors.scorePerfect : AppColors.primary),
                                 minHeight: 8,
@@ -91,14 +94,14 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
                       Column(
                         children: [
                           Icon(Icons.timer_rounded, color: AppColors.accent, size: 20),
-                          Text('$_targetMinutes분', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.w600)),
+                          Text('$targetMinutes분', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ],
                   ),
-                  if (_goal.isNotEmpty) ...[
+                  if (goalText.isNotEmpty) ...[
                     const SizedBox(height: 12),
-                    Text('목표: $_goal', style: TextStyle(color: AppColors.textSecondary, fontSize: 13, fontStyle: FontStyle.italic)),
+                    Text('목표: $goalText', style: TextStyle(color: AppColors.textSecondary, fontSize: 13, fontStyle: FontStyle.italic)),
                   ],
                 ],
               ),
@@ -227,6 +230,11 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
   }
 
   void _showGoalSettings(BuildContext context) {
+    final current = ref.read(trainingGoalProvider);
+    int count = current.targetCount;
+    int minutes = current.targetMinutes;
+    final goalCtrl = TextEditingController(text: current.goal);
+
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.bgSurface,
@@ -242,23 +250,23 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
               const SizedBox(height: 20),
               Text('연습 횟수', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
               Slider(
-                value: _targetCount.toDouble(),
+                value: count.toDouble(),
                 min: 1, max: 10, divisions: 9,
-                label: '$_targetCount회',
+                label: '$count회',
                 activeColor: AppColors.primary,
-                onChanged: (v) { setSheetState(() => _targetCount = v.round()); setState(() {}); },
+                onChanged: (v) => setSheetState(() => count = v.round()),
               ),
               Text('연습 시간', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
               Slider(
-                value: _targetMinutes.toDouble(),
+                value: minutes.toDouble(),
                 min: 5, max: 60, divisions: 11,
-                label: '$_targetMinutes분',
+                label: '$minutes분',
                 activeColor: AppColors.accent,
-                onChanged: (v) { setSheetState(() => _targetMinutes = v.round()); setState(() {}); },
+                onChanged: (v) => setSheetState(() => minutes = v.round()),
               ),
               const SizedBox(height: 12),
               TextField(
-                onChanged: (v) => setState(() => _goal = v),
+                controller: goalCtrl,
                 style: TextStyle(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   hintText: '목표를 입력하세요 (예: 반짝반짝 작은별 90점 이상)',
@@ -271,7 +279,14 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.pop(ctx),
+                  onPressed: () {
+                    ref.read(trainingGoalProvider.notifier).state = TrainingGoal(
+                      targetCount: count,
+                      targetMinutes: minutes,
+                      goal: goalCtrl.text.trim(),
+                    );
+                    Navigator.pop(ctx);
+                  },
                   child: Text(AppLocalizations.of(context)?.save ?? '저장'),
                 ),
               ),
@@ -280,7 +295,7 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
           ),
         ),
       ),
-    );
+    ).whenComplete(goalCtrl.dispose);
   }
 
   void _showReviewList(BuildContext context) {
