@@ -129,11 +129,11 @@ class AiRecommendScreen extends ConsumerWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  ref.read(trainingGoalProvider.notifier).state = TrainingGoal(
+                  ref.read(trainingGoalProvider.notifier).setGoal(TrainingGoal(
                     targetCount: recCount,
                     targetMinutes: recMinutes,
                     goal: recGoal,
-                  );
+                  ));
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
                     ..showSnackBar(SnackBar(

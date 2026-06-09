@@ -8,6 +8,8 @@ import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../shared/services/ai_voice_service.dart';
+import '../../../practice/domain/models/practice_session.dart';
+import '../../../progress/presentation/providers/progress_provider.dart';
 
 enum _PracticeMode { audio, video }
 enum _PracticeState { idle, recording, analyzing, done }
@@ -131,6 +133,25 @@ class _FreePracticeScreenState extends ConsumerState<FreePracticeScreen>
       _feedbackTitle = analysis.title;
       _feedbackBody = analysis.body;
     });
+
+    // 유효한 연주는 연습 기록에 저장 → '오늘의 목표' 횟수에 반영
+    if (analysis.score > 0) {
+      final now = DateTime.now();
+      ref.read(practiceHistoryProvider.notifier).update((list) => [
+            PracticeSession(
+              id: 'free_${now.millisecondsSinceEpoch}',
+              lessonId: 'free_practice',
+              lessonTitle: '자유 연습',
+              userId: 'user',
+              score: analysis.score.toDouble(),
+              duration: _elapsed,
+              noteResults: const [],
+              createdAt: now,
+              xpEarned: (analysis.score * 1.2).round(),
+            ),
+            ...list,
+          ]);
+    }
   }
 
   /// 녹음된 PCM16 오디오에서 음량(RMS)·연주 비율·길이를 추출해 점수와 피드백 생성

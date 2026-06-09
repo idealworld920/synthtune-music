@@ -280,11 +280,11 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    ref.read(trainingGoalProvider.notifier).state = TrainingGoal(
+                    ref.read(trainingGoalProvider.notifier).setGoal(TrainingGoal(
                       targetCount: count,
                       targetMinutes: minutes,
                       goal: goalCtrl.text.trim(),
-                    );
+                    ));
                     Navigator.pop(ctx);
                   },
                   child: Text(AppLocalizations.of(context)?.save ?? '저장'),
@@ -301,7 +301,8 @@ class _TrainingScreenState extends ConsumerState<TrainingScreen> {
   void _showReviewList(BuildContext context) {
     final history = ref.read(practiceHistoryProvider);
     final unique = <String, dynamic>{};
-    for (final s in history) { unique[s.lessonId] = s; }
+    // 자유 연습은 특정 레슨으로 복습할 수 없으므로 제외
+    for (final s in history.where((s) => s.lessonId != 'free_practice')) { unique[s.lessonId] = s; }
 
     showModalBottomSheet(
       context: context,
