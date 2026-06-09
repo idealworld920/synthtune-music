@@ -39,6 +39,7 @@ class TrainingGoalNotifier extends StateNotifier<TrainingGoal> {
     final count = prefs.getInt(_kCount);
     final minutes = prefs.getInt(_kMinutes);
     final goal = prefs.getString(_kGoal);
+    if (!mounted) return;
     if (count == null && minutes == null && goal == null) return;
     state = TrainingGoal(
       targetCount: count ?? state.targetCount,
